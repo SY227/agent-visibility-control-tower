@@ -55,6 +55,24 @@ export function HeroSection({
             icon={<Sparkles className="h-4 w-4" />}
           />
         </div>
+
+        <div className="rounded-[20px] border border-[var(--border)] bg-[var(--sage-soft)]/58 p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <div className="text-sm font-semibold text-[var(--ink)]">Bounded public-page analysis</div>
+              <p className="mt-1 text-sm leading-6 text-[var(--slate)]">
+                One URL in, bounded public evidence collected, then a boardroom-ready brief is assembled through a six-stage Gemini workflow.
+              </p>
+            </div>
+            <Badge tone={isRunning ? "sage" : "neutral"}>{isRunning ? "Scanning" : "Ready"}</Badge>
+          </div>
+
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            <CompactStat label="Required input" value="1 URL" />
+            <CompactStat label="Gemini stages" value="6 bounded agents" />
+            <CompactStat label="Executive output" value="Brief + Fix Pack" />
+          </div>
+        </div>
       </div>
 
       <div className="mt-5 rounded-[24px] border border-[var(--border)] bg-white/82 p-4 sm:p-5">
@@ -85,7 +103,7 @@ export function HeroSection({
 
           <div className="space-y-2.5">
             <div className="text-sm font-medium text-[var(--ink)]">Sample cases</div>
-            <div className="grid gap-2.5">
+            <div className="grid gap-2.5 sm:grid-cols-2">
               {samples.map((sample) => (
                 <button
                   key={sample.url}
@@ -127,6 +145,15 @@ function SignalCard({
           <p className="mt-1 text-[13px] leading-5 text-[var(--muted)]">{copy}</p>
         </div>
       </div>
+    </div>
+  );
+}
+
+function CompactStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[16px] border border-[var(--border)] bg-white/88 px-3 py-2.5">
+      <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">{label}</div>
+      <div className="mt-1.5 text-sm font-semibold text-[var(--ink)]">{value}</div>
     </div>
   );
 }

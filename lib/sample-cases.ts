@@ -11,9 +11,4 @@ export const SAMPLE_CASES: SampleCase[] = [
     url: "https://www.cursor.com",
     note: "Good test for AI-native positioning clarity and agent-readable product framing.",
   },
-  {
-    name: "Ramp",
-    url: "https://ramp.com",
-    note: "Useful for finance workflow messaging, proof, and buyer-intent structure.",
-  },
 ];

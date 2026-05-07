@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { AgentWorkflowTrace } from "@/components/agent-workflow-trace";
@@ -64,15 +64,6 @@ export function AgentVisibilityApp() {
   const [workflowTrace, setWorkflowTrace] = useState<WorkflowTraceItem[]>(DEFAULT_TRACE);
   const [payload, setPayload] = useState<AnalyzeResultPayload | null>(null);
   const [copyState, setCopyState] = useState<"idle" | "copied">("idle");
-
-  const stats = useMemo(() => {
-    if (!payload) return null;
-    return [
-      { label: "Pages analyzed", value: String(payload.scanSummary.pagesAnalyzed) },
-      { label: "Pages discovered", value: String(payload.scanSummary.pagesDiscovered) },
-      { label: "Page types", value: payload.scanSummary.pageTypes.join(", ") || "homepage" },
-    ];
-  }, [payload]);
 
   function updateTrace(event: ProgressEvent) {
     setWorkflowTrace((current) =>
@@ -195,72 +186,51 @@ export function AgentVisibilityApp() {
           <AgentWorkflowTrace items={workflowTrace} isRunning={isRunning} />
         </div>
 
-        <Card className="p-6 sm:p-7">
-          <div className="space-y-5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="text-sm font-semibold text-[var(--ink)]">Bounded public-page analysis</div>
-                <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-                  One URL in, bounded public evidence collected, then a boardroom-ready brief is assembled through a six-stage Gemini workflow with visible artifacts, machine-facing GTM risks, and handoff-ready repair outputs.
-                </p>
-              </div>
-              <Badge tone={payload ? "success" : isRunning ? "sage" : "neutral"}>
-                {payload ? "Brief ready" : isRunning ? "Scanning" : "Ready"}
-              </Badge>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-3">
-              <MiniStat label="Required input" value="1 URL" />
-              <MiniStat label="Gemini stages" value="6 bounded agents" />
-              <MiniStat label="Executive output" value="Brief + Fix Pack" />
-            </div>
-
-            {stats ? (
-              <div className="grid gap-3 sm:grid-cols-3">
-                {stats.map((stat) => (
-                  <MiniStat key={stat.label} label={stat.label} value={stat.value} />
-                ))}
-              </div>
-            ) : null}
-
-            {payload?.scanSummary.limitations.length ? (
-              <div className="rounded-[22px] border border-[rgba(209,165,66,0.18)] bg-[var(--amber-soft)] px-4 py-3 text-sm leading-6 text-[var(--slate)]">
-                <div className="mb-1 font-semibold text-[var(--ink)]">Confidence notes</div>
-                {payload.scanSummary.limitations.join(" ")}
-              </div>
-            ) : null}
-
-            {error ? (
-              <div className="rounded-[22px] border border-[rgba(201,105,90,0.18)] bg-[var(--red-soft)] px-4 py-3 text-sm leading-6 text-[var(--slate)]">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="mt-1 h-4 w-4 shrink-0 text-[#9b4d41]" />
-                  <div>{error}</div>
+        {payload?.scanSummary.limitations.length || error || copyState === "copied" ? (
+          <Card className="p-5 sm:p-6">
+            <div className="space-y-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="text-sm font-semibold text-[var(--ink)]">Run status</div>
+                  <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                    Lightweight run notes, confidence flags, and copy status.
+                  </p>
                 </div>
+                <Badge tone={payload ? "success" : isRunning ? "sage" : error ? "critical" : "neutral"}>
+                  {payload ? "Brief ready" : isRunning ? "Scanning" : error ? "Attention needed" : "Ready"}
+                </Badge>
               </div>
-            ) : null}
 
-            {copyState === "copied" ? (
-              <div className="rounded-[22px] border border-[rgba(62,143,92,0.18)] bg-[var(--green-soft)] px-4 py-3 text-sm text-[var(--green-deep)]">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" />
-                  Brief, artifacts, and Fix Pack copied as clean markdown.
+              {payload?.scanSummary.limitations.length ? (
+                <div className="rounded-[22px] border border-[rgba(209,165,66,0.18)] bg-[var(--amber-soft)] px-4 py-3 text-sm leading-6 text-[var(--slate)]">
+                  <div className="mb-1 font-semibold text-[var(--ink)]">Confidence notes</div>
+                  {payload.scanSummary.limitations.join(" ")}
                 </div>
-              </div>
-            ) : null}
-          </div>
-        </Card>
+              ) : null}
+
+              {error ? (
+                <div className="rounded-[22px] border border-[rgba(201,105,90,0.18)] bg-[var(--red-soft)] px-4 py-3 text-sm leading-6 text-[var(--slate)]">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="mt-1 h-4 w-4 shrink-0 text-[#9b4d41]" />
+                    <div>{error}</div>
+                  </div>
+                </div>
+              ) : null}
+
+              {copyState === "copied" ? (
+                <div className="rounded-[22px] border border-[rgba(62,143,92,0.18)] bg-[var(--green-soft)] px-4 py-3 text-sm text-[var(--green-deep)]">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4" />
+                    Brief, artifacts, and Fix Pack copied as clean markdown.
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </Card>
+        ) : null}
 
         {payload ? <ReadinessBrief report={payload.report} onCopyMarkdown={() => void copyMarkdown()} /> : null}
       </div>
-    </div>
-  );
-}
-
-function MiniStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-[22px] border border-[var(--border)] bg-white/88 px-4 py-3">
-      <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">{label}</div>
-      <div className="mt-2 text-sm font-semibold text-[var(--ink)]">{value}</div>
     </div>
   );
 }

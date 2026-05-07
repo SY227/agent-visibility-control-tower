@@ -201,7 +201,7 @@ export function AgentVisibilityApp() {
               <div>
                 <div className="text-sm font-semibold text-[var(--ink)]">Bounded public-page analysis</div>
                 <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-                  The system fetches the homepage and a small number of high-signal internal pages, then turns that evidence into machine-facing GTM repair outputs through a bounded Gemini workflow with visible artifacts and evidence-constrained synthesis.
+                  One URL in, bounded public evidence collected, then a boardroom-ready brief is assembled through a six-stage Gemini workflow with visible artifacts, machine-facing GTM risks, and handoff-ready repair outputs.
                 </p>
               </div>
               <Badge tone={payload ? "success" : isRunning ? "sage" : "neutral"}>
@@ -211,8 +211,8 @@ export function AgentVisibilityApp() {
 
             <div className="grid gap-3 sm:grid-cols-3">
               <MiniStat label="Required input" value="1 URL" />
-              <MiniStat label="Core engine" value="Gemini workflow" />
-              <MiniStat label="Artifact" value="Brief + Fix Pack" />
+              <MiniStat label="Gemini stages" value="6 bounded agents" />
+              <MiniStat label="Executive output" value="Brief + Fix Pack" />
             </div>
 
             {stats ? (

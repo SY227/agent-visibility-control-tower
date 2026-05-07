@@ -22,7 +22,14 @@ export function FixPackSection({ report }: { report: VisibilityReport }) {
           </div>
 
           <div className="space-y-3">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Workflow handoff copy</div>
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                Handoff-Ready Workstreams
+              </div>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--slate)]">
+                Copy clean workstream-ready outputs for the teams that need to repair the machine-facing GTM layer.
+              </p>
+            </div>
             <WorkflowHandoffButtons report={report} />
           </div>
 

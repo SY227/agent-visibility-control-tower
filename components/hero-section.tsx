@@ -34,24 +34,24 @@ export function HeroSection({
             Inspect and repair how AI agents, LLMs, and answer engines understand, cite, route, or skip your company.
           </p>
           <p className="max-w-3xl text-sm leading-7 text-[var(--muted)] sm:text-[15px]">
-            Paste one website URL. The system reads a bounded set of public pages and returns an AI Visibility Readiness Brief, visible agent artifacts, a Fix Pack, and a directional before/after AI perception simulator.
+            One URL in. A boardroom-ready AI Visibility Brief and Fix Pack out. No login, no setup tax, bounded public-page scan.
           </p>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-3">
           <SignalCard
             title="Low friction"
-            copy="One required input only, the company website URL. No setup tax."
+            copy="One required input only, the company website URL. No login, no setup tax."
             icon={<Sparkles className="h-4 w-4" />}
           />
           <SignalCard
-            title="Executive-ready"
-            copy="Built to produce a calm, judge-inspectable executive artifact instead of a noisy audit dump."
+            title="Six-stage Gemini workflow"
+            copy="Bounded Gemini orchestration with visible artifacts, not a fake autonomous swarm."
             icon={<Sparkles className="h-4 w-4" />}
           />
           <SignalCard
-            title="Machine-facing GTM"
-            copy="Focused on machine-facing GTM infrastructure, not a generic SEO audit, with repair outputs included."
+            title="Executive output"
+            copy="Boardroom-ready brief, Machine-Facing GTM Risks, Fix Pack, and before/after perception simulator."
             icon={<Sparkles className="h-4 w-4" />}
           />
         </div>

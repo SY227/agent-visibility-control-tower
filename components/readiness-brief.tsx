@@ -2,13 +2,17 @@ import { Copy, Printer } from "lucide-react";
 
 import { AgentArtifactCards } from "@/components/agent-artifact-cards";
 import { BeforeAfterPerceptionSimulator } from "@/components/before-after-perception";
+import { BoardroomSnapshot } from "@/components/boardroom-snapshot";
+import { DecisionMemo } from "@/components/decision-memo";
 import { EvidenceReceipts } from "@/components/evidence-receipts";
 import { FixPackSection } from "@/components/fix-pack-section";
 import { GeminiOrchestrationSummary } from "@/components/gemini-orchestration-summary";
 import { InferredCompetitiveContext } from "@/components/inferred-competitive-context";
+import { JudgeRubricSnapshot } from "@/components/judge-rubric-snapshot";
 import { JourneyDiagram } from "@/components/journey-diagram";
 import { MachineFacingGtmRisks } from "@/components/machine-facing-gtm-risks";
 import { VisibilityScoreCard } from "@/components/visibility-score-card";
+import { WhyGeminiStrip } from "@/components/why-gemini-strip";
 import { Badge, Button, Card, SectionHeading } from "@/components/ui";
 import type { VisibilityReport } from "@/lib/types";
 import { scoreTone } from "@/lib/utils";
@@ -31,7 +35,7 @@ export function ReadinessBrief({
       <SectionHeading
         eyebrow="AI Visibility Readiness Brief"
         title="Executive artifact"
-        description="A directional public-page read of how machines can understand, cite, and act on your site today, plus the repair outputs that strengthen it next."
+        description="A directional public-page read of how machines understand, cite, route, or skip the company today, plus the repair outputs that strengthen it next."
       />
 
       <Card className="p-6 sm:p-7 print-break-inside-avoid">
@@ -57,6 +61,8 @@ export function ReadinessBrief({
         </div>
       </Card>
 
+      <BoardroomSnapshot report={report} />
+
       <div className="grid gap-4 md:grid-cols-3">
         <VisibilityScoreCard
           label="AI Visibility Score"
@@ -65,7 +71,10 @@ export function ReadinessBrief({
         />
         <VisibilityScoreCard
           label="Citation Readiness"
-          score={Math.max(0, Math.min(100, report.visibilityScore - (report.aioReadiness.structuredDataGaps.length > 2 ? 12 : 4)))}
+          score={Math.max(
+            0,
+            Math.min(100, report.visibilityScore - (report.aioReadiness.structuredDataGaps.length > 2 ? 12 : 4)),
+          )}
           detail={report.aioReadiness.citationReadiness}
         />
         <VisibilityScoreCard
@@ -74,6 +83,8 @@ export function ReadinessBrief({
           detail={report.agentReadiness.actionabilityGaps[0] || "Action paths look relatively clear in the bounded crawl."}
         />
       </div>
+
+      <DecisionMemo report={report} />
 
       <Card className="border-[rgba(209,165,66,0.22)] bg-[var(--amber-soft)] p-5 sm:p-6">
         <div className="space-y-3">
@@ -88,6 +99,8 @@ export function ReadinessBrief({
 
       <MachineFacingGtmRisks report={report} />
       <InferredCompetitiveContext report={report} />
+      <FixPackSection report={report} />
+      <BeforeAfterPerceptionSimulator perception={report.beforeAfterPerception} />
       <AgentArtifactCards report={report} />
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -127,17 +140,19 @@ export function ReadinessBrief({
 
         <Card className="p-5 sm:p-6">
           <div className="space-y-4">
-            <div className="text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">Directional category visibility note</div>
+            <div className="text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">
+              Directional category visibility note
+            </div>
             <p className="text-sm leading-7 text-[var(--slate)]">{report.inferredCompetitiveContext.validationNote}</p>
           </div>
         </Card>
       </div>
 
       <JourneyDiagram mermaid={report.journeyDiagram.mermaid} summary={report.journeyDiagram.summary} />
-      <FixPackSection report={report} />
-      <BeforeAfterPerceptionSimulator perception={report.beforeAfterPerception} />
       <EvidenceReceipts receipts={report.evidenceReceipts} />
       <GeminiOrchestrationSummary report={report} />
+      <WhyGeminiStrip />
+      <JudgeRubricSnapshot />
 
       <Card className="p-5 sm:p-6">
         <div className="space-y-3">

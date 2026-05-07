@@ -89,7 +89,7 @@ export function HeroSection({
             <Input
               value={url}
               onChange={(event) => onUrlChange(event.target.value)}
-              placeholder="https://www.shopify.com"
+              placeholder="Enter a website URL or click a sample case to try"
               onKeyDown={(event) => {
                 if (event.key === "Enter") onSubmit();
               }}

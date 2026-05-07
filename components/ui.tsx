@@ -30,7 +30,7 @@ export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
     <input
       {...props}
       className={cn(
-        "h-12 w-full rounded-2xl border border-[var(--border)] bg-white px-4 text-sm text-[var(--ink)] outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--green)] focus:ring-2 focus:ring-[rgba(62,143,92,0.16)]",
+        "h-12 w-full rounded-2xl border border-[var(--border)] bg-white px-4 text-sm text-[var(--ink)] outline-none transition placeholder:text-[rgba(111,125,112,0.72)] focus:border-[var(--green)] focus:ring-2 focus:ring-[rgba(62,143,92,0.16)]",
         props.className,
       )}
     />

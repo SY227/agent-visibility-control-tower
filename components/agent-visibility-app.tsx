@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { AgentWorkflowTrace } from "@/components/agent-workflow-trace";
 import { HeroSection } from "@/components/hero-section";
@@ -60,6 +60,7 @@ export function AgentVisibilityApp() {
   const [isRunning, setIsRunning] = useState(false);
   const [workflowTrace, setWorkflowTrace] = useState<WorkflowTraceItem[]>(DEFAULT_TRACE);
   const [payload, setPayload] = useState<AnalyzeResultPayload | null>(null);
+  const briefRef = useRef<HTMLDivElement | null>(null);
 
   function updateTrace(event: ProgressEvent) {
     setWorkflowTrace((current) =>
@@ -162,6 +163,16 @@ export function AgentVisibilityApp() {
     await navigator.clipboard.writeText(buildMarkdownBrief(payload.report));
   }
 
+  useEffect(() => {
+    if (!payload || !briefRef.current) return;
+
+    const timer = window.setTimeout(() => {
+      briefRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 180);
+
+    return () => window.clearTimeout(timer);
+  }, [payload]);
+
   return (
     <div className="min-h-screen">
       <div className="mx-auto flex w-full max-w-[1320px] flex-col gap-8 px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
@@ -177,7 +188,11 @@ export function AgentVisibilityApp() {
           <AgentWorkflowTrace items={workflowTrace} isRunning={isRunning} />
         </div>
 
-        {payload ? <ReadinessBrief report={payload.report} onCopyMarkdown={() => void copyMarkdown()} /> : null}
+        {payload ? (
+          <div ref={briefRef} id="readiness-brief">
+            <ReadinessBrief report={payload.report} onCopyMarkdown={() => void copyMarkdown()} />
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { AgentWorkflowTrace } from "@/components/agent-workflow-trace";
 import { HeroSection } from "@/components/hero-section";
 import { ReadinessBrief } from "@/components/readiness-brief";
-import { Badge, Card } from "@/components/ui";
 import { buildMarkdownBrief } from "@/lib/export";
 import { SAMPLE_CASES } from "@/lib/sample-cases";
 import type { AnalyzeResultPayload, ProgressEvent, WorkflowTraceItem } from "@/lib/types";
@@ -60,10 +58,8 @@ const DEFAULT_TRACE: WorkflowTraceItem[] = [
 export function AgentVisibilityApp() {
   const [url, setUrl] = useState("");
   const [isRunning, setIsRunning] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [workflowTrace, setWorkflowTrace] = useState<WorkflowTraceItem[]>(DEFAULT_TRACE);
   const [payload, setPayload] = useState<AnalyzeResultPayload | null>(null);
-  const [copyState, setCopyState] = useState<"idle" | "copied">("idle");
 
   function updateTrace(event: ProgressEvent) {
     setWorkflowTrace((current) =>
@@ -86,9 +82,7 @@ export function AgentVisibilityApp() {
 
     setUrl(candidateUrl);
     setIsRunning(true);
-    setError(null);
     setPayload(null);
-    setCopyState("idle");
     setWorkflowTrace(DEFAULT_TRACE.map((item) => ({ ...item })));
 
     try {
@@ -141,7 +135,6 @@ export function AgentVisibilityApp() {
       }
     } catch (scanError) {
       const message = scanError instanceof Error ? scanError.message : "The scan failed.";
-      setError(message);
       setWorkflowTrace((current) => {
         const hadRunningStep = current.some((item) => item.status === "running");
 
@@ -167,8 +160,6 @@ export function AgentVisibilityApp() {
   async function copyMarkdown() {
     if (!payload) return;
     await navigator.clipboard.writeText(buildMarkdownBrief(payload.report));
-    setCopyState("copied");
-    window.setTimeout(() => setCopyState("idle"), 1600);
   }
 
   return (
@@ -185,49 +176,6 @@ export function AgentVisibilityApp() {
           />
           <AgentWorkflowTrace items={workflowTrace} isRunning={isRunning} />
         </div>
-
-        {payload?.scanSummary.limitations.length || error || copyState === "copied" ? (
-          <Card className="p-5 sm:p-6">
-            <div className="space-y-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="text-sm font-semibold text-[var(--ink)]">Run status</div>
-                  <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-                    Lightweight run notes, confidence flags, and copy status.
-                  </p>
-                </div>
-                <Badge tone={payload ? "success" : isRunning ? "sage" : error ? "critical" : "neutral"}>
-                  {payload ? "Brief ready" : isRunning ? "Scanning" : error ? "Attention needed" : "Ready"}
-                </Badge>
-              </div>
-
-              {payload?.scanSummary.limitations.length ? (
-                <div className="rounded-[22px] border border-[rgba(209,165,66,0.18)] bg-[var(--amber-soft)] px-4 py-3 text-sm leading-6 text-[var(--slate)]">
-                  <div className="mb-1 font-semibold text-[var(--ink)]">Confidence notes</div>
-                  {payload.scanSummary.limitations.join(" ")}
-                </div>
-              ) : null}
-
-              {error ? (
-                <div className="rounded-[22px] border border-[rgba(201,105,90,0.18)] bg-[var(--red-soft)] px-4 py-3 text-sm leading-6 text-[var(--slate)]">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="mt-1 h-4 w-4 shrink-0 text-[#9b4d41]" />
-                    <div>{error}</div>
-                  </div>
-                </div>
-              ) : null}
-
-              {copyState === "copied" ? (
-                <div className="rounded-[22px] border border-[rgba(62,143,92,0.18)] bg-[var(--green-soft)] px-4 py-3 text-sm text-[var(--green-deep)]">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" />
-                    Brief, artifacts, and Fix Pack copied as clean markdown.
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </Card>
-        ) : null}
 
         {payload ? <ReadinessBrief report={payload.report} onCopyMarkdown={() => void copyMarkdown()} /> : null}
       </div>

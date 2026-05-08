@@ -475,12 +475,19 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
         : fallback.geminiOrchestrationSummary.steps,
     },
     llmPerception: {
-      likelySummary: toSentence(source.llmPerception && typeof source.llmPerception === "object" ? (source.llmPerception as Record<string, unknown>).likelySummary : undefined, fallback.llmPerception.likelySummary),
-      positioningClarity: toSentence(
+      likelySummary: cleanSentenceText(
+        source.llmPerception && typeof source.llmPerception === "object"
+          ? (source.llmPerception as Record<string, unknown>).likelySummary
+          : undefined,
+        fallback.llmPerception.likelySummary,
+        420,
+      ),
+      positioningClarity: cleanSentenceText(
         source.llmPerception && typeof source.llmPerception === "object"
           ? (source.llmPerception as Record<string, unknown>).positioningClarity
           : undefined,
         fallback.llmPerception.positioningClarity,
+        260,
       ),
       possibleMisreadings: stringList(
         source.llmPerception && typeof source.llmPerception === "object"

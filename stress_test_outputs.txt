@@ -1,0 +1,1689 @@
+============================================================
+AGENT VISIBILITY CONTROL TOWER — STRESS TEST OUTPUTS
+Generated: 2026-05-08T05:50:09.588Z
+Local branch/status: main | M app/api/analyze/route.ts;  M components/agent-visibility-app.tsx;  M lib/gemini.ts;  M lib/report-helpers.ts; ?? stress_test_outputs.txt
+Build result: pass
+============================================================
+
+CASE 1 — Shopify
+URL: https://www.shopify.com
+Score: 96 / 100 (Excellent)
+Run status: pass, graceful Gemini fallback used
+Notes:
+- Why this case: Strong commerce platform, enterprise + SMB, good for polished demo.
+- Duration: 28.6s
+- Pages analyzed: 4
+- Pages discovered: 45
+- Page types: homepage, product, pricing
+- Gemini limited fallback used: yes
+- Stall heartbeat observed in API trace: no
+- Limitations: Skipped https://shopify.com/solutions: HTTP 404.
+- Issue flags watched: fakeRankingOrOverclaiming
+Full output:
+Workflow trace:
+- website-context :: running :: Reading homepage, sitemap, and high-signal internal pages.
+- website-context :: completed :: Captured 4 public pages for evidence review. (evidenceCount=4)
+- llm-perception :: running :: Modeling likely machine summaries from the captured public signals. (evidenceCount=4)
+- website-context :: completed :: Captured 4 public pages and identified commerce platform / ecommerce infrastructure for businesses and enterprises, homepage, product, pricing, proof, and action-path signals. (evidenceCount=4)
+- llm-perception :: completed :: Modeled likely machine summary and category interpretation from public evidence. (evidenceCount=4)
+- agent-visitor :: running :: Checking whether an AI agent can understand the buyer path and next action. (evidenceCount=4)
+- agent-visitor :: completed :: Assessed buyer routing, evaluation clarity, and next-step action signals for agent visitors. (evidenceCount=4)
+- aio-answer-engine :: running :: Assessing answer-engine interpretation, strengths, and structural weaknesses. (evidenceCount=4)
+- aio-answer-engine :: completed :: Reviewed answer-engine reuse, content structure, and machine-readable positioning cues. (evidenceCount=4)
+- citation-readiness :: running :: Reviewing evidence density, proof packaging, and trust gaps. (evidenceCount=4)
+- citation-readiness :: completed :: Checked whether claims, proof, and trust cues are packaged cleanly enough for citation. (evidenceCount=4)
+- fix-prioritization :: running :: Building the Fix Pack, ranking the top actions, and simulating projected perception changes. (evidenceCount=4)
+- fix-prioritization :: completed :: Converted the findings into a distinct first-week action plan and Fix Pack. (evidenceCount=4)
+
+Scan summary:
+- Normalized URL: https://shopify.com/
+- Pages analyzed: 4
+- Pages discovered: 45
+- Page types: homepage, product, pricing
+- Limitations: Skipped https://shopify.com/solutions: HTTP 404.
+
+# AI Visibility Readiness Brief
+
+**AI Visibility Score:** 96 / 100 (Excellent)
+
+## Executive Verdict
+Public signals suggest Shopify already has a strong machine-readable baseline, but category framing, proof packaging, and buyer routing can still be tightened for higher-confidence AI interpretation and citation.
+
+## Boardroom Snapshot
+- Enterprise Risk: Misclassification Risk (Low) -> If category and audience framing stay implicit, AI systems may classify the company too broadly instead of understanding it as commerce platform / ecommerce infrastructure for businesses and enterpr….
+- Business Consequence: Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.
+- First-Week Move: Baseline is strong. This week, Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages.
+
+## Scorecards
+- AI Visibility Score: 96/100 (Excellent)
+- Citation Readiness: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Agent Actionability: The action path should be linked more tightly to proof and pricing so an agent can move from understanding to action.
+
+## Decision Memo
+- Current posture: Excellent
+- Primary risk: Misclassification Risk (Low)
+- Recommended action: Baseline is strong. This week, Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages.
+- Suggested owner: Content
+- Time horizon: This week
+
+## Top Machine-Facing Gap
+The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.
+
+## Fix Pack / top 5 actions
+### What to do first this week
+Baseline is strong. This week, Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages.
+
+### Top 5 actions
+- 1. Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages (High impact, Low effort): Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.
+- 2. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 3. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 4. Reinforce product, organization, FAQ, and enterprise page schema (Medium impact, Low effort): Existing structured data is a good baseline, but broader reinforcement makes the category, offering, and page intent easier to confirm.
+- 5. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+
+### AI-readable homepage summary block
+Shopify is a commerce platform / ecommerce infrastructure for businesses and enterprises for entrepreneurs, smbs, commerce teams, and enterprise brands. It should say, in one machine-readable block, that it helps buyers with unlock unprecedented growth on the platform that keeps enterprises ahead, then support the primary claim with Reach millions of pre-verified shoppers. and a clear next step for plans, demo, or enterprise evaluation.
+
+### Answer-engine FAQ block
+- Q: What does Shopify do?
+  - A: Shopify is presented as a commerce platform / ecommerce infrastructure for businesses and enterprises with public signals that point to unlock unprecedented growth on the platform that keeps enterprises ahead.
+- Q: Who is Shopify for?
+  - A: entrepreneurs, SMBs, commerce teams, and enterprise brands.
+- Q: What problem does Shopify help solve?
+  - A: The public copy should connect the offer to one or two concrete workflows so answer engines can map the company to the right buyer need quickly.
+- Q: What proof should a buyer or machine see?
+  - A: Keep customer outcomes, trust markers, enterprise proof, or measured results close to the main value claims so they are easy to cite directionally.
+- Q: What is the best next step?
+  - A: Make the site state whether the next step is reviewing plans, requesting a demo, or starting an enterprise evaluation.
+
+### Citation-ready proof block
+- Turn this into a citation-ready proof line with a source, scope, or metric: Reach millions of pre-verified shoppers.
+- Turn this into a citation-ready proof line with a source, scope, or metric: Shopify Checkout with Shop Pay converts up to 50% higher than guest checkout and exposes your brand to hundreds of millions of buyers.
+- Add a proof line in this format: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Add a proof line in this format: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Place the strongest proof line beside the relevant pricing or enterprise-evaluation path so agents can connect trust to action.
+
+### Agent action-path copy
+- Pricing path: Review plans, pricing logic, and packaging to determine the right fit before contacting the team.
+- Demo / request path: If you want a guided walkthrough, request a demo with your use case, team size, and evaluation goals so the right workflow can be shown.
+- Enterprise evaluation path: For enterprise evaluation, share your security, integration, rollout, and procurement requirements so the team can scope fit clearly.
+- Docs path: If technical documentation exists, link it directly from the core product path so agents can route implementation-minded buyers cleanly.
+
+### Structured data / schema plan
+- Organization schema on the homepage and about surface to reinforce core company identity and official links.
+- Product or SoftwareApplication schema on the main product surface to clarify what the offering is and how it should be categorized.
+- FAQ schema for the answer-engine FAQ block so core buyer questions are machine-readable.
+- Breadcrumb schema on deeper product, pricing, and documentation paths to reinforce page relationships.
+- Review or AggregateRating schema only where real, supportable review evidence exists publicly.
+
+## Machine-Facing GTM Risks
+- Misclassification Risk (Low)
+  - Why it matters: If category and audience framing stay implicit, AI systems may classify the company too broadly instead of understanding it as commerce platform / ecommerce infrastructure for businesses and enterpr….
+  - Suggested fix: Add one plain-language category and audience block on the homepage, then repeat that framing on product and commercial pages.
+- Citation Weakness Risk (Low)
+  - Why it matters: Some proof exists, but it still needs tighter formatting so answer engines can reuse it as evidence instead of paraphrasing softer claims.
+  - Suggested fix: Pair each major claim with a nearby proof statement, outcome, customer example, or trust marker written in citation-ready language.
+- Agent Journey Blocker (Low)
+  - Why it matters: Understanding is not enough if an agent still cannot determine the next useful action after reading the site.
+  - Suggested fix: Make the next-step path explicit across homepage, product, and pricing surfaces, with clear routing for demo, evaluation, or self-serve intent.
+- Buyer Routing Risk (Low)
+  - Why it matters: Even with commercial signals present, fragmented routing can make it harder for a machine to connect the right buyer to the right path.
+  - Suggested fix: Clarify plans, packaging, or evaluation criteria, then connect that language directly to the relevant CTA path.
+- Trust Gap (Low)
+  - Why it matters: Machine-facing trust depends on visible proof, structured cues, and consistent credibility signals, not brand polish alone.
+  - Suggested fix: Strengthen public trust markers such as implementation evidence, security posture, customer outcomes, or structured data that reinforces official identity.
+
+## Inferred Competitive Context
+- Inferred category: Commerce platform / ecommerce infrastructure for businesses and enterpr….
+- Category confidence: High
+- Likely peer: Commerce platforms with stronger enterprise proof packaging (High) -> Likely inferred from public site signals showing a clear product story but room to make enterprise-grade proof easier for machines to quote and compare.
+- Likely peer: Ecommerce infrastructure vendors with clearer buyer routing (Medium) -> Likely inferred from public site signals around how directly the site guides entrepreneurs, smbs, commerce teams, and enterprise brands into pricing, demo, or enterprise evaluation next steps.
+- Likely peer: Retail technology platforms with stronger structured data (Medium) -> Likely inferred from public site signals about structured data, repeated category wording, and how easily answer engines can reuse the site narrative.
+- Likely peer: Marketplace and storefront platforms with clearer category framing (Medium) -> Likely inferred from public site signals that suggest the category is real and legible, but still benefits from tighter noun-based framing across core pages.
+- Competitive perception gap: The site appears likely to belong in a clear category, but its machine-facing differentiation can still be packaged more tightly than the strongest peer narratives AI systems compress into summaries.
+- Category visibility risk: Category visibility risk looks moderate because the company is directionally legible, but proof, buyer routing, or repeated machine-readable cues still need tighter packaging.
+- Differentiation note: Use category language consistently across homepage, product, pricing, and enterprise pages so machine summaries do not drift.
+- Differentiation note: Keep proof and audience context close to the main value proposition so differentiation is supported, not merely asserted.
+- Differentiation note: Strengthen action-path clarity so machine-mediated buyers can distinguish this offer from adjacent options in the same category.
+- Validation note: This is directional competitive context inferred from public site signals, not a verified market map, official competitor list, or claim about which company an AI system would prefer.
+
+## Before / After AI Perception Simulator
+### Current likely AI / LLM summary
+Shopify appears to be a commerce platform / ecommerce infrastructure for businesses and enterprises for entrepreneurs, smbs, commerce teams, and enterprise brands, with public signals pointing to unlock unprecedented growth on the platform that keeps enterprises ahead.
+
+### Improved likely AI / LLM summary
+Directional simulation only: if the proposed homepage summary, FAQ, proof packaging, and action-path copy were added, Shopify would be more likely to be interpreted as a clearly categorized company for a clearly stated audience, with stronger proof support and a cleaner next-step path for machine-mediated buyers.
+
+### What changed
+- Clearer category framing based on the proposed homepage summary and FAQ block.
+- Clearer audience and workflow language for answer engines and agent visitors.
+- Stronger proof packaging through citation-ready claims and evidence formatting.
+- Cleaner buyer action path across pricing, demo, enterprise evaluation, and docs routing.
+- Improved machine readability from tighter structure and schema reinforcement.
+- Improved citation support, directionally, through more explicit proof and trust signals.
+
+## Evidence Receipts
+- Shopify: The All-in-One Commerce Platform for Businesses - Shopify (https://shopify.com/)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: For anyone from entrepreneurs to enterprise.
+- Shopify: The All-in-One Commerce Platform for Businesses - Shopify (https://shopify.com/)
+  - Signal: Proof or customer credibility signal is present.
+  - Why it matters: Citation-friendly proof improves whether an answer engine can support a recommendation confidently.
+  - Snippet: Reach millions of pre-verified shoppers.
+- Shopify: The All-in-One Commerce Platform for Businesses - Shopify (https://shopify.com/)
+  - Signal: Structured data detected: Corporation, ContactPoint.
+  - Why it matters: Structured data can reduce ambiguity when agents parse page intent and business facts.
+  - Snippet: Get more than ecommerce software with tools to manage every part of your business.
+- Shopify for enterprise - Shopify (https://shopify.com/enterprise)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: Shopify for enterprise - Shopify.
+- B2B Commerce Platform - Shopify (https://shopify.com/plus/solutions/b2b-ecommerce)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: Run B2B and DTC on one platform with modern self-serve buying and specialized wholesale tools, including custom catalogs, pricing, and automatic inventory sync. .
+- B2B Commerce Platform - Shopify (https://shopify.com/plus/solutions/b2b-ecommerce)
+  - Signal: Proof or customer credibility signal is present.
+  - Why it matters: Citation-friendly proof improves whether an answer engine can support a recommendation confidently.
+  - Snippet: Curate pricing and product availability using catalogs, which can be assigned to specific B2B customers.
+- B2B Commerce Platform - Shopify (https://shopify.com/plus/solutions/b2b-ecommerce)
+  - Signal: Use-case language appears in rendered copy.
+  - Why it matters: This helps machines map the company to a buyer problem, workflow, or role-based query.
+  - Snippet: B2B Commerce Platform - Shopify.
+- Shopify Pricing - Setup and Open Your Online Store Today – Free Trial - Shopify (https://shopify.com/pricing)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: Shopify Pricing - Setup and Open Your Online Store Today – Free Trial - Shopify.
+
+## Visible Agent Artifacts
+### Site facts captured
+- Company/category summary: Commerce platform / ecommerce infrastructure for businesses and enterprises.
+- Likely audience: entrepreneurs, SMBs, commerce teams, and enterprise brands.
+- Main offering: Unlock unprecedented growth on the platform that keeps enterprises ahead.
+- Key page found: Be the nextAI all-star (homepage)
+- Key page found: Shopify for enterprise (product)
+- Key page found: Feels like DTC. Acts like B2B. (product)
+- Key page found: Plans & pricing (pricing)
+- Proof signal found: Reach millions of pre-verified shoppers.
+- Proof signal found: Put your products where shoppers search, shop, and scroll with multichannel integration.
+- Proof signal found: Structured data present: Corporation, ContactPoint
+- Proof signal found: EY shares a report on the retail industry and the role of technology within it Shopify has the fastest server speed in commerce EY shares a new report on how integrated technology…
+- Proof signal found: Curate pricing and product availability using catalogs, which can be assigned to specific B2B customers.
+- Missing basic: Machine readability is solid overall, but the site can still tighten proof packaging and action-path clarity.
+
+### Likely machine summary
+Shopify appears to be a commerce platform / ecommerce infrastructure for businesses and enterprises for entrepreneurs, smbs, commerce teams, and enterprise brands, with public signals pointing to unlock unprecedented growth on the platform that keeps enterprises ahead.
+- Positioning interpretation: Public signals suggest the company will likely be interpreted as Commerce platform / ecommerce infrastructure for businesses and enterprises.
+- Possible misreading: A model may still flatten the company into a broader category if the strongest category and audience cues are not repeated across homepage, product, and enterprise pages.
+- Possible misreading: A model may understand the product but still blur the difference between self-serve, growth, and enterprise paths.
+- Possible misreading: Strong proof exists, but machines may not cite it cleanly if outcomes, trust cues, and commercial claims stay too far apart.
+
+### Agent shopper journey blockers
+- Agents can understand: The site exposes 4 public pages in this bounded pass.
+- Agents can understand: Some audience or workflow intent is visible in rendered HTML.
+- Agents can understand: At least one next-step path is public and machine-visible.
+- Journey blocker: The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+- Journey blocker: Proof exists, but it may not sit close enough to the claims or action path for fast machine trust-building.
+- Journey blocker: The next-step path exists, but it is not yet reinforced with role-specific action language.
+- Actionability gap: The action path should be linked more tightly to proof and pricing so an agent can move from understanding to action.
+- Actionability gap: Role-specific copy exists, but the commercial next step still needs to be easier to infer.
+- Actionability gap: Important buying logic may still live in visual design rather than plainly extractable text.
+
+### Answer-engine readiness findings
+- Strength: The site provides at least some use-case or workflow context for answer engines.
+- Strength: Public proof signals give answer engines some material they can cite or paraphrase.
+- Strength: Structured data is present on at least one high-signal page.
+- Weakness: Even strong public sites benefit from tighter proof packaging and clearer machine-facing commercial context.
+- Observation: Answer surfaces will likely understand the broad problem area, but may still compress the positioning.
+- Observation: Visible proof increases the odds of a more trustworthy directional summary, though not guaranteed citation behavior.
+- Content structure issue: Important machine-readable context should stay in rendered text, not only in visual layout or implied page structure.
+- Content structure issue: Important machine-readable context should stay in rendered text, not only in visual layout or implied page structure.
+- Content structure issue: Core buyer-path information should be repeated consistently across homepage, product, and commercial pages.
+
+### Evidence and proof gaps
+- Strong claim: Reach millions of pre-verified shoppers.
+- Strong claim: Shopify Checkout with Shop Pay converts up to 50% higher than guest checkout and exposes your brand to hundreds of millions of buyers.
+- Strong claim: Curate pricing and product availability using catalogs, which can be assigned to specific B2B customers.
+- Strong claim: Create customer-specific conditional rules for products and variants, including minimums and maximums, case packs, and increments.
+- Weak claim: Some higher-level value claims would still benefit from explicit metrics, named evidence, or linked documentation.
+- Proof gap: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Proof gap: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Trust gap: Trust signals like compliance, security, or documented validation are not prominent enough in the bounded crawl.
+
+### Fix Pack + top 5 actions
+- 1. Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages (High impact, Low effort): Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.
+- 2. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 3. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 4. Reinforce product, organization, FAQ, and enterprise page schema (Medium impact, Low effort): Existing structured data is a good baseline, but broader reinforcement makes the category, offering, and page intent easier to confirm.
+- 5. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+- First this week: Baseline is strong. This week, Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages.
+- Fix Pack component: Baseline machine readability is already strong, so the first-week work is refinement, not emergency repair.
+- Fix Pack component: Paste-ready homepage summary and FAQ copy to reinforce category, audience, and next-step routing.
+- Fix Pack component: Citation-ready proof packaging and a practical schema plan for the highest-signal pages.
+- Fix Pack component: Action-path copy for pricing, demo, enterprise evaluation, and docs routing.
+
+## Gemini Orchestration Summary
+This is a bounded Gemini agent workflow with six specialized stages, visible artifacts, and evidence-constrained outputs, optimized for enterprise reliability and inspectability rather than performative autonomy.
+- Website Context Agent -> Captured public facts, category clues, page coverage, and missing basics from the bounded website scan. Output artifact: Site facts captured
+- LLM Perception Agent -> Modeled the likely machine summary, positioning interpretation, and possible misreadings based on public signals. Output artifact: Likely machine summary
+- Agent Visitor Agent -> Identified what an AI buyer agent can understand, where the journey stalls, and which next-step paths remain unclear. Output artifact: Agent shopper journey blockers
+- AIO / Answer Engine Agent -> Assessed answer-surface readiness, structure quality, and how easily the site narrative can be reused by answer engines. Output artifact: Answer-engine readiness findings
+- Citation Readiness Agent -> Reviewed claims, proof density, and trust packaging to surface evidence gaps that limit machine confidence. Output artifact: Evidence and proof gaps
+- Fix Prioritization Agent -> Converted the findings into an executive brief, a Fix Pack, and the first-week priority list. Output artifact: Fix Pack + top 5 actions
+
+## Why Gemini
+- Gemini Flash: used for fast, responsive agent workflows.
+- Structured outputs: Gemini output is constrained into typed artifacts and validated.
+- Bounded orchestration: six specialized Gemini-driven stages produce inspectable artifacts.
+- Enterprise reliability: evidence-constrained outputs are favored over open-ended chat or fake autonomous swarms.
+- Architecture note: Gemini Pro can support deeper final synthesis later without changing the core one-URL flow.
+
+## Why this fits the challenge
+- Application of Technology: Gemini powers the bounded six-stage agent workflow, structured JSON synthesis, visible intermediate artifacts, Machine-Facing GTM Risks, Fix Pack generation, and Before / After AI Perception Simulator.
+- Presentation: One URL input, visible workflow trace, boardroom-ready brief, executive snapshot, and handoff-ready workstreams.
+- Business Value: Enterprises risk being misunderstood, skipped, weakly cited, or misrouted by AI agents and answer engines before human buyers ever reach the website.
+- Originality: Most SEO tools optimize for search crawlers. This product audits and repairs how AI agents, LLMs, and answer engines understand, cite, route, or skip a company.
+
+## Limitations
+This is a directional public-page read based on a bounded crawl. Some pages may be blocked, dynamic, or inaccessible from the server environment, so conclusions should be validated before strategic use. Gemini synthesis was limited for this run, so the report used conservative local synthesis from public-page evidence.
+
+------------------------------------------------------------
+
+CASE 2 — Cursor
+URL: https://www.cursor.com
+Score: 96 / 100 (Excellent)
+Run status: pass, Gemini completed
+Notes:
+- Why this case: AI-native product, tests whether the app handles modern AI positioning clearly.
+- Duration: 27.0s
+- Pages analyzed: 5
+- Pages discovered: 43
+- Page types: homepage, product, pricing
+- Gemini limited fallback used: no
+- Stall heartbeat observed in API trace: no
+- Limitations: Skipped https://cursor.com/plus/solutions/b2b-ecommerce: HTTP 404.
+- Issue flags watched: genericFeelRisk
+Full output:
+Workflow trace:
+- website-context :: running :: Reading homepage, sitemap, and high-signal internal pages.
+- website-context :: completed :: Captured 5 public pages for evidence review. (evidenceCount=5)
+- llm-perception :: running :: Modeling likely machine summaries from the captured public signals. (evidenceCount=5)
+- website-context :: completed :: Captured 5 public pages and identified for enterprise — trusted by 64% of fortune 500 companies, homepage, product, pricing, proof, and action-path signals. (evidenceCount=5)
+- llm-perception :: completed :: Modeled likely machine summary and category interpretation from public evidence. (evidenceCount=5)
+- agent-visitor :: running :: Checking whether an AI agent can understand the buyer path and next action. (evidenceCount=5)
+- agent-visitor :: completed :: Assessed buyer routing, evaluation clarity, and next-step action signals for agent visitors. (evidenceCount=5)
+- aio-answer-engine :: running :: Assessing answer-engine interpretation, strengths, and structural weaknesses. (evidenceCount=5)
+- aio-answer-engine :: completed :: Reviewed answer-engine reuse, content structure, and machine-readable positioning cues. (evidenceCount=5)
+- citation-readiness :: running :: Reviewing evidence density, proof packaging, and trust gaps. (evidenceCount=5)
+- citation-readiness :: completed :: Checked whether claims, proof, and trust cues are packaged cleanly enough for citation. (evidenceCount=5)
+- fix-prioritization :: running :: Building the Fix Pack, ranking the top actions, and simulating projected perception changes. (evidenceCount=5)
+- fix-prioritization :: completed :: Converted the findings into a distinct first-week action plan and Fix Pack. (evidenceCount=5)
+
+Scan summary:
+- Normalized URL: https://cursor.com/
+- Pages analyzed: 5
+- Pages discovered: 43
+- Page types: homepage, product, pricing
+- Limitations: Skipped https://cursor.com/plus/solutions/b2b-ecommerce: HTTP 404.
+
+# AI Visibility Readiness Brief
+
+**AI Visibility Score:** 96 / 100 (Excellent)
+
+## Executive Verdict
+Public signals suggest Cursor already has a strong machine-readable baseline, but category framing, proof packaging, and buyer routing can still be tightened for higher-confidence AI interpretation and citation.
+
+## Boardroom Snapshot
+- Enterprise Risk: Citation Weakness Risk (Medium) -> Testimonials are in body text, making them harder for answer engines to attribute to specific companies.
+- Business Consequence: Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- First-Week Move: Package proof closer to homepage and enterprise claims.
+
+## Scorecards
+- AI Visibility Score: 96/100 (Excellent)
+- Citation Readiness: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Agent Actionability: The action path should be linked more tightly to proof and pricing so an agent can move from understanding to action.
+
+## Decision Memo
+- Current posture: Excellent
+- Primary risk: Citation Weakness Risk (Medium)
+- Recommended action: Package proof closer to homepage and enterprise claims.
+- Suggested owner: RevOps
+- Time horizon: This week
+
+## Top Machine-Facing Gap
+The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+
+## Fix Pack / top 5 actions
+### What to do first this week
+Package proof closer to homepage and enterprise claims.
+
+### Top 5 actions
+- 1. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 2. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 3. Reinforce product, organization, FAQ, and enterprise page schema (Medium impact, Low effort): Existing structured data is a good baseline, but broader reinforcement makes the category, offering, and page intent easier to confirm.
+- 4. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+- 5. Create a cleaner buyer action path across homepage, product, and pricing surfaces (High impact, Low effort): Understanding alone is not enough if a machine still cannot determine the correct next action for a buyer.
+
+### AI-readable homepage summary block
+Cursor is a for enterprise — trusted by 64% of fortune 500 companies for enterprise brands and developers. It should say, in one machine-readable block, that it helps buyers with soc 2 type ii certified. zero data retention. saml sso with okta, azure ad & google workspace. used by nvidia, samsung, openai, stripe, and more, then support the primary claim with Cursor for Enterprise — Trusted by 64% of Fortune 500 companies. and a clear next step for plans, demo, or enterprise evaluation.
+
+### Answer-engine FAQ block
+- Q: What does Cursor do?
+  - A: Cursor is presented as a for enterprise — trusted by 64% of fortune 500 companies with public signals that point to soc 2 type ii certified. zero data retention. saml sso with okta, azure ad & google workspace. used by nvidia, samsung, openai, stripe, and more.
+- Q: Who is Cursor for?
+  - A: enterprise brands and developers.
+- Q: What problem does Cursor help solve?
+  - A: The public copy should connect the offer to one or two concrete workflows so answer engines can map the company to the right buyer need quickly.
+- Q: What proof should a buyer or machine see?
+  - A: Keep customer outcomes, trust markers, enterprise proof, or measured results close to the main value claims so they are easy to cite directionally.
+- Q: What is the best next step?
+  - A: Make the site state whether the next step is reviewing plans, requesting a demo, or starting an enterprise evaluation.
+
+### Citation-ready proof block
+- Turn this into a citation-ready proof line with a source, scope, or metric: Cursor for Enterprise — Trusted by 64% of Fortune 500 companies.
+- Turn this into a citation-ready proof line with a source, scope, or metric: Trusted by the world's leading enterprises. .
+- Add a proof line in this format: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Add a proof line in this format: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Place the strongest proof line beside the relevant pricing or enterprise-evaluation path so agents can connect trust to action.
+
+### Agent action-path copy
+- Pricing path: Review plans, pricing logic, and packaging to determine the right fit before contacting the team.
+- Demo / request path: If you want a guided walkthrough, request a demo with your use case, team size, and evaluation goals so the right workflow can be shown.
+- Enterprise evaluation path: For enterprise evaluation, share your security, integration, rollout, and procurement requirements so the team can scope fit clearly.
+- Docs path: If technical documentation exists, link it directly from the core product path so agents can route implementation-minded buyers cleanly.
+
+### Structured data / schema plan
+- Organization schema on the homepage and about surface to reinforce core company identity and official links.
+- Product or SoftwareApplication schema on the main product surface to clarify what the offering is and how it should be categorized.
+- FAQ schema for the answer-engine FAQ block so core buyer questions are machine-readable.
+- Breadcrumb schema on deeper product, pricing, and documentation paths to reinforce page relationships.
+- Review or AggregateRating schema only where real, supportable review evidence exists publicly.
+
+## Machine-Facing GTM Risks
+- Misclassification Risk (Low)
+  - Why it matters: Agents might categorize Cursor as a plugin rather than a primary IDE.
+  - Suggested fix: Implement SoftwareApplication schema with 'applicationCategory': 'DeveloperApplication'.
+- Citation Weakness Risk (Medium)
+  - Why it matters: Testimonials are in body text, making them harder for answer engines to attribute to specific companies.
+  - Suggested fix: Wrap Fortune 500 mentions in Review or Organization schema.
+- Agent Journey Blocker (Medium)
+  - Why it matters: Broken links (404) on solution pages stop agent discovery of vertical-specific value.
+  - Suggested fix: Repair the /plus/solutions/b2b-ecommerce path or redirect to a general solutions hub.
+- Buyer Routing Risk (Low)
+  - Why it matters: Enterprise buyers might be routed to 'Pro' if the 'Enterprise' value prop isn't clearly differentiated in snippets.
+  - Suggested fix: Add a structured 'Enterprise Features' list to the pricing page schema.
+- Trust Gap (Low)
+  - Why it matters: Security claims are high-stakes for IDEs; unstructured claims are less 'believable' to LLMs.
+  - Suggested fix: Add a dedicated security schema block highlighting SOC 2 and Zero Data Retention.
+
+## Inferred Competitive Context
+- Inferred category: for Enterprise — Trusted by 64% of Fortune 500 companies.
+- Category confidence: High
+- Likely peer: Legacy IDE AI Plugins (High) -> Cursor explicitly compares its 'agentic' workflow to traditional autocomplete tools.
+- Likely peer: Cloud-Based Development Environments (Medium) -> Focus on enterprise scale and centralized management.
+- Likely peer: Autonomous Coding Agents (High) -> Frequent use of 'agent', 'autonomous', and 'parallel' in product copy.
+- Competitive perception gap: Cursor likely appears more 'ready for deployment' than experimental agent startups but more 'disruptive' than standard IDE extensions.
+- Category visibility risk: Risk of being bucketed as a 'utility' rather than 'infrastructure' if the standalone nature of the IDE isn't prioritized by agents.
+- Differentiation note: Use category language consistently across homepage, product, pricing, and enterprise pages so machine summaries do not drift.
+- Differentiation note: Keep proof and audience context close to the main value proposition so differentiation is supported, not merely asserted.
+- Differentiation note: Strengthen action-path clarity so machine-mediated buyers can distinguish this offer from adjacent options in the same category.
+- Validation note: This is directional competitive context, inferred from public site signals, and not a verified market map.
+
+## Before / After AI Perception Simulator
+### Current likely AI / LLM summary
+Cursor appears to be a for enterprise — trusted by 64% of fortune 500 companies for enterprise brands and developers, with public signals pointing to soc 2 type ii certified. zero data retention. saml sso with okta, azure ad & google workspace. used by nvidia, samsung, openai, stripe, and more.
+
+### Improved likely AI / LLM summary
+Directional simulation only: if the proposed homepage summary, FAQ, proof packaging, and action-path copy were added, Cursor would be more likely to be interpreted as a clearly categorized company for a clearly stated audience, with stronger proof support and a cleaner next-step path for machine-mediated buyers.
+
+### What changed
+- Clearer category framing based on the proposed homepage summary and FAQ block.
+- Clearer audience and workflow language for answer engines and agent visitors.
+- Stronger proof packaging through citation-ready claims and evidence formatting.
+- Cleaner buyer action path across pricing, demo, enterprise evaluation, and docs routing.
+- Improved machine readability from tighter structure and schema reinforcement.
+- Improved citation support, directionally, through more explicit proof and trust signals.
+
+## Evidence Receipts
+- Cursor: The best way to code with AI (https://cursor.com/)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: ” “My favorite enterprise AI service is Cursor.
+- Cursor: The best way to code with AI (https://cursor.com/enterprise)
+  - Signal: Structured data detected: Organization, ImageObject, ContactPoint, WebSite.
+  - Why it matters: Structured data can reduce ambiguity when agents parse page intent and business facts.
+  - Snippet: Built to make you extraordinarily productive, Cursor is the best way to build software with AI.
+- Cursor for Enterprise — Trusted by 64% of Fortune 500 companies (https://cursor.com/pricing)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: Cursor for Enterprise — Trusted by 64% of Fortune 500 companies.
+- Cursor for Enterprise — Trusted by 64% of Fortune 500 companies (https://cursor.com/product)
+  - Signal: Structured data detected: Organization, ImageObject, ContactPoint, WebSite.
+  - Why it matters: Structured data can reduce ambiguity when agents parse page intent and business facts.
+  - Snippet: SOC 2 Type II certified. Zero data retention. SAML SSO with Okta, Azure AD & Google Workspace. Used by Nvidia, Samsung, OpenAI, Stripe, and more.
+
+## Visible Agent Artifacts
+### Site facts captured
+- Company/category summary: for Enterprise — Trusted by 64% of Fortune 500 companies.
+- Likely audience: Software engineers, engineering leadership, and enterprise R&D organizations.
+- Main offering: A standalone code editor with built-in AI agents, codebase indexing, and enterprise-grade security features.
+- Key page found: Built to make you extraordinarily productive, Cursor is the best way to code with AI. (homepage)
+- Key page found: Develop enduring software at scale (product)
+- Key page found: Pricing (pricing)
+- Key page found: Turn ideas into code (product)
+- Key page found: Next-action prediction (product)
+- Proof signal found: Trusted every day by teams that build world-class software.
+- Proof signal found: Structured data present: Organization, ImageObject, ContactPoint, WebSite
+- Proof signal found: Cursor for Enterprise — Trusted by 64% of Fortune 500 companies.
+- Proof signal found: SOC 2 Type II certified.
+- Proof signal found: Trusted every day by teams that build world-class software. .
+- Missing basic: The next-step path for a buyer or agent is not consistently obvious.
+
+### Likely machine summary
+Cursor appears to be a for enterprise — trusted by 64% of fortune 500 companies for enterprise brands and developers, with public signals pointing to soc 2 type ii certified. zero data retention. saml sso with okta, azure ad & google workspace. used by nvidia, samsung, openai, stripe, and more.
+- Positioning interpretation: Public signals suggest the company will likely be interpreted as for Enterprise — Trusted by 64% of Fortune 500 companies.
+- Possible misreading: A model may still flatten the company into a broader category if the strongest category and audience cues are not repeated across homepage, product, and enterprise pages.
+- Possible misreading: A model may understand the product but still blur the difference between self-serve, growth, and enterprise paths.
+- Possible misreading: Strong proof exists, but machines may not cite it cleanly if outcomes, trust cues, and commercial claims stay too far apart.
+
+### Agent shopper journey blockers
+- Agents can understand: The site exposes 5 public pages in this bounded pass.
+- Agents can understand: Some audience or workflow intent is visible in rendered HTML.
+- Agents can understand: At least one next-step path is public and machine-visible.
+- Journey blocker: The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+- Journey blocker: Proof exists, but it may not sit close enough to the claims or action path for fast machine trust-building.
+- Journey blocker: The site does not yet make the next action obvious across the homepage, product, and commercial surfaces.
+- Actionability gap: The action path should be linked more tightly to proof and pricing so an agent can move from understanding to action.
+- Actionability gap: Role-specific copy exists, but the commercial next step still needs to be easier to infer.
+- Actionability gap: Important buying logic may still live in visual design rather than plainly extractable text.
+
+### Answer-engine readiness findings
+- Strength: The site provides at least some use-case or workflow context for answer engines.
+- Strength: Public proof signals give answer engines some material they can cite or paraphrase.
+- Strength: Structured data is present on at least one high-signal page.
+- Weakness: Thin pages limit the amount of reusable explanatory text available to answer engines.
+- Weakness: The buying path still needs clearer rendered next-step language for agent-mediated journeys.
+- Observation: Answer surfaces will likely understand the broad problem area, but may still compress the positioning.
+- Observation: Visible proof increases the odds of a more trustworthy directional summary, though not guaranteed citation behavior.
+- Content structure issue: Action-path copy is too sparse or too disconnected from the explanatory content.
+- Content structure issue: Important machine-readable context should stay in rendered text, not only in visual layout or implied page structure.
+
+### Evidence and proof gaps
+- Strong claim: Used by 64% of Fortune 500
+- Strong claim: SOC 2 Type II certified
+- Strong claim: 28% higher accept rate for Tab model
+- Weak claim: Extraordinarily productive (subjective)
+- Weak claim: The best way to code with AI (superlative)
+- Proof gap: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Proof gap: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Trust gap: Trusted every day by teams that build world-class software.
+- Trust gap: Cursor for Enterprise — Trusted by 64% of Fortune 500 companies.
+- Trust gap: SOC 2 Type II certified.
+- Trust gap: Trusted by the world's leading enterprises. .
+
+### Fix Pack + top 5 actions
+- 1. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 2. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 3. Reinforce product, organization, FAQ, and enterprise page schema (Medium impact, Low effort): Existing structured data is a good baseline, but broader reinforcement makes the category, offering, and page intent easier to confirm.
+- 4. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+- 5. Create a cleaner buyer action path across homepage, product, and pricing surfaces (High impact, Low effort): Understanding alone is not enough if a machine still cannot determine the correct next action for a buyer.
+- First this week: Package proof closer to homepage and enterprise claims.
+- Fix Pack component: Start with the highest-leverage clarity and buyer-path repairs first.
+- Fix Pack component: Paste-ready homepage summary and FAQ copy to reinforce category, audience, and next-step routing.
+- Fix Pack component: Citation-ready proof packaging and a practical schema plan for the highest-signal pages.
+- Fix Pack component: Action-path copy for pricing, demo, enterprise evaluation, and docs routing.
+
+## Gemini Orchestration Summary
+A bounded Gemini agent workflow executed in six stages to evaluate and repair machine-facing GTM signals.
+- Website Context Agent -> Captured public facts, category clues, page coverage, and missing basics from the bounded website scan. Output artifact: Site facts captured
+- LLM Perception Agent -> Modeled the likely machine summary, positioning interpretation, and possible misreadings based on public signals. Output artifact: Likely machine summary
+- Agent Visitor Agent -> Identified what an AI buyer agent can understand, where the journey stalls, and which next-step paths remain unclear. Output artifact: Agent shopper journey blockers
+- AIO / Answer Engine Agent -> Assessed answer-surface readiness, structure quality, and how easily the site narrative can be reused by answer engines. Output artifact: Answer-engine readiness findings
+- Citation Readiness Agent -> Reviewed claims, proof density, and trust packaging to surface evidence gaps that limit machine confidence. Output artifact: Evidence and proof gaps
+- Fix Prioritization Agent -> Converted the findings into an executive brief, a Fix Pack, and the first-week priority list. Output artifact: Fix Pack + top 5 actions
+
+## Why Gemini
+- Gemini Flash: used for fast, responsive agent workflows.
+- Structured outputs: Gemini output is constrained into typed artifacts and validated.
+- Bounded orchestration: six specialized Gemini-driven stages produce inspectable artifacts.
+- Enterprise reliability: evidence-constrained outputs are favored over open-ended chat or fake autonomous swarms.
+- Architecture note: Gemini Pro can support deeper final synthesis later without changing the core one-URL flow.
+
+## Why this fits the challenge
+- Application of Technology: Gemini powers the bounded six-stage agent workflow, structured JSON synthesis, visible intermediate artifacts, Machine-Facing GTM Risks, Fix Pack generation, and Before / After AI Perception Simulator.
+- Presentation: One URL input, visible workflow trace, boardroom-ready brief, executive snapshot, and handoff-ready workstreams.
+- Business Value: Enterprises risk being misunderstood, skipped, weakly cited, or misrouted by AI agents and answer engines before human buyers ever reach the website.
+- Originality: Most SEO tools optimize for search crawlers. This product audits and repairs how AI agents, LLMs, and answer engines understand, cite, route, or skip a company.
+
+## Limitations
+This is a directional public-page read based on a bounded crawl. Some pages may be blocked, dynamic, or inaccessible from the server environment, so conclusions should be validated before strategic use.
+
+------------------------------------------------------------
+
+CASE 3 — Ramp
+URL: https://www.ramp.com
+Score: 18 / 100 (Weak)
+Run status: degraded fallback, crawl blocked
+Notes:
+- Why this case: Finance / operations / enterprise GTM case, strong fit with business-value framing.
+- Duration: 0.9s
+- Pages analyzed: 0
+- Pages discovered: 0
+- Page types: none
+- Gemini limited fallback used: no
+- Stall heartbeat observed in API trace: no
+- Limitations: The site could not be fetched from this environment with a lightweight public-page crawl. | Skipped https://ramp.com: non-HTML response. | Skipped https://www.ramp.com: non-HTML response. | Skipped http://ramp.com: non-HTML response. | Skipped http://www.ramp.com: non-HTML response.
+- Issue flags watched: weakEvidenceReceipts, fakeRankingOrOverclaiming, genericFeelRisk
+Full output:
+Workflow trace:
+- website-context :: running :: Reading homepage, sitemap, and high-signal internal pages.
+- website-context :: blocked :: Public page fetch was limited from this environment. (evidenceCount=0)
+- llm-perception :: running :: Modeling likely machine summaries from the captured public signals. (evidenceCount=0)
+- website-context :: blocked :: Could not extract enough public evidence from this environment. (evidenceCount=0)
+- llm-perception :: blocked :: Modeled likely machine summary and category interpretation from public evidence. (evidenceCount=0)
+- agent-visitor :: running :: Checking whether an AI agent can understand the buyer path and next action. (evidenceCount=0)
+- agent-visitor :: blocked :: Assessed buyer routing, evaluation clarity, and next-step action signals for agent visitors. (evidenceCount=0)
+- aio-answer-engine :: running :: Assessing answer-engine interpretation, strengths, and structural weaknesses. (evidenceCount=0)
+- aio-answer-engine :: blocked :: Reviewed answer-engine reuse, content structure, and machine-readable positioning cues. (evidenceCount=0)
+- citation-readiness :: running :: Reviewing evidence density, proof packaging, and trust gaps. (evidenceCount=0)
+- citation-readiness :: blocked :: Checked whether claims, proof, and trust cues are packaged cleanly enough for citation. (evidenceCount=0)
+- fix-prioritization :: running :: Building the Fix Pack, ranking the top actions, and simulating projected perception changes. (evidenceCount=0)
+- fix-prioritization :: blocked :: Converted the findings into a distinct first-week action plan and Fix Pack. (evidenceCount=0)
+
+Scan summary:
+- Normalized URL: https://www.ramp.com
+- Pages analyzed: 0
+- Pages discovered: 0
+- Page types: none
+- Limitations: The site could not be fetched from this environment with a lightweight public-page crawl. | Skipped https://ramp.com: non-HTML response. | Skipped https://www.ramp.com: non-HTML response. | Skipped http://ramp.com: non-HTML response. | Skipped http://www.ramp.com: non-HTML response.
+
+# AI Visibility Readiness Brief
+
+**AI Visibility Score:** 18 / 100 (Weak)
+
+## Executive Verdict
+Evidence is limited because the site could not be fetched cleanly from this environment, so this brief is directional at best.
+
+## Boardroom Snapshot
+- Enterprise Risk: Misclassification Risk (High) -> If category and audience framing stay implicit, AI systems may classify the company too broadly instead of understanding it as digital product or service platform with category language that still n….
+- Business Consequence: Machines need the company, buyer, and use case to be obvious in rendered text before they can summarize or route intent well.
+- First-Week Move: Add one plain-English homepage block that states category, audience, and workflow outcome.
+
+## Scorecards
+- AI Visibility Score: 18/100 (Weak)
+- Citation Readiness: Add named customers, measured outcomes, certifications, or documented implementation evidence near the main claims.
+- Agent Actionability: A cleaner CTA and evaluation path is needed after the machine identifies the product and audience.
+
+## Decision Memo
+- Current posture: Weak
+- Primary risk: Misclassification Risk (High)
+- Recommended action: Add one plain-English homepage block that states category, audience, and workflow outcome.
+- Suggested owner: Content
+- Time horizon: This week
+
+## Top Machine-Facing Gap
+Machines may not understand the buyer or action path because pricing and packaging are not clearly public.
+Machines need the company, buyer, and use case to be obvious in rendered text before they can summarize or route intent well.
+
+## Fix Pack / top 5 actions
+### What to do first this week
+Add one plain-English homepage block that states category, audience, and workflow outcome.
+
+### Top 5 actions
+- 1. Add one plain-English homepage block that states category, audience, and workflow outcome (High impact, Low effort): Machines need the company, buyer, and use case to be obvious in rendered text before they can summarize or route intent well.
+- 2. Pair the primary claims with visible proof, outcomes, or customer credibility markers (High impact, Medium effort): Answer engines and machine-mediated buyers are more likely to trust claims that have nearby evidence.
+- 3. Expose pricing logic, plans, or commercial packaging in public copy (High impact, Medium effort): AI agents often stall when they cannot infer whether there is a self-serve, sales-led, or enterprise buying path.
+- 4. Add lightweight schema to the core company, product, and FAQ surfaces (Medium impact, Low effort): Structured reinforcement can reduce ambiguity around the organization, product, and offer model.
+- 5. Create a cleaner buyer action path across homepage, product, and pricing surfaces (High impact, Low effort): Understanding alone is not enough if a machine still cannot determine the correct next action for a buyer.
+
+### AI-readable homepage summary block
+the company is a digital product or service platform with category language that still needs tightening for machines for the public site only partly states who the offering is for, which increases the risk of generic machine summaries. It should say, in one machine-readable block, that it helps buyers with the main offering is directionally visible, but the public pages still need a clearer machine-readable explanation of product scope and buyer path, then support the primary claim with The site communicates the company narrative, but the strongest claims still need more verifiable packaging. and a clear next step for plans, demo, or enterprise evaluation.
+
+### Answer-engine FAQ block
+- Q: What does the company do?
+  - A: the company is presented as a digital product or service platform with category language that still needs tightening for machines with public signals that point to the main offering is directionally visible, but the public pages still need a clearer machine-readable explanation of product scope and buyer path.
+- Q: Who is the company for?
+  - A: The public site only partly states who the offering is for, which increases the risk of generic machine summaries.
+- Q: What problem does the company help solve?
+  - A: The site should add a short workflow-oriented explanation that states the buyer problem, the product role, and the expected outcome.
+- Q: What proof should a buyer or machine see?
+  - A: Add verified proof such as named customers, measured outcomes, security posture, or implementation evidence near the main claims.
+- Q: What is the best next step?
+  - A: Add a buyer-path line that explains whether the visitor should request pricing, book a demo, or begin an enterprise evaluation.
+
+### Citation-ready proof block
+- Turn this into a citation-ready proof line with a source, scope, or metric: The site communicates the company narrative, but the strongest claims still need more verifiable packaging.
+- Add a proof line in this format: Add named customers, measured outcomes, certifications, or documented implementation evidence near the main claims.
+- Add a proof line in this format: Use-case proof is missing, so buyers and machines may struggle to map evidence to a specific audience or workflow.
+- Add a public commercial qualifier such as plan ranges, implementation scope, or enterprise evaluation criteria so machine-mediated buyers can understand the buying motion.
+
+### Agent action-path copy
+- Pricing path: Request pricing, packaging details, and buyer-fit guidance if you need commercial evaluation information.
+- Demo / request path: If you want a guided walkthrough, request a demo with your use case, team size, and evaluation goals so the right workflow can be shown.
+- Enterprise evaluation path: For enterprise evaluation, share your security, integration, rollout, and procurement requirements so the team can scope fit clearly.
+- Docs path: If technical documentation exists, link it directly from the core product path so agents can route implementation-minded buyers cleanly.
+
+### Structured data / schema plan
+- Organization schema on the homepage and about surface to reinforce core company identity and official links.
+- Product or SoftwareApplication schema on the main product surface to clarify what the offering is and how it should be categorized.
+- FAQ schema for the answer-engine FAQ block so core buyer questions are machine-readable.
+- Breadcrumb schema on deeper product, pricing, and documentation paths to reinforce page relationships.
+- After verified proof exists, consider Review or AggregateRating schema only where it is fully supportable.
+
+## Machine-Facing GTM Risks
+- Misclassification Risk (High)
+  - Why it matters: If category and audience framing stay implicit, AI systems may classify the company too broadly instead of understanding it as digital product or service platform with category language that still n….
+  - Suggested fix: Add one plain-language category and audience block on the homepage, then repeat that framing on product and commercial pages.
+- Citation Weakness Risk (High)
+  - Why it matters: Without visible outcomes, named proof, or stronger credibility packaging, machines may summarize the company without confidently supporting the main claims.
+  - Suggested fix: Pair each major claim with a nearby proof statement, outcome, customer example, or trust marker written in citation-ready language.
+- Agent Journey Blocker (High)
+  - Why it matters: Understanding is not enough if an agent still cannot determine the next useful action after reading the site.
+  - Suggested fix: Make the next-step path explicit across homepage, product, and pricing surfaces, with clear routing for demo, evaluation, or self-serve intent.
+- Buyer Routing Risk (High)
+  - Why it matters: If commercial packaging is unclear, machines may struggle to infer whether the offer is self-serve, sales-led, or enterprise-evaluation driven.
+  - Suggested fix: Clarify plans, packaging, or evaluation criteria, then connect that language directly to the relevant CTA path.
+- Trust Gap (High)
+  - Why it matters: Machine-facing trust depends on visible proof, structured cues, and consistent credibility signals, not brand polish alone.
+  - Suggested fix: Strengthen public trust markers such as implementation evidence, security posture, customer outcomes, or structured data that reinforces official identity.
+
+## Inferred Competitive Context
+- Inferred category: Digital product or service platform with category language that still n….
+- Category confidence: Low
+- Likely peer: Digital product or service platform with category language that still n… vendors with stronger proof packaging (Low) -> Likely inferred from public site signals showing a clear product story but room to make enterprise-grade proof easier for machines to quote and compare.
+- Likely peer: Digital product or service platform with category language that still n… vendors with clearer buyer routing (High) -> Likely inferred from public site signals around how directly the site guides the public site only partly states who the offering is for, which increases the risk of generic machine summaries into pricing, demo, or enterprise evaluation next steps.
+- Likely peer: Digital product or service platform with category language that still n… vendors with stronger structured data (High) -> Likely inferred from public site signals about structured data, repeated category wording, and how easily answer engines can reuse the site narrative.
+- Competitive perception gap: The site appears likely to fit a real market category, but category language is still loose enough that AI systems may flatten it into a generic software or service label.
+- Category visibility risk: Category visibility risk looks elevated because a machine may understand that the company exists without confidently understanding why it is distinct, citeable, or easy to route.
+- Differentiation note: Use category language consistently across homepage, product, pricing, and enterprise pages so machine summaries do not drift.
+- Differentiation note: Keep proof and audience context close to the main value proposition so differentiation is supported, not merely asserted.
+- Differentiation note: Strengthen action-path clarity so machine-mediated buyers can distinguish this offer from adjacent options in the same category.
+- Validation note: This is directional competitive context inferred from public site signals, not a verified market map, official competitor list, or claim about which company an AI system would prefer.
+
+## Before / After AI Perception Simulator
+### Current likely AI / LLM summary
+the company appears to be a digital product or service platform with category language that still needs tightening for machines for the public site only partly states who the offering is for, which increases the risk of generic machine summaries, with public signals pointing to the main offering is directionally visible, but the public pages still need a clearer machine-readable explanation of product scope and buyer path.
+
+### Improved likely AI / LLM summary
+Directional simulation only: if the proposed homepage summary, FAQ, proof packaging, and action-path copy were added, the company would be more likely to be interpreted as a clearly categorized company for a clearly stated audience, with stronger proof support and a cleaner next-step path for machine-mediated buyers.
+
+### What changed
+- Clearer category framing based on the proposed homepage summary and FAQ block.
+- Clearer audience and workflow language for answer engines and agent visitors.
+- Stronger proof packaging through citation-ready claims and evidence formatting.
+- Cleaner buyer action path across pricing, demo, enterprise evaluation, and docs routing.
+- Improved machine readability from tighter structure and schema reinforcement.
+- Improved citation support, directionally, through more explicit proof and trust signals.
+
+## Evidence Receipts
+No source receipts were available for this run because the bounded crawl could not capture enough public pages.
+
+## Visible Agent Artifacts
+### Site facts captured
+- Company/category summary: Digital product or service platform with category language that still needs tightening for machines.
+- Likely audience: The public site only partly states who the offering is for, which increases the risk of generic machine summaries.
+- Main offering: The main offering is directionally visible, but the public pages still need a clearer machine-readable explanation of product scope and buyer path.
+- Key page found: Homepage surface was captured in a limited bounded crawl. (homepage)
+- Key page found: Additional high-signal pages were limited in this bounded crawl. (crawl)
+- Proof signal found: Proof, citation, or trust signals were sparse in the bounded crawl, so machine confidence is likely limited.
+- Missing basic: Public pricing, packaging, or commercial motion is not clearly exposed.
+- Missing basic: Core claims need visible proof, outcomes, or named credibility support.
+- Missing basic: The next-step path for a buyer or agent is not consistently obvious.
+- Missing basic: No reinforcing structured data was detected on the highest-signal pages.
+- Missing basic: Audience and use-case framing remain too implicit in the rendered copy.
+
+### Likely machine summary
+the company appears to be a digital product or service platform with category language that still needs tightening for machines for the public site only partly states who the offering is for, which increases the risk of generic machine summaries, with public signals pointing to the main offering is directionally visible, but the public pages still need a clearer machine-readable explanation of product scope and buyer path.
+- Positioning interpretation: The likely positioning interpretation is directionally understandable, but category language is still loose enough to invite flattening or over-generalization.
+- Possible misreading: The company may be described too broadly because audience and workflow language are still implied instead of stated plainly.
+- Possible misreading: An LLM may miss the commercial motion because pricing and packaging remain unclear on public pages.
+- Possible misreading: Claims may be repeated without enough proof context, which lowers confidence in a machine-generated summary.
+
+### Agent shopper journey blockers
+- Agents can understand: The site at least establishes that a company and offering exist, even if the audience remains fuzzy.
+- Agents can understand: Core pages can be read, but the next step is still not consistently machine-clear.
+- Journey blocker: Machines may not understand the buyer or action path because pricing and packaging are not clearly public.
+- Journey blocker: Sparse proof signals can stop an agent from recommending the product with confidence.
+- Journey blocker: The site does not yet make the next action obvious across the homepage, product, and commercial surfaces.
+- Actionability gap: A cleaner CTA and evaluation path is needed after the machine identifies the product and audience.
+- Actionability gap: Role-based or use-case copy is too thin to support buyer routing or intent qualification.
+- Actionability gap: Important buying logic may still live in visual design rather than plainly extractable text.
+
+### Answer-engine readiness findings
+- Strength: The site has at least a baseline public surface that answer engines can crawl and summarize directionally.
+- Weakness: Commercial packaging is not explicit enough for a clean answer-surface interpretation.
+- Weakness: Claims are not supported with enough nearby evidence for strong answer confidence.
+- Weakness: The buying path still needs clearer rendered next-step language for agent-mediated journeys.
+- Observation: Answer surfaces may return a generic category description because the buyer problem is not stated explicitly enough.
+- Observation: Without stronger proof packaging, answer surfaces may summarize the site but hesitate to support specific claims.
+- Content structure issue: Organization, product, FAQ, or offer intent is not reinforced with schema on the bounded crawl pages.
+- Content structure issue: Category and audience language are not repeated consistently enough across the crawl path.
+- Content structure issue: Action-path copy is too sparse or too disconnected from the explanatory content.
+- Content structure issue: Important machine-readable context should stay in rendered text, not only in visual layout or implied page structure.
+
+### Evidence and proof gaps
+- Strong claim: The site communicates the company narrative, but the strongest claims still need more verifiable packaging.
+- Weak claim: Differentiation claims appear stronger than the visible proof that currently supports them.
+- Weak claim: Commercial claims are harder to evaluate because plans, packaging, or evaluation criteria are not clearly public.
+- Proof gap: Add named customers, measured outcomes, certifications, or documented implementation evidence near the main claims.
+- Proof gap: Use-case proof is missing, so buyers and machines may struggle to map evidence to a specific audience or workflow.
+- Trust gap: Trust signals like compliance, security, or documented validation are not prominent enough in the bounded crawl.
+
+### Fix Pack + top 5 actions
+- 1. Add one plain-English homepage block that states category, audience, and workflow outcome (High impact, Low effort): Machines need the company, buyer, and use case to be obvious in rendered text before they can summarize or route intent well.
+- 2. Pair the primary claims with visible proof, outcomes, or customer credibility markers (High impact, Medium effort): Answer engines and machine-mediated buyers are more likely to trust claims that have nearby evidence.
+- 3. Expose pricing logic, plans, or commercial packaging in public copy (High impact, Medium effort): AI agents often stall when they cannot infer whether there is a self-serve, sales-led, or enterprise buying path.
+- 4. Add lightweight schema to the core company, product, and FAQ surfaces (Medium impact, Low effort): Structured reinforcement can reduce ambiguity around the organization, product, and offer model.
+- 5. Create a cleaner buyer action path across homepage, product, and pricing surfaces (High impact, Low effort): Understanding alone is not enough if a machine still cannot determine the correct next action for a buyer.
+- First this week: Add one plain-English homepage block that states category, audience, and workflow outcome.
+- Fix Pack component: Start with the highest-leverage clarity and buyer-path repairs first.
+- Fix Pack component: Paste-ready homepage summary and FAQ copy to reinforce category, audience, and next-step routing.
+- Fix Pack component: Citation-ready proof packaging and a practical schema plan for the highest-signal pages.
+- Fix Pack component: Action-path copy for pricing, demo, enterprise evaluation, and docs routing.
+
+## Gemini Orchestration Summary
+This is a bounded Gemini agent workflow with six specialized stages, visible artifacts, and evidence-constrained outputs, optimized for enterprise reliability and inspectability rather than performative autonomy.
+- Website Context Agent -> Captured public facts, category clues, page coverage, and missing basics from the bounded website scan. Output artifact: Site facts captured
+- LLM Perception Agent -> Modeled the likely machine summary, positioning interpretation, and possible misreadings based on public signals. Output artifact: Likely machine summary
+- Agent Visitor Agent -> Identified what an AI buyer agent can understand, where the journey stalls, and which next-step paths remain unclear. Output artifact: Agent shopper journey blockers
+- AIO / Answer Engine Agent -> Assessed answer-surface readiness, structure quality, and how easily the site narrative can be reused by answer engines. Output artifact: Answer-engine readiness findings
+- Citation Readiness Agent -> Reviewed claims, proof density, and trust packaging to surface evidence gaps that limit machine confidence. Output artifact: Evidence and proof gaps
+- Fix Prioritization Agent -> Converted the findings into an executive brief, a Fix Pack, and the first-week priority list. Output artifact: Fix Pack + top 5 actions
+
+## Why Gemini
+- Gemini Flash: used for fast, responsive agent workflows.
+- Structured outputs: Gemini output is constrained into typed artifacts and validated.
+- Bounded orchestration: six specialized Gemini-driven stages produce inspectable artifacts.
+- Enterprise reliability: evidence-constrained outputs are favored over open-ended chat or fake autonomous swarms.
+- Architecture note: Gemini Pro can support deeper final synthesis later without changing the core one-URL flow.
+
+## Why this fits the challenge
+- Application of Technology: Gemini powers the bounded six-stage agent workflow, structured JSON synthesis, visible intermediate artifacts, Machine-Facing GTM Risks, Fix Pack generation, and Before / After AI Perception Simulator.
+- Presentation: One URL input, visible workflow trace, boardroom-ready brief, executive snapshot, and handoff-ready workstreams.
+- Business Value: Enterprises risk being misunderstood, skipped, weakly cited, or misrouted by AI agents and answer engines before human buyers ever reach the website.
+- Originality: Most SEO tools optimize for search crawlers. This product audits and repairs how AI agents, LLMs, and answer engines understand, cite, route, or skip a company.
+
+## Limitations
+This is a directional public-page read based on a bounded crawl. Some pages may be blocked, dynamic, or inaccessible from the server environment, so conclusions should be validated before strategic use.
+
+------------------------------------------------------------
+
+CASE 4 — ServiceNow
+URL: https://www.servicenow.com
+Score: 49 / 100 (Emerging)
+Run status: pass, graceful Gemini fallback used
+Notes:
+- Why this case: Enterprise workflow / automation company, close to the hackathon’s enterprise AI theme.
+- Duration: 40.6s
+- Pages analyzed: 1
+- Pages discovered: 10
+- Page types: homepage
+- Gemini limited fallback used: yes
+- Stall heartbeat observed in API trace: no
+- Limitations: Could not fetch https://servicenow.com: fetch failed. | Skipped https://servicenow.com/enterprise: fetch failed. | Skipped https://servicenow.com/plus/solutions/b2b-ecommerce: fetch failed. | Skipped https://servicenow.com/pricing: fetch failed. | Skipped https://servicenow.com/product: fetch failed. | Skipped https://servicenow.com/solutions: fetch failed.
+- Issue flags watched: weakEvidenceReceipts, fakeRankingOrOverclaiming, genericFeelRisk
+Full output:
+Workflow trace:
+- website-context :: running :: Reading homepage, sitemap, and high-signal internal pages.
+- website-context :: completed :: Captured 1 public pages for evidence review. (evidenceCount=1)
+- llm-perception :: running :: Modeling likely machine summaries from the captured public signals. (evidenceCount=1)
+- website-context :: completed :: Captured 1 public pages and identified streamline your enterprise workflows with the ai platform—empowering both customers and employees in every corner of your business, homepage, crawl, proof, and action-path signals. (evidenceCount=1)
+- llm-perception :: completed :: Modeled likely machine summary and category interpretation from public evidence. (evidenceCount=1)
+- agent-visitor :: running :: Checking whether an AI agent can understand the buyer path and next action. (evidenceCount=1)
+- agent-visitor :: completed :: Assessed buyer routing, evaluation clarity, and next-step action signals for agent visitors. (evidenceCount=1)
+- aio-answer-engine :: running :: Assessing answer-engine interpretation, strengths, and structural weaknesses. (evidenceCount=1)
+- aio-answer-engine :: completed :: Reviewed answer-engine reuse, content structure, and machine-readable positioning cues. (evidenceCount=1)
+- citation-readiness :: running :: Reviewing evidence density, proof packaging, and trust gaps. (evidenceCount=1)
+- citation-readiness :: completed :: Checked whether claims, proof, and trust cues are packaged cleanly enough for citation. (evidenceCount=1)
+- fix-prioritization :: running :: Building the Fix Pack, ranking the top actions, and simulating projected perception changes. (evidenceCount=1)
+- fix-prioritization :: completed :: Converted the findings into a distinct first-week action plan and Fix Pack. (evidenceCount=1)
+
+Scan summary:
+- Normalized URL: https://servicenow.com/
+- Pages analyzed: 1
+- Pages discovered: 10
+- Page types: homepage
+- Limitations: Could not fetch https://servicenow.com: fetch failed. | Skipped https://servicenow.com/enterprise: fetch failed. | Skipped https://servicenow.com/plus/solutions/b2b-ecommerce: fetch failed. | Skipped https://servicenow.com/pricing: fetch failed. | Skipped https://servicenow.com/product: fetch failed. | Skipped https://servicenow.com/solutions: fetch failed.
+
+# AI Visibility Readiness Brief
+
+**AI Visibility Score:** 49 / 100 (Emerging)
+
+## Executive Verdict
+Public signals suggest ServiceNow is still hard for machines to interpret cleanly, especially around category clarity, proof, and next-step routing.
+
+## Boardroom Snapshot
+- Enterprise Risk: Agent Journey Blocker (High) -> Understanding is not enough if an agent still cannot determine the next useful action after reading the site.
+- Business Consequence: Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- First-Week Move: Package proof closer to homepage and enterprise claims.
+
+## Scorecards
+- AI Visibility Score: 49/100 (Emerging)
+- Citation Readiness: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Agent Actionability: A cleaner CTA and evaluation path is needed after the machine identifies the product and audience.
+
+## Decision Memo
+- Current posture: Emerging
+- Primary risk: Agent Journey Blocker (High)
+- Recommended action: Package proof closer to homepage and enterprise claims.
+- Suggested owner: RevOps
+- Time horizon: This week
+
+## Top Machine-Facing Gap
+The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+
+## Fix Pack / top 5 actions
+### What to do first this week
+Package proof closer to homepage and enterprise claims.
+
+### Top 5 actions
+- 1. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 2. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 3. Add lightweight schema to the core company, product, and FAQ surfaces (Medium impact, Low effort): Structured reinforcement can reduce ambiguity around the organization, product, and offer model.
+- 4. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+- 5. Create a cleaner buyer action path across homepage, product, and pricing surfaces (High impact, Low effort): Understanding alone is not enough if a machine still cannot determine the correct next action for a buyer.
+
+### AI-readable homepage summary block
+ServiceNow is a streamline your enterprise workflows with the ai platform—empowering both customers and employees in every corner of your business for enterprise brands. It should say, in one machine-readable block, that it helps buyers with streamline your enterprise workflows with the servicenow ai platform—empowering both customers and employees in every corner of your business, then support the primary claim with Streamline your enterprise workflows with the ServiceNow AI Platform—empowering both customers and employees in every c… and a clear next step for plans, demo, or enterprise evaluation.
+
+### Answer-engine FAQ block
+- Q: What does ServiceNow do?
+  - A: ServiceNow is presented as a streamline your enterprise workflows with the ai platform—empowering both customers and employees in every corner of your business with public signals that point to streamline your enterprise workflows with the servicenow ai platform—empowering both customers and employees in every corner of your business.
+- Q: Who is ServiceNow for?
+  - A: enterprise brands.
+- Q: What problem does ServiceNow help solve?
+  - A: The public copy should connect the offer to one or two concrete workflows so answer engines can map the company to the right buyer need quickly.
+- Q: What proof should a buyer or machine see?
+  - A: Keep customer outcomes, trust markers, enterprise proof, or measured results close to the main value claims so they are easy to cite directionally.
+- Q: What is the best next step?
+  - A: Make the site state whether the next step is reviewing plans, requesting a demo, or starting an enterprise evaluation.
+
+### Citation-ready proof block
+- Turn this into a citation-ready proof line with a source, scope, or metric: Streamline your enterprise workflows with the ServiceNow AI Platform—empowering both customers and employees in every corner of your business.
+- Add a proof line in this format: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Add a proof line in this format: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Place the strongest proof line beside the relevant pricing or enterprise-evaluation path so agents can connect trust to action.
+
+### Agent action-path copy
+- Pricing path: Review plans, pricing logic, and packaging to determine the right fit before contacting the team.
+- Demo / request path: If you want a guided walkthrough, request a demo with your use case, team size, and evaluation goals so the right workflow can be shown.
+- Enterprise evaluation path: For enterprise evaluation, share your security, integration, rollout, and procurement requirements so the team can scope fit clearly.
+- Docs path: If technical documentation exists, link it directly from the core product path so agents can route implementation-minded buyers cleanly.
+
+### Structured data / schema plan
+- Organization schema on the homepage and about surface to reinforce core company identity and official links.
+- Product or SoftwareApplication schema on the main product surface to clarify what the offering is and how it should be categorized.
+- FAQ schema for the answer-engine FAQ block so core buyer questions are machine-readable.
+- Breadcrumb schema on deeper product, pricing, and documentation paths to reinforce page relationships.
+- Review or AggregateRating schema only where real, supportable review evidence exists publicly.
+
+## Machine-Facing GTM Risks
+- Misclassification Risk (Medium)
+  - Why it matters: If category and audience framing stay implicit, AI systems may classify the company too broadly instead of understanding it as streamline your enterprise workflows with the ai platform—empowering bo….
+  - Suggested fix: Add one plain-language category and audience block on the homepage, then repeat that framing on product and commercial pages.
+- Citation Weakness Risk (Medium)
+  - Why it matters: Some proof exists, but it still needs tighter formatting so answer engines can reuse it as evidence instead of paraphrasing softer claims.
+  - Suggested fix: Pair each major claim with a nearby proof statement, outcome, customer example, or trust marker written in citation-ready language.
+- Agent Journey Blocker (High)
+  - Why it matters: Understanding is not enough if an agent still cannot determine the next useful action after reading the site.
+  - Suggested fix: Make the next-step path explicit across homepage, product, and pricing surfaces, with clear routing for demo, evaluation, or self-serve intent.
+- Buyer Routing Risk (Medium)
+  - Why it matters: Even with commercial signals present, fragmented routing can make it harder for a machine to connect the right buyer to the right path.
+  - Suggested fix: Clarify plans, packaging, or evaluation criteria, then connect that language directly to the relevant CTA path.
+- Trust Gap (Low)
+  - Why it matters: Machine-facing trust depends on visible proof, structured cues, and consistent credibility signals, not brand polish alone.
+  - Suggested fix: Strengthen public trust markers such as implementation evidence, security posture, customer outcomes, or structured data that reinforces official identity.
+
+## Inferred Competitive Context
+- Inferred category: Streamline your enterprise workflows with the AI Platform—empowering bo….
+- Category confidence: Medium
+- Likely peer: Streamline your enterprise workflows with the AI Platform—empowering bo… vendors with stronger proof packaging (Medium) -> Likely inferred from public site signals showing a clear product story but room to make enterprise-grade proof easier for machines to quote and compare.
+- Likely peer: Streamline your enterprise workflows with the AI Platform—empowering bo… vendors with clearer buyer routing (High) -> Likely inferred from public site signals around how directly the site guides enterprise brands into pricing, demo, or enterprise evaluation next steps.
+- Likely peer: Streamline your enterprise workflows with the AI Platform—empowering bo… vendors with stronger structured data (High) -> Likely inferred from public site signals about structured data, repeated category wording, and how easily answer engines can reuse the site narrative.
+- Competitive perception gap: The site appears likely to belong in a clear category, but its machine-facing differentiation can still be packaged more tightly than the strongest peer narratives AI systems compress into summaries.
+- Category visibility risk: Category visibility risk looks elevated because a machine may understand that the company exists without confidently understanding why it is distinct, citeable, or easy to route.
+- Differentiation note: Use category language consistently across homepage, product, pricing, and enterprise pages so machine summaries do not drift.
+- Differentiation note: Keep proof and audience context close to the main value proposition so differentiation is supported, not merely asserted.
+- Differentiation note: Strengthen action-path clarity so machine-mediated buyers can distinguish this offer from adjacent options in the same category.
+- Validation note: This is directional competitive context inferred from public site signals, not a verified market map, official competitor list, or claim about which company an AI system would prefer.
+
+## Before / After AI Perception Simulator
+### Current likely AI / LLM summary
+ServiceNow appears to be a streamline your enterprise workflows with the ai platform—empowering both customers and employees in every corner of your business for enterprise brands, with public signals pointing to streamline your enterprise workflows with the servicenow ai platform—empowering both customers and employees in every corner of your business.
+
+### Improved likely AI / LLM summary
+Directional simulation only: if the proposed homepage summary, FAQ, proof packaging, and action-path copy were added, ServiceNow would be more likely to be interpreted as a clearly categorized company for a clearly stated audience, with stronger proof support and a cleaner next-step path for machine-mediated buyers.
+
+### What changed
+- Clearer category framing based on the proposed homepage summary and FAQ block.
+- Clearer audience and workflow language for answer engines and agent visitors.
+- Stronger proof packaging through citation-ready claims and evidence formatting.
+- Cleaner buyer action path across pricing, demo, enterprise evaluation, and docs routing.
+- Improved machine readability from tighter structure and schema reinforcement.
+- Improved citation support, directionally, through more explicit proof and trust signals.
+
+## Evidence Receipts
+- ServiceNow - Put AI to Work (https://servicenow.com/)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: Streamline your enterprise workflows with the ServiceNow AI Platform—empowering both customers and employees in every corner of your business.
+- ServiceNow - Put AI to Work (https://servicenow.com/)
+  - Signal: homepage page was accessible in the bounded crawl.
+  - Why it matters: Accessible, descriptive pages give answer engines and agents more usable public context.
+  - Snippet: Streamline your enterprise workflows with the ServiceNow AI Platform—empowering both customers and employees in every corner of your business.
+
+## Visible Agent Artifacts
+### Site facts captured
+- Company/category summary: Streamline your enterprise workflows with the AI Platform—empowering both customers and employees in every corner of your business.
+- Likely audience: enterprise brands.
+- Main offering: Streamline your enterprise workflows with the ServiceNow AI Platform—empowering both customers and employees in every corner of your business.
+- Key page found: ServiceNow - Put AI to Work (homepage)
+- Key page found: Additional high-signal pages were limited in this bounded crawl. (crawl)
+- Proof signal found: Streamline your enterprise workflows with the ServiceNow AI Platform—empowering both customers and employees in every corner of your business.
+- Missing basic: The next-step path for a buyer or agent is not consistently obvious.
+- Missing basic: No reinforcing structured data was detected on the highest-signal pages.
+
+### Likely machine summary
+ServiceNow appears to be a streamline your enterprise workflows with the ai platform—empowering both customers and employees in every corner of your business for enterprise brands, with public signals pointing to streamline your enterprise workflows with the servicenow ai platform—empowering both customers and employees in every corner of your business.
+- Positioning interpretation: Public signals suggest the company will likely be interpreted as Streamline your enterprise workflows with the AI Platform—empowering both customers and employees in every corner of your business.
+- Possible misreading: A model may still flatten the company into a broader category if the strongest category and audience cues are not repeated across homepage, product, and enterprise pages.
+- Possible misreading: A model may understand the product but still blur the difference between self-serve, growth, and enterprise paths.
+- Possible misreading: Strong proof exists, but machines may not cite it cleanly if outcomes, trust cues, and commercial claims stay too far apart.
+
+### Agent shopper journey blockers
+- Agents can understand: The site exposes 1 public pages in this bounded pass.
+- Agents can understand: Some audience or workflow intent is visible in rendered HTML.
+- Agents can understand: Core pages can be read, but the next step is still not consistently machine-clear.
+- Journey blocker: The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+- Journey blocker: Proof exists, but it may not sit close enough to the claims or action path for fast machine trust-building.
+- Journey blocker: The site does not yet make the next action obvious across the homepage, product, and commercial surfaces.
+- Actionability gap: A cleaner CTA and evaluation path is needed after the machine identifies the product and audience.
+- Actionability gap: Role-specific copy exists, but the commercial next step still needs to be easier to infer.
+- Actionability gap: Important buying logic may still live in visual design rather than plainly extractable text.
+
+### Answer-engine readiness findings
+- Strength: The site provides at least some use-case or workflow context for answer engines.
+- Strength: Public proof signals give answer engines some material they can cite or paraphrase.
+- Weakness: Thin pages limit the amount of reusable explanatory text available to answer engines.
+- Weakness: The buying path still needs clearer rendered next-step language for agent-mediated journeys.
+- Observation: Answer surfaces will likely understand the broad problem area, but may still compress the positioning.
+- Observation: Visible proof increases the odds of a more trustworthy directional summary, though not guaranteed citation behavior.
+- Content structure issue: Organization, product, FAQ, or offer intent is not reinforced with schema on the bounded crawl pages.
+- Content structure issue: Action-path copy is too sparse or too disconnected from the explanatory content.
+- Content structure issue: Important machine-readable context should stay in rendered text, not only in visual layout or implied page structure.
+
+### Evidence and proof gaps
+- Strong claim: Streamline your enterprise workflows with the ServiceNow AI Platform—empowering both customers and employees in every corner of your business.
+- Weak claim: Some higher-level value claims would still benefit from explicit metrics, named evidence, or linked documentation.
+- Proof gap: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Proof gap: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Trust gap: Trust signals like compliance, security, or documented validation are not prominent enough in the bounded crawl.
+
+### Fix Pack + top 5 actions
+- 1. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 2. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 3. Add lightweight schema to the core company, product, and FAQ surfaces (Medium impact, Low effort): Structured reinforcement can reduce ambiguity around the organization, product, and offer model.
+- 4. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+- 5. Create a cleaner buyer action path across homepage, product, and pricing surfaces (High impact, Low effort): Understanding alone is not enough if a machine still cannot determine the correct next action for a buyer.
+- First this week: Package proof closer to homepage and enterprise claims.
+- Fix Pack component: Start with the highest-leverage clarity and buyer-path repairs first.
+- Fix Pack component: Paste-ready homepage summary and FAQ copy to reinforce category, audience, and next-step routing.
+- Fix Pack component: Citation-ready proof packaging and a practical schema plan for the highest-signal pages.
+- Fix Pack component: Action-path copy for pricing, demo, enterprise evaluation, and docs routing.
+
+## Gemini Orchestration Summary
+This is a bounded Gemini agent workflow with six specialized stages, visible artifacts, and evidence-constrained outputs, optimized for enterprise reliability and inspectability rather than performative autonomy.
+- Website Context Agent -> Captured public facts, category clues, page coverage, and missing basics from the bounded website scan. Output artifact: Site facts captured
+- LLM Perception Agent -> Modeled the likely machine summary, positioning interpretation, and possible misreadings based on public signals. Output artifact: Likely machine summary
+- Agent Visitor Agent -> Identified what an AI buyer agent can understand, where the journey stalls, and which next-step paths remain unclear. Output artifact: Agent shopper journey blockers
+- AIO / Answer Engine Agent -> Assessed answer-surface readiness, structure quality, and how easily the site narrative can be reused by answer engines. Output artifact: Answer-engine readiness findings
+- Citation Readiness Agent -> Reviewed claims, proof density, and trust packaging to surface evidence gaps that limit machine confidence. Output artifact: Evidence and proof gaps
+- Fix Prioritization Agent -> Converted the findings into an executive brief, a Fix Pack, and the first-week priority list. Output artifact: Fix Pack + top 5 actions
+
+## Why Gemini
+- Gemini Flash: used for fast, responsive agent workflows.
+- Structured outputs: Gemini output is constrained into typed artifacts and validated.
+- Bounded orchestration: six specialized Gemini-driven stages produce inspectable artifacts.
+- Enterprise reliability: evidence-constrained outputs are favored over open-ended chat or fake autonomous swarms.
+- Architecture note: Gemini Pro can support deeper final synthesis later without changing the core one-URL flow.
+
+## Why this fits the challenge
+- Application of Technology: Gemini powers the bounded six-stage agent workflow, structured JSON synthesis, visible intermediate artifacts, Machine-Facing GTM Risks, Fix Pack generation, and Before / After AI Perception Simulator.
+- Presentation: One URL input, visible workflow trace, boardroom-ready brief, executive snapshot, and handoff-ready workstreams.
+- Business Value: Enterprises risk being misunderstood, skipped, weakly cited, or misrouted by AI agents and answer engines before human buyers ever reach the website.
+- Originality: Most SEO tools optimize for search crawlers. This product audits and repairs how AI agents, LLMs, and answer engines understand, cite, route, or skip a company.
+
+## Limitations
+This is a directional public-page read based on a bounded crawl. Some pages may be blocked, dynamic, or inaccessible from the server environment, so conclusions should be validated before strategic use. Gemini synthesis was limited for this run, so the report used conservative local synthesis from public-page evidence.
+
+------------------------------------------------------------
+
+CASE 5 — Cloudflare
+URL: https://www.cloudflare.com
+Score: 96 / 100 (Excellent)
+Run status: pass, Gemini completed
+Notes:
+- Why this case: Infrastructure/security/edge angle, useful for testing non-GTM SaaS category readability.
+- Duration: 30.0s
+- Pages analyzed: 4
+- Pages discovered: 78
+- Page types: homepage, product, pricing
+- Gemini limited fallback used: no
+- Stall heartbeat observed in API trace: no
+- Limitations: Skipped https://cloudflare.com/plus/solutions/b2b-ecommerce: HTTP 404.
+- Issue flags watched: genericFeelRisk
+Full output:
+Workflow trace:
+- website-context :: running :: Reading homepage, sitemap, and high-signal internal pages.
+- website-context :: completed :: Captured 4 public pages for evidence review. (evidenceCount=4)
+- llm-perception :: running :: Modeling likely machine summaries from the captured public signals. (evidenceCount=4)
+- website-context :: completed :: Captured 4 public pages and identified cloudflare enterprise solutions cloudflare, homepage, product, pricing, proof, and action-path signals. (evidenceCount=4)
+- llm-perception :: completed :: Modeled likely machine summary and category interpretation from public evidence. (evidenceCount=4)
+- agent-visitor :: running :: Checking whether an AI agent can understand the buyer path and next action. (evidenceCount=4)
+- agent-visitor :: completed :: Assessed buyer routing, evaluation clarity, and next-step action signals for agent visitors. (evidenceCount=4)
+- aio-answer-engine :: running :: Assessing answer-engine interpretation, strengths, and structural weaknesses. (evidenceCount=4)
+- aio-answer-engine :: completed :: Reviewed answer-engine reuse, content structure, and machine-readable positioning cues. (evidenceCount=4)
+- citation-readiness :: running :: Reviewing evidence density, proof packaging, and trust gaps. (evidenceCount=4)
+- citation-readiness :: completed :: Checked whether claims, proof, and trust cues are packaged cleanly enough for citation. (evidenceCount=4)
+- fix-prioritization :: running :: Building the Fix Pack, ranking the top actions, and simulating projected perception changes. (evidenceCount=4)
+- fix-prioritization :: completed :: Converted the findings into a distinct first-week action plan and Fix Pack. (evidenceCount=4)
+
+Scan summary:
+- Normalized URL: https://cloudflare.com/
+- Pages analyzed: 4
+- Pages discovered: 78
+- Page types: homepage, product, pricing
+- Limitations: Skipped https://cloudflare.com/plus/solutions/b2b-ecommerce: HTTP 404.
+
+# AI Visibility Readiness Brief
+
+**AI Visibility Score:** 96 / 100 (Excellent)
+
+## Executive Verdict
+Public signals suggest Connect, protect, and build everywhere already has a strong machine-readable baseline, but category framing, proof packaging, and buyer routing can still be tightened for higher-confidence AI interpretation and citation.
+
+## Boardroom Snapshot
+- Enterprise Risk: Agent Journey Blocker (High) -> Agents cannot easily find the 'Enterprise' contact path without navigating complex menu structures.
+- Business Consequence: Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- First-Week Move: Baseline is strong. This week, Package proof closer to homepage and enterprise claims.
+
+## Scorecards
+- AI Visibility Score: 96/100 (Excellent)
+- Citation Readiness: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Agent Actionability: The action path should be linked more tightly to proof and pricing so an agent can move from understanding to action.
+
+## Decision Memo
+- Current posture: Excellent
+- Primary risk: Agent Journey Blocker (High)
+- Recommended action: Baseline is strong. This week, Package proof closer to homepage and enterprise claims.
+- Suggested owner: RevOps
+- Time horizon: This week
+
+## Top Machine-Facing Gap
+The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+
+## Fix Pack / top 5 actions
+### What to do first this week
+Baseline is strong. This week, Package proof closer to homepage and enterprise claims.
+
+### Top 5 actions
+- 1. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 2. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 3. Add lightweight schema to the core company, product, and FAQ surfaces (Medium impact, Low effort): Structured reinforcement can reduce ambiguity around the organization, product, and offer model.
+- 4. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+- 5. Connect homepage, product, pricing, enterprise, and docs paths with consistent action language (Medium impact, Low effort): A repeated action path keeps machine-mediated routing coherent across different entry points.
+
+### AI-readable homepage summary block
+Connect, protect, and build everywhere is a cloudflare enterprise solutions cloudflare for smbs, enterprise brands, and developers. It should say, in one machine-readable block, that it helps buyers with cloudflare's enterprise solutions increase customer retention, reduce compliance risk, and improve response times. view cloudflare's enterprise plans, then support the primary claim with Stop bot attacks in real time by harnessing data from millions of websites protected by Cloudflare. and a clear next step for pl….
+
+### Answer-engine FAQ block
+- Q: What does Connect, protect, and build everywhere do?
+  - A: Connect, protect, and build everywhere is presented as a cloudflare enterprise solutions cloudflare with public signals that point to cloudflare's enterprise solutions increase customer retention, reduce compliance risk, and improve response times. view cloudflare's enterprise plans.
+- Q: Who is Connect, protect, and build everywhere for?
+  - A: SMBs, enterprise brands, and developers.
+- Q: What problem does Connect, protect, and build everywhere help solve?
+  - A: The public copy should connect the offer to one or two concrete workflows so answer engines can map the company to the right buyer need quickly.
+- Q: What proof should a buyer or machine see?
+  - A: Keep customer outcomes, trust markers, enterprise proof, or measured results close to the main value claims so they are easy to cite directionally.
+- Q: What is the best next step?
+  - A: Make the site state whether the next step is reviewing plans, requesting a demo, or starting an enterprise evaluation.
+
+### Citation-ready proof block
+- Turn this into a citation-ready proof line with a source, scope, or metric: Stop bot attacks in real time by harnessing data from millions of websites protected by Cloudflare.
+- Turn this into a citation-ready proof line with a source, scope, or metric: Cloudflare's enterprise solutions increase customer retention, reduce compliance risk, and improve response times.
+- Add a proof line in this format: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Add a proof line in this format: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Place the strongest proof line beside the relevant pricing or enterprise-evaluation path so agents can connect trust to action.
+
+### Agent action-path copy
+- Pricing path: Review plans, pricing logic, and packaging to determine the right fit before contacting the team.
+- Demo / request path: If you want a guided walkthrough, request a demo with your use case, team size, and evaluation goals so the right workflow can be shown.
+- Enterprise evaluation path: For enterprise evaluation, share your security, integration, rollout, and procurement requirements so the team can scope fit clearly.
+- Docs path: If technical documentation exists, link it directly from the core product path so agents can route implementation-minded buyers cleanly.
+
+### Structured data / schema plan
+- Organization schema on the homepage and about surface to reinforce core company identity and official links.
+- Product or SoftwareApplication schema on the main product surface to clarify what the offering is and how it should be categorized.
+- FAQ schema for the answer-engine FAQ block so core buyer questions are machine-readable.
+- Breadcrumb schema on deeper product, pricing, and documentation paths to reinforce page relationships.
+- Review or AggregateRating schema only where real, supportable review evidence exists publicly.
+
+## Machine-Facing GTM Risks
+- Misclassification Risk (Medium)
+  - Why it matters: AI agents may categorize the company as a legacy CDN rather than a modern AI/SASE platform.
+  - Suggested fix: Implement Organization and Service schema explicitly defining the 'Connectivity Cloud' category.
+- Citation Weakness Risk (Low)
+  - Why it matters: High authority ensures citations, but lack of structured data may lead to inaccurate stat reporting.
+  - Suggested fix: Create a machine-readable 'Fact Sheet' page with structured data for all key performance claims.
+- Agent Journey Blocker (High)
+  - Why it matters: Agents cannot easily find the 'Enterprise' contact path without navigating complex menu structures.
+  - Suggested fix: Add ContactPage and Action schema to the primary enterprise landing page.
+- Buyer Routing Risk (Medium)
+  - Why it matters: Buyers looking for 'AI Inference' might be routed to competitors if the Workers AI pricing isn't clearly indexed.
+  - Suggested fix: Consolidate AI-specific commercial signals onto the main /plans page.
+- Trust Gap (Medium)
+  - Why it matters: Customer success stories are visible to humans but not programmatically linked to specific products for agents.
+  - Suggested fix: Deploy Review and CaseStudy schema to link proof signals to specific product offerings.
+
+## Inferred Competitive Context
+- Inferred category: Cloudflare Enterprise Solutions Cloudflare.
+- Category confidence: High
+- Likely peer: Edge Computing Platforms (High) -> Based on Workers platform and global network footprint signals.
+- Likely peer: SASE & Zero Trust Vendors (High) -> Inferred from Cloudflare One and workspace security language.
+- Likely peer: Cloud Security Providers (High) -> Based on WAF, DDoS, and bot protection dominance.
+- Competitive perception gap: Compared to peers with robust Schema. org implementations, Cloudflare may appear less 'integrated' to an AI agent, despite its superior network scale.
+- Category visibility risk: Risk of being classified solely as a 'CDN' if AI infrastructure signals are not better structured for machine consumption.
+- Differentiation note: Use category language consistently across homepage, product, pricing, and enterprise pages so machine summaries do not drift.
+- Differentiation note: Keep proof and audience context close to the main value proposition so differentiation is supported, not merely asserted.
+- Differentiation note: Strengthen action-path clarity so machine-mediated buyers can distinguish this offer from adjacent options in the same category.
+- Validation note: This is directional competitive context, inferred from public site signals, and not a verified market map.
+
+## Before / After AI Perception Simulator
+### Current likely AI / LLM summary
+Connect, protect, and build everywhere appears to be a cloudflare enterprise solutions cloudflare for smbs, enterprise brands, and developers, with public signals pointing to cloudflare's enterprise solutions increase customer retention, reduce compliance risk, and improve response times. view cloudflare's enterprise plans.
+
+### Improved likely AI / LLM summary
+Directional simulation only: if the proposed homepage summary, FAQ, proof packaging, and action-path copy were added, Connect, protect, and build everywhere would be more likely to be interpreted as a clearly categorized company for a clearly stated audience, with stronger proof support and a cleaner next-step path for machine-mediated buyers.
+
+### What changed
+- Clearer category framing based on the proposed homepage summary and FAQ block.
+- Clearer audience and workflow language for answer engines and agent visitors.
+- Stronger proof packaging through citation-ready claims and evidence formatting.
+- Cleaner buyer action path across pricing, demo, enterprise evaluation, and docs routing.
+- Improved machine readability from tighter structure and schema reinforcement.
+- Improved citation support, directionally, through more explicit proof and trust signals.
+
+## Evidence Receipts
+- Connect, protect, and build everywhere | Cloudflare (https://cloudflare.com/)
+  - Signal: Proof or customer credibility signal is present.
+  - Why it matters: Citation-friendly proof improves whether an answer engine can support a recommendation confidently.
+  - Snippet: Stop bot attacks in real time by harnessing data from millions of websites protected by Cloudflare.
+- Connect, protect, and build everywhere | Cloudflare (https://cloudflare.com/enterprise)
+  - Signal: Use-case language appears in rendered copy.
+  - Why it matters: This helps machines map the company to a buyer problem, workflow, or role-based query.
+  - Snippet: Use our industry-leading WAF, DDoS, and bot protection to protect your websites, apps, APIs, and AI workloads while accelerating performance with our ultra-fast CDN.
+- Cloudflare Enterprise Solutions | Cloudflare (https://workers.cloudflare.com/plans)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: Cloudflare Enterprise Solutions | Cloudflare.
+- Cloudflare Enterprise Solutions | Cloudflare (https://cloudflare.com/)
+  - Signal: Proof or customer credibility signal is present.
+  - Why it matters: Citation-friendly proof improves whether an answer engine can support a recommendation confidently.
+  - Snippet: Cloudflare's enterprise solutions increase customer retention, reduce compliance risk, and improve response times.
+
+## Visible Agent Artifacts
+### Site facts captured
+- Company/category summary: Cloudflare Enterprise Solutions Cloudflare.
+- Likely audience: Enterprise IT leaders, security engineers, application developers, and AI infrastructure architects.
+- Main offering: A unified platform for SASE, web security (WAF/DDoS), serverless compute (Workers), and AI inference at the edge.
+- Key page found: Connect, protect, and build everywhere (homepage)
+- Key page found: Modernize your enterprise to accelerate innovation (product)
+- Key page found: Security, Performance, and Reliability - all in one package (pricing)
+- Key page found: Build without boundaries (pricing)
+- Proof signal found: Stop bot attacks in real time by harnessing data from millions of websites protected by Cloudflare.
+- Proof signal found: Speak to sales about SASE and workspace security. .
+- Proof signal found: Cloudflare's enterprise solutions increase customer retention, reduce compliance risk, and improve response times.
+- Proof signal found: Security, Performance, and Reliability - all in one package.
+- Proof signal found: Trusted by the teams you trust.
+- Missing basic: No reinforcing structured data was detected on the highest-signal pages.
+
+### Likely machine summary
+Cloudflare appears to be a dominant infrastructure layer for the modern internet, transitioning from a CDN and DDoS mitigation provider into a comprehensive 'connectivity cloud. ' Public signals suggest it now prioritizes AI agent security, edge inference, and Zero Trust networking, positioning itself as the secure fabric for both human and machine-driven web traffic.
+- Positioning interpretation: Public signals suggest the company will likely be interpreted as Cloudflare Enterprise Solutions Cloudflare.
+- Possible misreading: A model may still flatten the company into a broader category if the strongest category and audience cues are not repeated across homepage, product, and enterprise pages.
+- Possible misreading: A model may understand the product but still blur the difference between self-serve, growth, and enterprise paths.
+- Possible misreading: Strong proof exists, but machines may not cite it cleanly if outcomes, trust cues, and commercial claims stay too far apart.
+
+### Agent shopper journey blockers
+- Agents can understand: The site exposes 4 public pages in this bounded pass.
+- Agents can understand: Some audience or workflow intent is visible in rendered HTML.
+- Agents can understand: At least one next-step path is public and machine-visible.
+- Journey blocker: The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+- Journey blocker: Proof exists, but it may not sit close enough to the claims or action path for fast machine trust-building.
+- Journey blocker: The next-step path exists, but it is not yet reinforced with role-specific action language.
+- Actionability gap: The action path should be linked more tightly to proof and pricing so an agent can move from understanding to action.
+- Actionability gap: Role-specific copy exists, but the commercial next step still needs to be easier to infer.
+- Actionability gap: Important buying logic may still live in visual design rather than plainly extractable text.
+
+### Answer-engine readiness findings
+- Strength: The site provides at least some use-case or workflow context for answer engines.
+- Strength: Public proof signals give answer engines some material they can cite or paraphrase.
+- Weakness: Thin pages limit the amount of reusable explanatory text available to answer engines.
+- Observation: Answer surfaces will likely understand the broad problem area, but may still compress the positioning.
+- Observation: Visible proof increases the odds of a more trustworthy directional summary, though not guaranteed citation behavior.
+- Content structure issue: Organization, product, FAQ, or offer intent is not reinforced with schema on the bounded crawl pages.
+- Content structure issue: Important machine-readable context should stay in rendered text, not only in visual layout or implied page structure.
+
+### Evidence and proof gaps
+- Strong claim: Cloudflare powers 1 in 5 sites on the Internet.
+- Strong claim: Reduces policy and compliance risk by up to 50%.
+- Strong claim: Improves DDoS attack response times by up to 75%.
+- Weak claim: The 'best place' to build AI agents (subjective, lacks comparative benchmark data in snippets).
+- Weak claim: Industry-leading WAF (requires external analyst citation to be fully machine-verifiable).
+- Proof gap: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Proof gap: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Trust gap: Speak to sales about SASE and workspace security. .
+- Trust gap: Take the fast path to safe AI adoption and zero trust access with our composable, programmable platform.
+- Trust gap: We never sell your data, and we value your privacy choices.
+- Trust gap: Cloudflare's enterprise solutions increase customer retention, reduce compliance risk, and improve response times.
+
+### Fix Pack + top 5 actions
+- 1. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 2. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 3. Add lightweight schema to the core company, product, and FAQ surfaces (Medium impact, Low effort): Structured reinforcement can reduce ambiguity around the organization, product, and offer model.
+- 4. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+- 5. Connect homepage, product, pricing, enterprise, and docs paths with consistent action language (Medium impact, Low effort): A repeated action path keeps machine-mediated routing coherent across different entry points.
+- First this week: Baseline is strong. This week, Package proof closer to homepage and enterprise claims.
+- Fix Pack component: Baseline machine readability is already strong, so the first-week work is refinement, not emergency repair.
+- Fix Pack component: Paste-ready homepage summary and FAQ copy to reinforce category, audience, and next-step routing.
+- Fix Pack component: Citation-ready proof packaging and a practical schema plan for the highest-signal pages.
+- Fix Pack component: Action-path copy for pricing, demo, enterprise evaluation, and docs routing.
+
+## Gemini Orchestration Summary
+A bounded Gemini agent workflow executed six specialized stages to analyze Cloudflare's machine-facing GTM layer.
+- Website Context Agent -> Captured public facts, category clues, page coverage, and missing basics from the bounded website scan. Output artifact: Site facts captured
+- LLM Perception Agent -> Modeled the likely machine summary, positioning interpretation, and possible misreadings based on public signals. Output artifact: Likely machine summary
+- Agent Visitor Agent -> Identified what an AI buyer agent can understand, where the journey stalls, and which next-step paths remain unclear. Output artifact: Agent shopper journey blockers
+- AIO / Answer Engine Agent -> Assessed answer-surface readiness, structure quality, and how easily the site narrative can be reused by answer engines. Output artifact: Answer-engine readiness findings
+- Citation Readiness Agent -> Reviewed claims, proof density, and trust packaging to surface evidence gaps that limit machine confidence. Output artifact: Evidence and proof gaps
+- Fix Prioritization Agent -> Converted the findings into an executive brief, a Fix Pack, and the first-week priority list. Output artifact: Fix Pack + top 5 actions
+
+## Why Gemini
+- Gemini Flash: used for fast, responsive agent workflows.
+- Structured outputs: Gemini output is constrained into typed artifacts and validated.
+- Bounded orchestration: six specialized Gemini-driven stages produce inspectable artifacts.
+- Enterprise reliability: evidence-constrained outputs are favored over open-ended chat or fake autonomous swarms.
+- Architecture note: Gemini Pro can support deeper final synthesis later without changing the core one-URL flow.
+
+## Why this fits the challenge
+- Application of Technology: Gemini powers the bounded six-stage agent workflow, structured JSON synthesis, visible intermediate artifacts, Machine-Facing GTM Risks, Fix Pack generation, and Before / After AI Perception Simulator.
+- Presentation: One URL input, visible workflow trace, boardroom-ready brief, executive snapshot, and handoff-ready workstreams.
+- Business Value: Enterprises risk being misunderstood, skipped, weakly cited, or misrouted by AI agents and answer engines before human buyers ever reach the website.
+- Originality: Most SEO tools optimize for search crawlers. This product audits and repairs how AI agents, LLMs, and answer engines understand, cite, route, or skip a company.
+
+## Limitations
+This is a directional public-page read based on a bounded crawl. Some pages may be blocked, dynamic, or inaccessible from the server environment, so conclusions should be validated before strategic use.
+
+------------------------------------------------------------
+
+CASE 6 — HubSpot
+URL: https://www.hubspot.com
+Score: 96 / 100 (Excellent)
+Run status: pass, Gemini completed
+Notes:
+- Why this case: GTM platform with rich public pages, good benchmark for marketing/sales platform clarity.
+- Duration: 32.9s
+- Pages analyzed: 5
+- Pages discovered: 59
+- Page types: homepage, product, pricing
+- Gemini limited fallback used: no
+- Stall heartbeat observed in API trace: no
+- Limitations: Skipped https://hubspot.com/plus/solutions/b2b-ecommerce: HTTP 404.
+- Issue flags watched: none triggered by checks
+Full output:
+Workflow trace:
+- website-context :: running :: Reading homepage, sitemap, and high-signal internal pages.
+- website-context :: completed :: Captured 5 public pages for evidence review. (evidenceCount=5)
+- llm-perception :: running :: Modeling likely machine summaries from the captured public signals. (evidenceCount=5)
+- website-context :: completed :: Captured 5 public pages and identified commerce platform / ecommerce infrastructure for businesses and enterprises, homepage, product, pricing, proof, and action-path signals. (evidenceCount=5)
+- llm-perception :: completed :: Modeled likely machine summary and category interpretation from public evidence. (evidenceCount=5)
+- agent-visitor :: running :: Checking whether an AI agent can understand the buyer path and next action. (evidenceCount=5)
+- agent-visitor :: completed :: Assessed buyer routing, evaluation clarity, and next-step action signals for agent visitors. (evidenceCount=5)
+- aio-answer-engine :: running :: Assessing answer-engine interpretation, strengths, and structural weaknesses. (evidenceCount=5)
+- aio-answer-engine :: completed :: Reviewed answer-engine reuse, content structure, and machine-readable positioning cues. (evidenceCount=5)
+- citation-readiness :: running :: Reviewing evidence density, proof packaging, and trust gaps. (evidenceCount=5)
+- citation-readiness :: completed :: Checked whether claims, proof, and trust cues are packaged cleanly enough for citation. (evidenceCount=5)
+- fix-prioritization :: running :: Building the Fix Pack, ranking the top actions, and simulating projected perception changes. (evidenceCount=5)
+- fix-prioritization :: completed :: Converted the findings into a distinct first-week action plan and Fix Pack. (evidenceCount=5)
+
+Scan summary:
+- Normalized URL: https://hubspot.com/
+- Pages analyzed: 5
+- Pages discovered: 59
+- Page types: homepage, product, pricing
+- Limitations: Skipped https://hubspot.com/plus/solutions/b2b-ecommerce: HTTP 404.
+
+# AI Visibility Readiness Brief
+
+**AI Visibility Score:** 96 / 100 (Excellent)
+
+## Executive Verdict
+Public signals suggest HubSpot already has a strong machine-readable baseline, but category framing, proof packaging, and buyer routing can still be tightened for higher-confidence AI interpretation and citation.
+
+## Boardroom Snapshot
+- Enterprise Risk: Agent Journey Blocker (Medium) -> Complex modular pricing makes it difficult for agents to answer 'How much does HubSpot cost for 50 users?'.
+- Business Consequence: Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.
+- First-Week Move: Baseline is strong. This week, Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages.
+
+## Scorecards
+- AI Visibility Score: 96/100 (Excellent)
+- Citation Readiness: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Agent Actionability: The action path should be linked more tightly to proof and pricing so an agent can move from understanding to action.
+
+## Decision Memo
+- Current posture: Excellent
+- Primary risk: Agent Journey Blocker (Medium)
+- Recommended action: Baseline is strong. This week, Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages.
+- Suggested owner: Content
+- Time horizon: This week
+
+## Top Machine-Facing Gap
+The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.
+
+## Fix Pack / top 5 actions
+### What to do first this week
+Baseline is strong. This week, Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages.
+
+### Top 5 actions
+- 1. Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages (High impact, Low effort): Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.
+- 2. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 3. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 4. Reinforce product, organization, FAQ, and enterprise page schema (Medium impact, Low effort): Existing structured data is a good baseline, but broader reinforcement makes the category, offering, and page intent easier to confirm.
+- 5. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+
+### AI-readable homepage summary block
+HubSpot is a commerce platform / ecommerce infrastructure for businesses and enterprises for smbs, commerce teams, and enterprise brands. It should say, in one machine-readable block, that it helps buyers with transform your marketing with hubspot's enterprise marketing software. get advanced abm, adaptive testing, and revenue attribution all in one platform, then support the primary claim with HubSpot's customer platform includes all the marketing, sales, customer service, and CRM software you need to grow your…….
+
+### Answer-engine FAQ block
+- Q: What does HubSpot do?
+  - A: HubSpot is presented as a commerce platform / ecommerce infrastructure for businesses and enterprises with public signals that point to transform your marketing with hubspot's enterprise marketing software. get advanced abm, adaptive testing, and revenue attribution all in one platform.
+- Q: Who is HubSpot for?
+  - A: SMBs, commerce teams, and enterprise brands.
+- Q: What problem does HubSpot help solve?
+  - A: The public copy should connect the offer to one or two concrete workflows so answer engines can map the company to the right buyer need quickly.
+- Q: What proof should a buyer or machine see?
+  - A: Keep customer outcomes, trust markers, enterprise proof, or measured results close to the main value claims so they are easy to cite directionally.
+- Q: What is the best next step?
+  - A: Make the site state whether the next step is reviewing plans, requesting a demo, or starting an enterprise evaluation.
+
+### Citation-ready proof block
+- Turn this into a citation-ready proof line with a source, scope, or metric: HubSpot's customer platform includes all the marketing, sales, customer service, and CRM software you need to grow your business. .
+- Turn this into a citation-ready proof line with a source, scope, or metric: 288, 000+ customers in over 135 countries grow their businesses with HubSpot. .
+- Add a proof line in this format: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Add a proof line in this format: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Place the strongest proof line beside the relevant pricing or enterprise-evaluation path so agents can connect trust to action.
+
+### Agent action-path copy
+- Pricing path: Review plans, pricing logic, and packaging to determine the right fit before contacting the team.
+- Demo / request path: If you want a guided walkthrough, request a demo with your use case, team size, and evaluation goals so the right workflow can be shown.
+- Enterprise evaluation path: For enterprise evaluation, share your security, integration, rollout, and procurement requirements so the team can scope fit clearly.
+- Docs path: If technical documentation exists, link it directly from the core product path so agents can route implementation-minded buyers cleanly.
+
+### Structured data / schema plan
+- Organization schema on the homepage and about surface to reinforce core company identity and official links.
+- Product or SoftwareApplication schema on the main product surface to clarify what the offering is and how it should be categorized.
+- FAQ schema for the answer-engine FAQ block so core buyer questions are machine-readable.
+- Breadcrumb schema on deeper product, pricing, and documentation paths to reinforce page relationships.
+- Review or AggregateRating schema only where real, supportable review evidence exists publicly.
+
+## Machine-Facing GTM Risks
+- Misclassification Risk (Low)
+  - Why it matters: AI may still categorize the brand as 'Inbound Marketing' only, missing the broader 'Agentic Platform' capabilities.
+  - Suggested fix: Increase technical schema density around AI Agent capabilities.
+- Citation Weakness Risk (Low)
+  - Why it matters: Vague claims like 'AI that works for you' are harder for answer engines to cite than specific performance data.
+  - Suggested fix: Convert qualitative AI claims into citeable performance benchmarks.
+- Agent Journey Blocker (Medium)
+  - Why it matters: Complex modular pricing makes it difficult for agents to answer 'How much does HubSpot cost for 50 users?'.
+  - Suggested fix: Implement a machine-readable pricing summary table.
+- Buyer Routing Risk (Low)
+  - Why it matters: Agents might route enterprise buyers to 'Starter' tools if the distinction isn't clear in summaries.
+  - Suggested fix: Ensure H1/H2 tags clearly distinguish 'Enterprise' vs 'Starter' capabilities.
+- Trust Gap (Low)
+  - Why it matters: New AI features (Breeze) lack the decades of citation history that the core CRM enjoys.
+  - Suggested fix: Aggressively index third-party reviews specifically for Breeze AI agents.
+
+## Inferred Competitive Context
+- Inferred category: Commerce platform / ecommerce infrastructure for businesses and enterpr….
+- Category confidence: High
+- Likely peer: Enterprise CRM Suites (High) -> Direct competition for unified customer data and sales pipeline management.
+- Likely peer: B2B Marketing Automation Platforms (High) -> Explicitly cited as a Gartner Magic Quadrant Leader in this category.
+- Likely peer: AI Agentic Workflow Tools (Medium) -> Inferred from the 'Breeze' AI agent branding and 'Agentic Platform' positioning.
+- Competitive perception gap: HubSpot is likely perceived as more 'user-friendly' and 'integrated' than legacy enterprise peers, but may face scrutiny on the depth of its custom object capabilities compared to highly specialized CRM platforms.
+- Category visibility risk: Low. The brand has high authority in its primary categories, though the 'Agentic' pivot requires consistent citation support to avoid being seen as a generic AI wrapper.
+- Differentiation note: Use category language consistently across homepage, product, pricing, and enterprise pages so machine summaries do not drift.
+- Differentiation note: Keep proof and audience context close to the main value proposition so differentiation is supported, not merely asserted.
+- Differentiation note: Strengthen action-path clarity so machine-mediated buyers can distinguish this offer from adjacent options in the same category.
+- Validation note: This is directional competitive context, inferred from public site signals, and not a verified market map.
+
+## Before / After AI Perception Simulator
+### Current likely AI / LLM summary
+HubSpot appears to be a commerce platform / ecommerce infrastructure for businesses and enterprises for smbs, commerce teams, and enterprise brands, with public signals pointing to transform your marketing with hubspot's enterprise marketing software. get advanced abm, adaptive testing, and revenue attribution all in one platform.
+
+### Improved likely AI / LLM summary
+Directional simulation only: if the proposed homepage summary, FAQ, proof packaging, and action-path copy were added, HubSpot would be more likely to be interpreted as a clearly categorized company for a clearly stated audience, with stronger proof support and a cleaner next-step path for machine-mediated buyers.
+
+### What changed
+- Clearer category framing based on the proposed homepage summary and FAQ block.
+- Clearer audience and workflow language for answer engines and agent visitors.
+- Stronger proof packaging through citation-ready claims and evidence formatting.
+- Cleaner buyer action path across pricing, demo, enterprise evaluation, and docs routing.
+- Improved machine readability from tighter structure and schema reinforcement.
+- Improved citation support, directionally, through more explicit proof and trust signals.
+
+## Evidence Receipts
+- HubSpot | Software & Tools for your Business - Homepage (https://hubspot.com/)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: Send quotes, collect payments, and manage subscriptions.
+- HubSpot | Software & Tools for your Business - Homepage (https://hubspot.com/products/marketing/enterprise)
+  - Signal: Proof or customer credibility signal is present.
+  - Why it matters: Citation-friendly proof improves whether an answer engine can support a recommendation confidently.
+  - Snippet: HubSpot's customer platform includes all the marketing, sales, customer service, and CRM software you need to grow your business. .
+- HubSpot | Software & Tools for your Business - Homepage (https://hubspot.com/products/marketing)
+  - Signal: Structured data detected: Organization, WebSite, WebPage, Product, SoftwareApplication.
+  - Why it matters: Structured data can reduce ambiguity when agents parse page intent and business facts.
+  - Snippet: HubSpot's customer platform includes all the marketing, sales, customer service, and CRM software you need to grow your business.
+- Enterprise Marketing Software | Powerful Features That Scale (https://hubspot.com/products/sales)
+  - Signal: Pricing or commercial language is visible.
+  - Why it matters: Agents can more easily infer buying motion, packaging, and commercial intent.
+  - Snippet: Enterprise Marketing Software | Powerful Features That Scale.
+- Enterprise Marketing Software | Powerful Features That Scale (https://hubspot.com/pricing)
+  - Signal: Proof or customer credibility signal is present.
+  - Why it matters: Citation-friendly proof improves whether an answer engine can support a recommendation confidently.
+  - Snippet: Marketing Hub Enterprise is now packed with even more powerful features your growing team needs — with the same ease-of-use our customers know and love.
+
+## Visible Agent Artifacts
+### Site facts captured
+- Company/category summary: Commerce platform / ecommerce infrastructure for businesses and enterprises.
+- Likely audience: B2B GTM leaders, marketing operations managers, and sales executives seeking integrated CRM and AI agent capabilities.
+- Main offering: A unified 'Agentic Customer Platform' featuring Breeze AI, Marketing Hub, Sales Hub, and Smart CRM.
+- Key page found: Where go-to-market teams go to grow scale close retain grow (homepage)
+- Key page found: Marketing Hub Enterprise (product)
+- Key page found: Marketing Software Pricing | HubSpot (pricing)
+- Key page found: Marketing Software (product)
+- Key page found: Sales Software (product)
+- Proof signal found: HubSpot's customer platform includes all the marketing, sales, customer service, and CRM software you need to grow your business. .
+- Proof signal found: Structured data present: Organization, WebSite, WebPage, Product, SoftwareApplication
+- Proof signal found: Marketing Hub Enterprise is now packed with even more powerful features your growing team needs — with the same ease-of-use our customers know and love.
+- Proof signal found: Advanced Salesforce Integration.
+- Proof signal found: Structured data present: VideoObject, MediaObject
+- Missing basic: Machine readability is solid overall, but the site can still tighten proof packaging and action-path clarity.
+
+### Likely machine summary
+HubSpot appears to be a commerce platform / ecommerce infrastructure for businesses and enterprises for smbs, commerce teams, and enterprise brands, with public signals pointing to transform your marketing with hubspot's enterprise marketing software. get advanced abm, adaptive testing, and revenue attribution all in one platform.
+- Positioning interpretation: Public signals suggest the company will likely be interpreted as Commerce platform / ecommerce infrastructure for businesses and enterprises.
+- Possible misreading: A model may still flatten the company into a broader category if the strongest category and audience cues are not repeated across homepage, product, and enterprise pages.
+- Possible misreading: A model may understand the product but still blur the difference between self-serve, growth, and enterprise paths.
+- Possible misreading: Strong proof exists, but machines may not cite it cleanly if outcomes, trust cues, and commercial claims stay too far apart.
+
+### Agent shopper journey blockers
+- Agents can understand: The site exposes 5 public pages in this bounded pass.
+- Agents can understand: Some audience or workflow intent is visible in rendered HTML.
+- Agents can understand: At least one next-step path is public and machine-visible.
+- Journey blocker: The buyer path is present, but pricing and evaluation logic may still be fragmented across pages.
+- Journey blocker: Proof exists, but it may not sit close enough to the claims or action path for fast machine trust-building.
+- Journey blocker: The next-step path exists, but it is not yet reinforced with role-specific action language.
+- Actionability gap: The action path should be linked more tightly to proof and pricing so an agent can move from understanding to action.
+- Actionability gap: Role-specific copy exists, but the commercial next step still needs to be easier to infer.
+- Actionability gap: Important buying logic may still live in visual design rather than plainly extractable text.
+
+### Answer-engine readiness findings
+- Strength: The site provides at least some use-case or workflow context for answer engines.
+- Strength: Public proof signals give answer engines some material they can cite or paraphrase.
+- Strength: Structured data is present on at least one high-signal page.
+- Weakness: Thin pages limit the amount of reusable explanatory text available to answer engines.
+- Observation: Answer surfaces will likely understand the broad problem area, but may still compress the positioning.
+- Observation: Visible proof increases the odds of a more trustworthy directional summary, though not guaranteed citation behavior.
+- Content structure issue: Important machine-readable context should stay in rendered text, not only in visual layout or implied page structure.
+- Content structure issue: Important machine-readable context should stay in rendered text, not only in visual layout or implied page structure.
+- Content structure issue: Core buyer-path information should be repeated consistently across homepage, product, and commercial pages.
+
+### Evidence and proof gaps
+- Strong claim: Leader in 2025 Gartner Magic Quadrant for B2B Marketing Automation
+- Strong claim: 288,000+ global customers
+- Strong claim: 94% increase in deals closed after 6 months for Sales Hub users
+- Weak claim: AI that gets your work done (vague without specific agent context)
+- Weak claim: Products that connect to everything (requires specific integration proof)
+- Proof gap: Tighten the proof format so outcomes, sources, and claim language are easier for machines to quote directionally.
+- Proof gap: Pair proof statements with audience or workflow context so machines can map the evidence to the right buyer scenario.
+- Trust gap: Trust signals like compliance, security, or documented validation are not prominent enough in the bounded crawl.
+
+### Fix Pack + top 5 actions
+- 1. Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages (High impact, Low effort): Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.
+- 2. Package proof closer to homepage and enterprise claims (High impact, Low effort): Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.
+- 3. Clarify the enterprise evaluation path alongside plans and product proof (High impact, Low effort): Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.
+- 4. Reinforce product, organization, FAQ, and enterprise page schema (Medium impact, Low effort): Existing structured data is a good baseline, but broader reinforcement makes the category, offering, and page intent easier to confirm.
+- 5. Make AI and assistant positioning more citeable with one short explainer and nearby proof (Medium impact, Low effort): AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.
+- First this week: Baseline is strong. This week, Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages.
+- Fix Pack component: Baseline machine readability is already strong, so the first-week work is refinement, not emergency repair.
+- Fix Pack component: Paste-ready homepage summary and FAQ copy to reinforce category, audience, and next-step routing.
+- Fix Pack component: Citation-ready proof packaging and a practical schema plan for the highest-signal pages.
+- Fix Pack component: Action-path copy for pricing, demo, enterprise evaluation, and docs routing.
+
+## Gemini Orchestration Summary
+This workflow utilizes a bounded Gemini orchestration to analyze machine-facing GTM signals across HubSpot's public infrastructure.
+- Website Context Agent -> Captured public facts, category clues, page coverage, and missing basics from the bounded website scan. Output artifact: Site facts captured
+- LLM Perception Agent -> Modeled the likely machine summary, positioning interpretation, and possible misreadings based on public signals. Output artifact: Likely machine summary
+- Agent Visitor Agent -> Identified what an AI buyer agent can understand, where the journey stalls, and which next-step paths remain unclear. Output artifact: Agent shopper journey blockers
+- AIO / Answer Engine Agent -> Assessed answer-surface readiness, structure quality, and how easily the site narrative can be reused by answer engines. Output artifact: Answer-engine readiness findings
+- Citation Readiness Agent -> Reviewed claims, proof density, and trust packaging to surface evidence gaps that limit machine confidence. Output artifact: Evidence and proof gaps
+- Fix Prioritization Agent -> Converted the findings into an executive brief, a Fix Pack, and the first-week priority list. Output artifact: Fix Pack + top 5 actions
+
+## Why Gemini
+- Gemini Flash: used for fast, responsive agent workflows.
+- Structured outputs: Gemini output is constrained into typed artifacts and validated.
+- Bounded orchestration: six specialized Gemini-driven stages produce inspectable artifacts.
+- Enterprise reliability: evidence-constrained outputs are favored over open-ended chat or fake autonomous swarms.
+- Architecture note: Gemini Pro can support deeper final synthesis later without changing the core one-URL flow.
+
+## Why this fits the challenge
+- Application of Technology: Gemini powers the bounded six-stage agent workflow, structured JSON synthesis, visible intermediate artifacts, Machine-Facing GTM Risks, Fix Pack generation, and Before / After AI Perception Simulator.
+- Presentation: One URL input, visible workflow trace, boardroom-ready brief, executive snapshot, and handoff-ready workstreams.
+- Business Value: Enterprises risk being misunderstood, skipped, weakly cited, or misrouted by AI agents and answer engines before human buyers ever reach the website.
+- Originality: Most SEO tools optimize for search crawlers. This product audits and repairs how AI agents, LLMs, and answer engines understand, cite, route, or skip a company.
+
+## Limitations
+This is a directional public-page read based on a bounded crawl. Some pages may be blocked, dynamic, or inaccessible from the server environment, so conclusions should be validated before strategic use.
+
+------------------------------------------------------------
+
+============================================================
+STRESS TEST SUMMARY
+============================================================
+
+Shopify
+- Output quality: 8/10
+- Executive presence: 9/10
+- Evidence quality: 8/10
+- Fix Pack usefulness: 8/10
+- Demo suitability: 8/10
+- Any visible problems: Gemini fell back to conservative local synthesis on this run, so the output is strong but not the cleanest possible hero path for a live reliability demo.
+- Best use in final demo: Yes
+
+Cursor
+- Output quality: 8/10
+- Executive presence: 8/10
+- Evidence quality: 6/10
+- Fix Pack usefulness: 7/10
+- Demo suitability: 9/10
+- Any visible problems: Category extraction is still not fully clean and evidence density is a bit thinner than Shopify, but the run completed normally with Gemini and did not hang.
+- Best use in final demo: Yes
+
+Ramp
+- Output quality: 1/10
+- Executive presence: 2/10
+- Evidence quality: 1/10
+- Fix Pack usefulness: 3/10
+- Demo suitability: 1/10
+- Any visible problems: Crawl failed completely with non-HTML responses, so the output is almost entirely fallback material with no evidence receipts.
+- Best use in final demo: No
+
+ServiceNow
+- Output quality: 3/10
+- Executive presence: 5/10
+- Evidence quality: 2/10
+- Fix Pack usefulness: 5/10
+- Demo suitability: 2/10
+- Any visible problems: Only one page was captured, evidence receipts are thin, and this run also fell back to conservative local synthesis.
+- Best use in final demo: No
+
+Cloudflare
+- Output quality: 7/10
+- Executive presence: 8/10
+- Evidence quality: 6/10
+- Fix Pack usefulness: 7/10
+- Demo suitability: 7/10
+- Any visible problems: Output is solid, but evidence density is lighter than before and category naming still risks feeling headline-like instead of taxonomy-clean.
+- Best use in final demo: Maybe
+
+HubSpot
+- Output quality: 6/10
+- Executive presence: 7/10
+- Evidence quality: 6/10
+- Fix Pack usefulness: 6/10
+- Demo suitability: 6/10
+- Any visible problems: The company is still misclassified as ecommerce infrastructure, which makes the narrative feel category-wrong even though the run completed cleanly.
+- Best use in final demo: Maybe
+
+Ranked demo recommendation:
+1. Best final video demo case: Shopify
+2. Best backup case: Cursor
+3. Risky / avoid case: Ramp (ServiceNow is also weak unless crawl access improves)
+
+Cross-case quality risks observed:
+- Category extraction can still drift into slogan, proof, or enterprise-page headline text instead of clean taxonomy.
+- Crawl accessibility remains a real risk for some domains, especially Ramp and ServiceNow.
+- Gemini fallback is now graceful, but it still lowers demo polish when it triggers on an otherwise strong case.
+- Evidence density is still uneven across some strong cases, especially Cursor and Cloudflare on this run.
+- The bounded workflow is now safer, but long-running model calls can still reduce perceived speed before fallback kicks in.
+
+Specific issue watchlist results:
+- Cursor stuck at Step 2 / 99%: not reproduced as an indefinite hang in the patched runs; Cursor completed with Gemini
+- Any raw Gemini/API error text: none in saved outputs
+- Any INVALID_ARGUMENT text: none in saved outputs
+- Any API key or secret exposure: none seen
+- Any “Try free” / CTA copy used as category: not seen in saved outputs
+- Any malformed audience phrase: not seen, though some audiences were still broad
+- Any repeated top 5 fixes: not seen within a case
+- Any raw navigation/menu text in proof snippets: not seen in saved outputs
+- Any weak evidence receipts: yes, especially Ramp and ServiceNow
+- Any fake ranking or overclaiming: no direct fake ranking, but some category labels still overfit to slogans or proof lines
+- Any chain-of-thought / thinking-trace language: none seen
+- Any output that feels generic instead of specific: yes, most visible on Ramp, ServiceNow, and parts of HubSpot
+- Any case where the app takes too long or fails: Ramp failed crawl, ServiceNow degraded, but Cursor no longer hung indefinitely

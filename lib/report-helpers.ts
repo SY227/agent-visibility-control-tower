@@ -1174,8 +1174,8 @@ export function buildFallbackReport(scan: SiteScanResult): VisibilityReport {
     machineFacingGtmRisks,
     geminiOrchestrationSummary,
     llmPerception: {
-      likelySummary: llmPerceptionArtifact.likelySummary,
-      positioningClarity: llmPerceptionArtifact.positioningInterpretation,
+      likelySummary: truncate(llmPerceptionArtifact.likelySummary, 420),
+      positioningClarity: truncate(llmPerceptionArtifact.positioningInterpretation, 260),
       possibleMisreadings: llmPerceptionArtifact.possibleMisreadings,
     },
     agentReadiness: {

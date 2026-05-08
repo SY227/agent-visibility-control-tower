@@ -10,6 +10,8 @@ import { SAMPLE_CASES } from "@/lib/sample-cases";
 import type { AnalyzeResultPayload, ProgressEvent, WorkflowTraceItem } from "@/lib/types";
 import { tryParseJson } from "@/lib/utils";
 
+const LLM_STALL_MESSAGE = "Gemini synthesis is taking longer than expected; the system will fall back if needed.";
+
 const DEFAULT_TRACE: WorkflowTraceItem[] = [
   {
     id: "website-context",
@@ -61,6 +63,7 @@ export function AgentVisibilityApp() {
   const [workflowTrace, setWorkflowTrace] = useState<WorkflowTraceItem[]>(DEFAULT_TRACE);
   const [payload, setPayload] = useState<AnalyzeResultPayload | null>(null);
   const briefRef = useRef<HTMLDivElement | null>(null);
+  const currentRunningStepId = workflowTrace.find((item) => item.status === "running")?.id;
 
   function updateTrace(event: ProgressEvent) {
     setWorkflowTrace((current) =>
@@ -172,6 +175,25 @@ export function AgentVisibilityApp() {
 
     return () => window.clearTimeout(timer);
   }, [payload]);
+
+  useEffect(() => {
+    if (!isRunning || currentRunningStepId !== "llm-perception") return;
+
+    const timer = window.setTimeout(() => {
+      setWorkflowTrace((current) =>
+        current.map((item) =>
+          item.id === "llm-perception" && item.status === "running"
+            ? {
+                ...item,
+                summary: LLM_STALL_MESSAGE,
+              }
+            : item,
+        ),
+      );
+    }, 30_000);
+
+    return () => window.clearTimeout(timer);
+  }, [currentRunningStepId, isRunning]);
 
   return (
     <div className="min-h-screen">

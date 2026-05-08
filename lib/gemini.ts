@@ -20,12 +20,32 @@ import {
   buildWebsiteContextArtifact,
   cleanEvidenceText,
   inferCleanCategory,
-  safeCompanyName,
 } from "@/lib/report-helpers";
 import type { SiteScanResult, VisibilityReport } from "@/lib/types";
 import { clamp, normalizeWhitespace, scoreLabel, sentence, truncate } from "@/lib/utils";
 
 const MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
+const GEMINI_TIMEOUT_MS = 48_000;
+const GEMINI_RETRY_TIMEOUT_MS = 25_000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`${label}_TIMEOUT`));
+    }, ms);
+
+    void promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
 
 function toSentence(value: unknown, fallback: string) {
   if (typeof value !== "string") return fallback;
@@ -741,6 +761,32 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
   return visibilityReportSchema.parse(report);
 }
 
+function buildGeminiLimitedFallbackReport(scan: SiteScanResult) {
+  const report = buildFallbackReport(scan);
+
+  report.limitations = truncate(buildUserFacingLimitations({ geminiLimited: true }), 400);
+  report.websiteContextArtifact = buildWebsiteContextArtifact(scan);
+  report.websiteContextArtifact.companyCategory = inferCleanCategory(scan);
+  report.llmPerceptionArtifact = buildLLMPerceptionArtifact(scan, report.websiteContextArtifact);
+  report.agentVisitorArtifact = buildAgentVisitorArtifact(scan);
+  report.aioArtifact = buildAioArtifact(scan);
+  report.citationArtifact = buildCitationArtifact(scan);
+  report.topFixes = buildTopFixes(scan);
+  report.fixPrioritizationArtifact = buildFixPrioritizationArtifact(scan, report.topFixes);
+  report.fixPack = buildFixPack(scan, report.websiteContextArtifact, report.citationArtifact);
+  report.beforeAfterPerception = buildBeforeAfterPerception(
+    scan,
+    report.llmPerceptionArtifact,
+    report.websiteContextArtifact,
+    report.fixPack,
+  );
+  report.inferredCompetitiveContext = buildInferredCompetitiveContext(scan, report.websiteContextArtifact);
+  report.machineFacingGtmRisks = buildMachineFacingGtmRisks(scan, report.websiteContextArtifact);
+  report.geminiOrchestrationSummary = buildGeminiOrchestrationSummary();
+
+  return visibilityReportSchema.parse(report);
+}
+
 export async function generateVisibilityReport(scan: SiteScanResult) {
   const fallback = buildFallbackReport(scan);
   const apiKey = process.env.GEMINI_API_KEY;
@@ -751,17 +797,21 @@ export async function generateVisibilityReport(scan: SiteScanResult) {
 
   const ai = new GoogleGenAI({ apiKey });
 
-  const runGemini = async (useSchema: boolean) => {
-    const response = await ai.models.generateContent({
-      model: MODEL,
-      contents: buildVisibilityPrompt(scan),
-      config: {
-        responseMimeType: "application/json",
-        ...(useSchema ? { responseJsonSchema: geminiResponseJsonSchema } : {}),
-        temperature: 0.35,
-        topP: 0.9,
-      },
-    });
+  const runGemini = async (useSchema: boolean, timeoutMs: number) => {
+    const response = await withTimeout(
+      ai.models.generateContent({
+        model: MODEL,
+        contents: buildVisibilityPrompt(scan),
+        config: {
+          responseMimeType: "application/json",
+          ...(useSchema ? { responseJsonSchema: geminiResponseJsonSchema } : {}),
+          temperature: 0.35,
+          topP: 0.9,
+        },
+      }),
+      timeoutMs,
+      useSchema ? "GEMINI_PRIMARY" : "GEMINI_RETRY",
+    );
 
     const text = response.text;
     if (!text) return null;
@@ -769,7 +819,7 @@ export async function generateVisibilityReport(scan: SiteScanResult) {
   };
 
   try {
-    const primary = await runGemini(true);
+    const primary = await runGemini(true, GEMINI_TIMEOUT_MS);
     if (primary) return primary;
     return fallback;
   } catch (error) {
@@ -777,44 +827,13 @@ export async function generateVisibilityReport(scan: SiteScanResult) {
 
     if (invalidArgument) {
       try {
-        const retry = await runGemini(false);
+        const retry = await runGemini(false, GEMINI_RETRY_TIMEOUT_MS);
         if (retry) return retry;
       } catch {
         // Fall through to conservative local synthesis.
       }
     }
 
-    const artifactFallback = buildFallbackReport(scan);
-    artifactFallback.executiveVerdict = sentence(
-      `${artifactFallback.executiveVerdict} Public signals for ${safeCompanyName(scan)} were still usable, so the report fell back to conservative local synthesis`,
-    );
-    artifactFallback.limitations = truncate(buildUserFacingLimitations({ geminiLimited: true }), 400);
-
-    artifactFallback.websiteContextArtifact = buildWebsiteContextArtifact(scan);
-    artifactFallback.websiteContextArtifact.companyCategory = inferCleanCategory(scan);
-    artifactFallback.llmPerceptionArtifact = buildLLMPerceptionArtifact(scan, artifactFallback.websiteContextArtifact);
-    artifactFallback.agentVisitorArtifact = buildAgentVisitorArtifact(scan);
-    artifactFallback.aioArtifact = buildAioArtifact(scan);
-    artifactFallback.citationArtifact = buildCitationArtifact(scan);
-    artifactFallback.topFixes = buildTopFixes(scan);
-    artifactFallback.fixPrioritizationArtifact = buildFixPrioritizationArtifact(scan, artifactFallback.topFixes);
-    artifactFallback.fixPack = buildFixPack(scan, artifactFallback.websiteContextArtifact, artifactFallback.citationArtifact);
-    artifactFallback.beforeAfterPerception = buildBeforeAfterPerception(
-      scan,
-      artifactFallback.llmPerceptionArtifact,
-      artifactFallback.websiteContextArtifact,
-      artifactFallback.fixPack,
-    );
-    artifactFallback.inferredCompetitiveContext = buildInferredCompetitiveContext(
-      scan,
-      artifactFallback.websiteContextArtifact,
-    );
-    artifactFallback.machineFacingGtmRisks = buildMachineFacingGtmRisks(
-      scan,
-      artifactFallback.websiteContextArtifact,
-    );
-    artifactFallback.geminiOrchestrationSummary = buildGeminiOrchestrationSummary();
-
-    return visibilityReportSchema.parse(artifactFallback);
+    return buildGeminiLimitedFallbackReport(scan);
   }
 }

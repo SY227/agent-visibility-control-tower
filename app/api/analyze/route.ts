@@ -38,6 +38,8 @@ export async function POST(request: Request) {
   const writer = writable.getWriter();
 
   void (async () => {
+    let llmStallTimer: ReturnType<typeof setTimeout> | null = null;
+
     try {
       const json = await request.json();
       const parsed = analyzeRequestSchema.safeParse(json);
@@ -72,7 +74,18 @@ export async function POST(request: Request) {
         evidenceCount,
       );
 
+      llmStallTimer = setTimeout(() => {
+        void emitProgress(writer, {
+          agentId: "llm-perception",
+          status: "running",
+          message: "Gemini synthesis is taking longer than expected; the system will fall back if needed.",
+          evidenceCount,
+        });
+      }, 30_000);
+
       const report = await generateVisibilityReport(scan);
+      clearTimeout(llmStallTimer);
+      llmStallTimer = null;
 
       await emitProgress(writer, buildCompletionEvent(report, "website-context", evidenceCount));
       await emitProgress(writer, buildCompletionEvent(report, "llm-perception", evidenceCount));
@@ -123,14 +136,15 @@ export async function POST(request: Request) {
       });
 
       await writer.write(line({ type: "result", payload }));
-    } catch (error) {
+    } catch {
       await writer.write(
         line({
           type: "error",
-          error: error instanceof Error ? error.message : "Analysis failed.",
+          error: "The analysis could not be completed cleanly from this environment. Please try again.",
         }),
       );
     } finally {
+      if (llmStallTimer) clearTimeout(llmStallTimer);
       await writer.close();
     }
   })();

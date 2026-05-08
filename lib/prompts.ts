@@ -59,6 +59,11 @@ Core rules:
 - The before/after simulator must be explicitly directional and non-guaranteed.
 - Do not invent competitors, peer rankings, sources, citations, or market maps.
 - Any competitive context must stay directional, confidence-labeled, and inferred only from the public site signals in this scan.
+- Return strict JSON only. No markdown fences, no prose before the JSON object, and no trailing commentary.
+- Do not use homepage CTA copy, promo slogans, or raw navigation text as the company category.
+- Reject snippets that look like merged menu text, repeated navigation labels, or cookie/banner copy.
+- topFixes and fixPrioritizationArtifact.topActions must be distinct. Never repeat the same action with slightly different wording.
+- If the site baseline is already strong, say so. Recommend refinement and packaging improvements, not emergency-repair language.
 
 Required output artifact name: AI Visibility Readiness Brief.
 
@@ -115,9 +120,11 @@ Artifact requirements:
 
 Additional section requirements:
 7. inferredCompetitiveContext
-   - inferredCategory should be a likely category inferred from public site signals.
+   - inferredCategory should be a concise, noun-based category inferred from public site signals.
+   - Never use CTA language, slogans, or promotional copy as inferredCategory.
    - categoryConfidence must be High, Medium, or Low.
    - likelyPeerSet must contain 3 to 5 directional peer archetypes or likely peer descriptions inferred from public site signals only, not verified competitors.
+   - likelyPeerSet names should be short strategic archetypes, not malformed category strings.
    - Each likelyPeerSet item needs name, confidence, and whyInferred.
    - competitivePerceptionGap should explain how the site may be perceived versus better-packaged peers in the same likely category.
    - categoryVisibilityRisk should explain the machine-facing GTM risk of weak category legibility.
@@ -136,6 +143,7 @@ Additional section requirements:
 Fix Pack requirements:
 - homepageSummaryBlock should read like paste-ready homepage copy that improves machine readability.
 - faqBlock should be concise and answer-engine friendly.
+- Do not produce awkward audience phrases such as malformed fragments or stitched heading text.
 - citationReadyProofBlock should upgrade vague claims into more citeable proof language without inventing facts.
 - agentActionPathCopy should cover pricing path, demo/request path, enterprise evaluation path, and docs path if relevant.
 - schemaPlan should recommend practical schema types such as Organization, Product, FAQ, SoftwareApplication, Breadcrumb, and Review/AggregateRating only where supportable.

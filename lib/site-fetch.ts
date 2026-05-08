@@ -12,7 +12,8 @@ const MAX_SITEMAP_URLS = 28;
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "" });
 
 const PAGE_PATTERNS: Array<{ type: string; regex: RegExp; score: number }> = [
-  { type: "pricing", regex: /\/(pricing|plans|enterprise|cost)(\/|$)/i, score: 98 },
+  { type: "pricing", regex: /\/(pricing|plans|cost)(\/|$)/i, score: 98 },
+  { type: "product", regex: /\/(enterprise|plus)(\/|$)/i, score: 99 },
   { type: "product", regex: /\/(product|products|platform|features|solutions)(\/|$)/i, score: 96 },
   { type: "customers", regex: /\/(customers|case-studies|testimonials|stories)(\/|$)/i, score: 92 },
   { type: "docs", regex: /\/(docs|documentation|developers|api|reference)(\/|$)/i, score: 91 },
@@ -24,6 +25,18 @@ const PAGE_PATTERNS: Array<{ type: string; regex: RegExp; score: number }> = [
 
 const NOISY_PATHS = /(\/login|\/signin|\/signup|\/careers|\/legal|\/privacy|\/terms|\/support|\/contact|\/checkout|\/cart)(\/|$)/i;
 const SKIP_EXTENSIONS = /\.(pdf|jpg|jpeg|png|webp|gif|svg|zip|mp4|mp3|csv|xml|json)$/i;
+const NOISY_TEXT_PATTERNS = [
+  /productsback/i,
+  /backget/i,
+  /why shopifyback/i,
+  /website builderthemesdomains/i,
+  /customer accountssidekick/i,
+  /social & marketplaces/i,
+  /there'?s no better place for you to build/i,
+  /cookie/i,
+  /accept all/i,
+  /skip to content/i,
+];
 
 function buildCandidateUrls(input: string) {
   const raw = input.trim();
@@ -73,6 +86,8 @@ function scoreCandidate(url: string, label = "") {
   for (const pattern of PAGE_PATTERNS) {
     if (pattern.regex.test(pathname) || pattern.regex.test(`/${label}`)) score = Math.max(score, pattern.score);
   }
+  if (/\b(20\d{2}|19\d{2})\b/.test(pathname) || /\/(blog|learn|guide|guides|news|retail)\//i.test(pathname)) score -= 18;
+  if (/enterprise|plus|b2b|wholesale/i.test(pathname)) score += 10;
   if (pathname.split("/").filter(Boolean).length > 3) score -= 8;
   return score;
 }
@@ -116,51 +131,95 @@ async function fetchWithRetry(url: string) {
   throw lastError || new Error("Request failed");
 }
 
+function cleanTextFragment(value: string) {
+  const normalized = normalizeWhitespace(value || "")
+    .replace(/\b(Back|Menu|Navigation)\b/gi, " ")
+    .replace(/try [a-z0-9 ]*free/gi, " ")
+    .replace(/get started(?: fast)?/gi, " ")
+    .replace(/build or grow your business(?: fast)?(?: with ai)?/gi, " ")
+    .replace(/\s*([,:;])\s*/g, "$1 ")
+    .replace(/\s*([.!?])\s*/g, "$1 ")
+    .replace(/\s{2,}/g, " ")
+    .replace(/^[\s.,;:!?-]+/, "")
+    .trim();
+
+  return normalized;
+}
+
+function isNoisyTextFragment(value: string) {
+  const normalized = cleanTextFragment(value);
+  if (!normalized) return true;
+  if (NOISY_TEXT_PATTERNS.some((pattern) => pattern.test(normalized))) return true;
+
+  const wordCount = normalized.split(/\s+/).filter(Boolean).length;
+  const capitalized = (normalized.match(/[A-Z][a-z]+/g) || []).length;
+  const navHints = (normalized.match(/Products|Pricing|Themes|Domains|Docs|Developers|Marketplaces|Campaigns/gi) || []).length;
+
+  return wordCount > 10 && capitalized >= 8 && navHints >= 4 && !/[.!?]/.test(normalized);
+}
+
+function keepTextFragment(value: string, minLength = 24) {
+  const cleaned = cleanTextFragment(value);
+  if (!cleaned || cleaned.length < minLength) return false;
+  if (isNoisyTextFragment(cleaned)) return false;
+
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  const uniqueRatio = new Set(words.map((word) => word.toLowerCase())).size / Math.max(words.length, 1);
+
+  return uniqueRatio > 0.45;
+}
+
 function extractSignalSentences(text: string, regex: RegExp, limit = 3) {
   const sentences = normalizeWhitespace(text)
-    .split(/(?<=[.!?])\s+/)
-    .map((item) => item.trim())
-    .filter(Boolean);
+    .split(/(?<=[.!?])\s+|\s[•·]\s|\n+/)
+    .map((item) => cleanTextFragment(item))
+    .filter((item) => keepTextFragment(item, 20));
 
-  return sentences.filter((item) => regex.test(item)).slice(0, limit).map((item) => truncate(item, 220));
+  return dedupe(sentences.filter((item) => regex.test(item))).slice(0, limit).map((item) => truncate(item, 220));
 }
+
 
 function extractPage(url: string, html: string, hostname: string): SitePage {
   const $ = load(html);
-  $("script:not([type='application/ld+json']), style, noscript, svg, iframe, form").remove();
+  $("script:not([type='application/ld+json']), style, noscript, svg, iframe, form, nav, header, footer, aside, menu, [role='navigation']").remove();
+  $("[aria-label*='navigation' i], [class*='nav' i], [id*='nav' i], [class*='menu' i], [id*='menu' i], [class*='cookie' i], [id*='cookie' i], [class*='banner' i][class*='cookie' i]").remove();
 
-  const title = normalizeWhitespace($("title").first().text());
-  const metaDescription = normalizeWhitespace(
+  const title = cleanTextFragment($("title").first().text());
+  const metaDescription = cleanTextFragment(
     $("meta[name='description']").attr("content") ||
       $("meta[property='og:description']").attr("content") ||
       "",
   );
-  const h1 = normalizeWhitespace($("h1").first().text());
+  const h1 = cleanTextFragment($("h1").first().text());
   const headings = dedupe(
     [h1]
       .concat(
-        $("h2, h3")
+        $("main h2, main h3, article h2, article h3, section h2, section h3, h2, h3")
           .toArray()
-          .map((element) => normalizeWhitespace($(element).text())),
+          .map((element) => cleanTextFragment($(element).text())),
       )
-      .filter(Boolean),
+      .filter((item) => keepTextFragment(item, 12)),
   ).slice(0, 12);
 
-  const paragraphs = $("main p, article p, section p, p, li")
+  const paragraphs = $("main p, article p, section p, main li, article li, section li")
     .toArray()
-    .map((element) => normalizeWhitespace($(element).text()))
-    .filter((item) => item.length > 35);
+    .map((element) => cleanTextFragment($(element).text()))
+    .filter((item) => keepTextFragment(item, 36));
 
-  const bodyText = truncate(paragraphs.join(" "), 4200);
-  const combined = [title, metaDescription, headings.join(" "), bodyText].join(" ");
+  const snippetSource = /try .*free|get started|build or grow your business/i.test(metaDescription)
+    ? paragraphs[0] || h1 || title || metaDescription
+    : metaDescription || paragraphs[0] || h1 || title;
+  const snippet = truncate(snippetSource, 220);
+  const bodyText = truncate(dedupe(paragraphs).join(" "), 4200);
+  const combined = [title, metaDescription, h1, headings.join(". "), bodyText].filter(Boolean).join(". ");
 
   const internalLinks = dedupe(
     $("a[href]")
       .toArray()
       .map((element) => {
         const href = $(element).attr("href");
-        const label = normalizeWhitespace($(element).text());
-        if (!href || !label) return null;
+        const label = cleanTextFragment($(element).text());
+        if (!href || !label || isNoisyTextFragment(label)) return null;
         try {
           const absolute = new URL(href, url).toString();
           if (!isSameDomain(absolute, hostname)) return null;
@@ -215,14 +274,14 @@ function extractPage(url: string, html: string, hostname: string): SitePage {
     h1,
     headings,
     bodyText,
-    snippet: truncate(metaDescription || paragraphs[0] || h1 || title, 220),
+    snippet,
     schemaTypes,
     internalLinks,
     pricingSignals: extractSignalSentences(combined, /\$|pricing|plan|enterprise|quote|monthly|annual|contact sales/i),
     proofSignals: extractSignalSentences(combined, /trusted by|customer|customers|case study|testimonial|roi|results|millions|billions|logos/i),
     trustSignals: extractSignalSentences(combined, /security|compliance|soc 2|soc2|gdpr|privacy|trust|audit/i),
-    useCaseSignals: extractSignalSentences(combined, /for teams|for developers|for finance|for sales|for marketing|for operations|workflow|use case|industry/i),
-    actionSignals: extractSignalSentences(combined, /book a demo|get started|contact sales|start free trial|request a demo|talk to sales|buy now/i),
+    useCaseSignals: extractSignalSentences(combined, /for teams|for developers|for finance|for sales|for marketing|for operations|workflow|use case|industry|entrepreneurs|enterprise|b2b|dtc|brands|merchants|retail/i),
+    actionSignals: extractSignalSentences(combined, /book a demo|get started|contact sales|start free trial|request a demo|talk to sales|buy now|plans & pricing|pricing/i),
     citationSignals: extractSignalSentences(combined, /according to|certified|documented|reference|faq|guide|study|report|integration/i),
   };
 }
@@ -290,7 +349,7 @@ function buildFacts(pages: SitePage[], pagesDiscovered: number, robotsStatus: Si
     pagesWithPricing: pages.filter((page) => page.pricingSignals.length > 0 || page.pageType === "pricing").length,
     pagesWithProof: pages.filter((page) => page.proofSignals.length > 0).length,
     pagesWithUseCases: pages.filter((page) => page.useCaseSignals.length > 0 || page.pageType === "use-cases").length,
-    pagesWithActions: pages.filter((page) => page.actionSignals.length > 0).length,
+    pagesWithActions: pages.filter((page) => page.actionSignals.length > 0 || page.pageType === "pricing").length,
     pagesWithThinContent: pages.filter((page) => page.bodyText.split(/\s+/).filter(Boolean).length < 90).length,
     robotsStatus,
     sitemapStatus,
@@ -299,16 +358,22 @@ function buildFacts(pages: SitePage[], pagesDiscovered: number, robotsStatus: Si
 
 function buildEvidenceReceipts(pages: SitePage[]): EvidenceReceipt[] {
   const receipts: EvidenceReceipt[] = [];
+  const seen = new Set<string>();
 
   for (const page of pages) {
     const pushReceipt = (signal: string, whyItMatters: string, snippet: string) => {
       if (receipts.length >= 8) return;
+      const cleanedSnippet = truncate(cleanTextFragment(snippet || page.snippet), 220);
+      if (!cleanedSnippet || isNoisyTextFragment(cleanedSnippet)) return;
+      const key = `${page.url}::${cleanedSnippet.toLowerCase()}`;
+      if (seen.has(key)) return;
+      seen.add(key);
       receipts.push({
         sourceName: page.title || safeUrlLabel(page.url),
         sourceUrl: page.url,
         signal,
         whyItMatters,
-        snippet: truncate(snippet || page.snippet, 220),
+        snippet: cleanedSnippet,
       });
     };
 
@@ -374,7 +439,7 @@ export async function scanSite(inputUrl: string): Promise<SiteScanResult> {
   };
 
   for (const link of homepage.internalLinks) addCandidate(link.url, link.label);
-  for (const guess of ["/pricing", "/product", "/solutions", "/customers", "/docs", "/about", "/security"]) {
+  for (const guess of ["/pricing", "/enterprise", "/plus/solutions/b2b-ecommerce", "/product", "/solutions", "/customers", "/docs", "/about", "/security"]) {
     addCandidate(new URL(guess, homepageUrl).toString(), guess);
   }
 
@@ -421,7 +486,10 @@ export async function scanSite(inputUrl: string): Promise<SiteScanResult> {
         limitations.push(`Skipped ${url}: empty HTML.`);
         continue;
       }
-      pages.push(extractPage(normalizeUrl(response.url), html, homepageHost));
+      const extracted = extractPage(normalizeUrl(response.url), html, homepageHost);
+      if (!pages.some((page) => page.normalizedUrl === extracted.normalizedUrl)) {
+        pages.push(extracted);
+      }
     } catch (error) {
       limitations.push(`Skipped ${url}: ${error instanceof Error ? error.message : "Unknown error"}.`);
     }

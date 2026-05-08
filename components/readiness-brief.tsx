@@ -62,6 +62,7 @@ export function ReadinessBrief({
       </Card>
 
       <BoardroomSnapshot report={report} />
+      <DecisionMemo report={report} />
 
       <div className="grid gap-4 md:grid-cols-3">
         <VisibilityScoreCard
@@ -84,8 +85,6 @@ export function ReadinessBrief({
         />
       </div>
 
-      <DecisionMemo report={report} />
-
       <Card className="border-[rgba(209,165,66,0.22)] bg-[var(--amber-soft)] p-5 sm:p-6">
         <div className="space-y-3">
           <Badge tone="amber">Top machine-facing gap</Badge>
@@ -97,11 +96,13 @@ export function ReadinessBrief({
         </div>
       </Card>
 
+      <FixPackSection report={report} />
       <MachineFacingGtmRisks report={report} />
       <InferredCompetitiveContext report={report} />
-      <FixPackSection report={report} />
       <BeforeAfterPerceptionSimulator perception={report.beforeAfterPerception} />
+      <EvidenceReceipts receipts={report.evidenceReceipts} />
       <AgentArtifactCards report={report} />
+      <JourneyDiagram mermaid={report.journeyDiagram.mermaid} summary={report.journeyDiagram.summary} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <ListCard
@@ -148,8 +149,6 @@ export function ReadinessBrief({
         </Card>
       </div>
 
-      <JourneyDiagram mermaid={report.journeyDiagram.mermaid} summary={report.journeyDiagram.summary} />
-      <EvidenceReceipts receipts={report.evidenceReceipts} />
       <GeminiOrchestrationSummary report={report} />
       <WhyGeminiStrip />
       <JudgeRubricSnapshot />

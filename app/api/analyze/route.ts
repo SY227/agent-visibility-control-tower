@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       });
 
       const scan = await scanSite(parsed.data.url);
-      const evidenceCount = scan.evidenceReceipts.length;
+      const evidenceCount = scan.pages.length;
 
       await emitProgress(writer, {
         agentId: "website-context",

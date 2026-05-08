@@ -33,6 +33,40 @@ const AGENT_LABELS: Record<WorkflowAgentId, string> = {
   "fix-prioritization": "Fix Prioritization Agent",
 };
 
+const USER_FACING_LIMITATION_BASE =
+  "This is a directional public-page read based on a bounded crawl. Some pages may be blocked, dynamic, or inaccessible from the server environment, so conclusions should be validated before strategic use.";
+
+const GEMINI_LIMITATION_NOTE =
+  "Gemini synthesis was limited for this run, so the report used conservative local synthesis from public-page evidence.";
+
+const CTA_NOISE_PATTERNS = [
+  /try [a-z0-9 ]*free/gi,
+  /get started(?: fast)?/gi,
+  /build or grow your business(?: fast)?(?: with ai)?/gi,
+  /be the next[a-z0-9 ]*all-star/gi,
+  /meet your secret weapon/gi,
+  /you could be selling by tomorrow/gi,
+  /switch to [a-z0-9]+/gi,
+  /get more customers/gi,
+  /why [a-z0-9]+back/gi,
+  /productsback/gi,
+  /backget/gi,
+  /the world'?s most [a-z ]+/gi,
+];
+
+const NAV_NOISE_PATTERNS = [
+  /productsback/i,
+  /backget/i,
+  /why [a-z0-9]+back/i,
+  /website builderthemesdomains/i,
+  /customer accounts/i,
+  /social & marketplaces/i,
+  /there'?s no better place for you to build/i,
+  /make more sales\.trusted by/i,
+];
+
+const CATEGORY_HINTS = /(platform|software|infrastructure|commerce|ecommerce|retail|payments|checkout|storefront|marketplace|b2b|enterprise|operations|wholesale|merchant|store)/i;
+
 function firstNonEmpty(values: Array<string | undefined>) {
   return values.map((value) => normalizeWhitespace(value || "")).find(Boolean) || "";
 }
@@ -61,6 +95,95 @@ function titleLead(text: string, fallback: string) {
   return normalized ? sentence(truncate(normalized, 200)) : fallback;
 }
 
+function cleanBranding(text: string, company: string) {
+  const escapedCompany = company.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return text
+    .replace(new RegExp(`^${escapedCompany}\\s*[:\\-–|]\\s*`, "i"), "")
+    .replace(new RegExp(`\\s*[:\\-–|]\\s*${escapedCompany}$`, "i"), "")
+    .replace(new RegExp(`\\b${escapedCompany}\\b`, "gi"), "")
+    .trim();
+}
+
+
+export function stripMarketingCtaLanguage(value: string) {
+  let cleaned = normalizeWhitespace(value || "");
+  for (const pattern of CTA_NOISE_PATTERNS) {
+    cleaned = cleaned.replace(pattern, " ");
+  }
+  return normalizeWhitespace(cleaned.replace(/[|]+/g, " "));
+}
+
+function collapseDuplicatedWords(value: string) {
+  const parts = normalizeWhitespace(value)
+    .split(/\s+/)
+    .filter(Boolean);
+  const collapsed: string[] = [];
+
+  for (const part of parts) {
+    if (collapsed[collapsed.length - 1]?.toLowerCase() === part.toLowerCase()) continue;
+    collapsed.push(part);
+  }
+
+  return normalizeWhitespace(collapsed.join(" "));
+}
+
+export function looksLikeNavigationNoise(value: string) {
+  const normalized = normalizeWhitespace(value || "");
+  if (!normalized) return true;
+  if (NAV_NOISE_PATTERNS.some((pattern) => pattern.test(normalized))) return true;
+
+  const wordCount = normalized.split(/\s+/).filter(Boolean).length;
+  const compactCaps = (normalized.match(/[A-Z][a-z]+/g) || []).length;
+  const delimiters = (normalized.match(/Back|Themes|Domains|Pricing|Products|Solutions|Docs|Developers/gi) || []).length;
+
+  return wordCount > 10 && compactCaps >= 8 && delimiters >= 4 && !/[.!?]/.test(normalized);
+}
+
+export function cleanEvidenceText(value: string, maxLength = 220) {
+  const cleaned = collapseDuplicatedWords(stripMarketingCtaLanguage(value || ""))
+    .replace(/\s*([,:;])\s*/g, "$1 ")
+    .replace(/\s*([.!?])\s*/g, "$1 ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  if (!cleaned || looksLikeNavigationNoise(cleaned)) return "";
+  return truncate(cleaned, maxLength);
+}
+
+export function cleanCategoryText(value: string, company = "") {
+  let cleaned = stripMarketingCtaLanguage(value || "");
+  if (company) cleaned = cleanBranding(cleaned, company);
+
+  const segments = cleaned
+    .split(/[.!?]/)
+    .map((segment) => normalizeWhitespace(segment))
+    .filter(Boolean);
+
+  const scored = segments
+    .map((segment) => {
+      const lowered = segment.toLowerCase();
+      const hintScore = (segment.match(CATEGORY_HINTS) ? 2 : 0) + (/(for businesses|for enterprise|for brands|for teams|b2b|dtc)/i.test(segment) ? 1 : 0);
+      const penalty = /(try|get started|free trial|all-star|secret weapon|tomorrow|chat)/i.test(lowered) ? 3 : 0;
+      return { segment, score: hintScore - penalty };
+    })
+    .sort((left, right) => right.score - left.score);
+
+  const best = scored.find((item) => item.score >= 1)?.segment || segments[0] || "";
+  return cleanEvidenceText(best, 140);
+}
+
+function joinAudienceList(items: string[]) {
+  if (items.length <= 1) return items[0] || "";
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
+}
+
+export function buildUserFacingLimitations(options?: { geminiLimited?: boolean }) {
+  return options?.geminiLimited
+    ? `${USER_FACING_LIMITATION_BASE} ${GEMINI_LIMITATION_NOTE}`
+    : USER_FACING_LIMITATION_BASE;
+}
+
 export function safeCompanyName(scan: SiteScanResult) {
   const title = first(scan.pages)?.title ?? "the company";
   const fragment = title.split(/[|\-–:]/)[0]?.trim();
@@ -69,54 +192,108 @@ export function safeCompanyName(scan: SiteScanResult) {
 }
 
 function inferAudience(scan: SiteScanResult) {
-  const pageSignals = scan.pages.flatMap((page) => page.useCaseSignals);
-  const matched = pageSignals.find((signal) => /for\s+[a-z0-9 ,/&-]+/i.test(signal));
-  if (matched) {
-    const capture = matched.match(/for\s+([a-z0-9 ,/&-]+)/i)?.[1];
-    if (capture) return sentence(`Likely audience: ${truncate(capture, 90)}`);
+  const combined = scan.pages
+    .flatMap((page) => [
+      page.title,
+      page.metaDescription,
+      page.h1,
+      page.bodyText,
+      ...page.useCaseSignals,
+      ...page.pricingSignals,
+      ...page.proofSignals,
+      ...page.actionSignals,
+    ])
+    .map((value) => normalizeWhitespace(value || ""))
+    .join(" ")
+    .toLowerCase();
+
+  const audiences: string[] = [];
+  const addAudience = (label: string, pattern: RegExp) => {
+    if (pattern.test(combined) && !audiences.includes(label)) audiences.push(label);
+  };
+
+  addAudience("entrepreneurs", /entrepreneur|founder|merchant/);
+  addAudience("SMBs", /small business|growing business|businesses|smb/);
+  addAudience("commerce teams", /commerce team|retail team|store team|b2b|dtc|wholesale/);
+  addAudience("enterprise brands", /enterprise|large brand|global brand|trusted by enterprise brands/);
+  addAudience("developers", /developer|api|technical team/);
+
+  if (audiences.length) {
+    return sentence(joinAudienceList(audiences.slice(0, 4)));
   }
 
   if (scan.facts.pagesWithUseCases > 0) {
-    return "Likely audience appears to be a defined business buyer or operator segment, but the role-based copy still needs to be plainer.";
+    return "Business buyers and operators are visible in the public copy, but the audience still needs plainer role-based wording.";
   }
 
-  return "Likely audience is only partly explicit on the public site, which increases the risk of generic machine summaries.";
+  return "The public site only partly states who the offering is for, which increases the risk of generic machine summaries.";
+}
+
+export function inferCleanCategory(scan: SiteScanResult) {
+  const company = safeCompanyName(scan);
+  const homepage = pickPage(scan, "homepage") || first(scan.pages);
+  const productPage = pickPage(scan, "product") || pickPage(scan, "use-cases");
+  const enterprisePage = scan.pages.find((page) => /enterprise/i.test(page.url) || /enterprise/i.test(page.title));
+  const candidates = dedupe(
+    [
+      productPage?.title,
+      productPage?.metaDescription,
+      enterprisePage?.title,
+      enterprisePage?.metaDescription,
+      homepage?.title,
+      homepage?.metaDescription,
+      productPage?.h1,
+      enterprisePage?.h1,
+      homepage?.h1,
+    ]
+      .map((value) => cleanCategoryText(value || "", company))
+      .filter(Boolean),
+  );
+
+  const joined = [
+    candidates.join(" "),
+    scan.pages.flatMap((page) => [page.bodyText, ...page.useCaseSignals, ...page.pricingSignals, ...page.proofSignals]).join(" "),
+  ].join(" ").toLowerCase();
+  const hasCommerce = /commerce|ecommerce|storefront|retail/.test(joined);
+  const hasPlatform = /platform|software|infrastructure/.test(joined);
+  const hasEnterprise = /enterprise|plus/.test(joined);
+  const hasB2B = /\bb2b\b|wholesale/.test(joined);
+  const hasDtc = /\bdtc\b|direct-to-consumer/.test(joined);
+
+  if (hasCommerce && hasPlatform) {
+    if (hasEnterprise || hasB2B || hasDtc) {
+      return "Commerce platform / ecommerce infrastructure for businesses and enterprises.";
+    }
+    return "Commerce platform / ecommerce infrastructure for businesses.";
+  }
+
+  const preferred = candidates.find((candidate) => CATEGORY_HINTS.test(candidate));
+  if (preferred) return sentence(preferred.replace(/\.$/, ""));
+
+  return "Digital product or service platform with category language that still needs tightening for machines.";
 }
 
 function inferCompanyCategory(scan: SiteScanResult) {
-  const homepage = first(scan.pages);
-  const productPage = pickPage(scan, "product") || pickPage(scan, "use-cases");
-  const source = firstNonEmpty([
-    homepage?.metaDescription,
-    homepage?.h1,
-    productPage?.h1,
-    productPage?.metaDescription,
-    homepage?.title,
-  ]);
-
-  return ensureNarrativeLength(
-    truncate(source, 180),
-    16,
-    "Public signals suggest a digital product or service business, but category language is still too thin for a crisp machine classification.",
-    "Public site signals are limited in this bounded pass, so this category read remains directional.",
-  );
+  return inferCleanCategory(scan);
 }
 
 function inferMainOffering(scan: SiteScanResult) {
-  const homepage = first(scan.pages);
+  const homepage = pickPage(scan, "homepage") || first(scan.pages);
   const productPage = pickPage(scan, "product") || pickPage(scan, "pricing") || pickPage(scan, "use-cases");
-  const offering = firstNonEmpty([
-    productPage?.metaDescription,
-    productPage?.h1,
-    homepage?.metaDescription,
-    homepage?.h1,
+  const enterprisePage = scan.pages.find((page) => /enterprise/i.test(page.url) || /enterprise/i.test(page.title));
+  const source = firstNonEmpty([
+    cleanEvidenceText(productPage?.metaDescription || "", 220),
+    cleanEvidenceText(enterprisePage?.metaDescription || "", 220),
+    cleanEvidenceText(productPage?.h1 || "", 180),
+    cleanEvidenceText(homepage?.metaDescription || "", 220),
+    cleanEvidenceText(homepage?.h1 || "", 180),
   ]);
 
   return ensureNarrativeLength(
-    truncate(offering, 200),
-    16,
-    "The main offering is still only partly understandable from the bounded public pages captured in this run.",
-    "Public site signals are limited, so the offering still needs clearer machine-readable explanation.",
+    source,
+    24,
+    "The main offering is directionally visible, but the public pages still need a clearer machine-readable explanation of product scope and buyer path.",
+    "The public evidence is limited, so this offering summary remains conservative.",
   );
 }
 
@@ -137,9 +314,9 @@ function buildKeyPagesFound(scan: SiteScanResult) {
 function buildProofSignalsFound(scan: SiteScanResult) {
   const signals = takeNonEmpty(
     scan.pages.flatMap((page) => [
-      page.proofSignals[0],
-      page.trustSignals[0],
-      page.citationSignals[0],
+      cleanEvidenceText(page.proofSignals[0] || "", 180) || undefined,
+      cleanEvidenceText(page.trustSignals[0] || "", 180) || undefined,
+      cleanEvidenceText(page.citationSignals[0] || "", 180) || undefined,
       page.schemaTypes[0] ? `Structured data present: ${page.schemaTypes.join(", ")}` : undefined,
     ]),
     5,
@@ -188,102 +365,192 @@ export function buildWebsiteContextArtifact(scan: SiteScanResult): WebsiteContex
   };
 }
 
+function normalizeFixKey(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function distinctTopFixFallbacks(): TopFix[] {
+  return [
+    {
+      fix: "Clarify machine-readable category and audience across homepage and product surfaces",
+      whyItMatters: "Machines summarize and route more confidently when category and buyer language are explicit, repeated, and noun-based.",
+      impact: "High",
+      effort: "Low",
+    },
+    {
+      fix: "Package proof next to primary claims",
+      whyItMatters: "Public proof is stronger when the claim, supporting evidence, and buyer context sit together instead of being scattered.",
+      impact: "High",
+      effort: "Medium",
+    },
+    {
+      fix: "Clarify pricing, packaging, and evaluation path",
+      whyItMatters: "AI agents need to understand whether the correct next step is self-serve, sales-led, or enterprise evaluation.",
+      impact: "High",
+      effort: "Medium",
+    },
+    {
+      fix: "Add or strengthen schema and structured data on core commercial pages",
+      whyItMatters: "Structured reinforcement helps machines confirm the organization, offering, FAQ intent, and page relationships.",
+      impact: "Medium",
+      effort: "Low",
+    },
+    {
+      fix: "Connect homepage, product, pricing, enterprise, and docs paths with consistent action language",
+      whyItMatters: "A clear, repeated action path makes it easier for machine-mediated buyers to move from understanding to action.",
+      impact: "Medium",
+      effort: "Low",
+    },
+  ];
+}
+
 export function buildTopFixes(scan: SiteScanResult): TopFix[] {
-  const fixes: TopFix[] = [];
+  const category = inferCleanCategory(scan).toLowerCase();
+  const joined = scan.pages
+    .flatMap((page) => [page.title, page.metaDescription, page.h1, page.bodyText])
+    .join(" ")
+    .toLowerCase();
+  const candidates: TopFix[] = [];
+  const add = (fix: TopFix) => {
+    if (!candidates.some((item) => normalizeFixKey(item.fix) === normalizeFixKey(fix.fix))) {
+      candidates.push(fix);
+    }
+  };
 
   if (scan.facts.pagesWithUseCases === 0) {
-    fixes.push({
-      fix: "Add one plain-English homepage block that states category, audience, and workflow outcome.",
+    add({
+      fix: "Add one plain-English homepage block that states category, audience, and workflow outcome",
       whyItMatters: "Machines need the company, buyer, and use case to be obvious in rendered text before they can summarize or route intent well.",
       impact: "High",
       effort: "Low",
     });
-  }
-  if (scan.facts.pagesWithPricing === 0) {
-    fixes.push({
-      fix: "Expose pricing logic, plans, or commercial packaging in public copy.",
-      whyItMatters: "AI agents often stall when they cannot infer whether there is a self-serve, sales-led, or enterprise buying path.",
+  } else if (/commerce|ecommerce/.test(category) && /enterprise|b2b|dtc/.test(joined)) {
+    add({
+      fix: "Make the B2B, DTC, and enterprise distinction more machine-readable across homepage and enterprise pages",
+      whyItMatters: "Strong sites still benefit when buyer segments and commercial motions are easier for machines to separate and cite.",
       impact: "High",
-      effort: "Medium",
+      effort: "Low",
     });
   }
+
   if (scan.facts.pagesWithProof === 0) {
-    fixes.push({
-      fix: "Pair the primary claims with visible proof, outcomes, or customer credibility markers.",
+    add({
+      fix: "Pair the primary claims with visible proof, outcomes, or customer credibility markers",
       whyItMatters: "Answer engines and machine-mediated buyers are more likely to trust claims that have nearby evidence.",
       impact: "High",
       effort: "Medium",
     });
-  }
-  if (scan.facts.pagesWithActions <= 1) {
-    fixes.push({
-      fix: "Create a cleaner buyer action path across homepage, product, and pricing surfaces.",
-      whyItMatters: "Understanding alone is not enough if a machine still cannot determine the correct next action for a buyer.",
+  } else {
+    add({
+      fix: "Package proof closer to homepage and enterprise claims",
+      whyItMatters: "Even a strong proof base performs better when measured outcomes, trust cues, and enterprise signals sit next to the claims they support.",
       impact: "High",
       effort: "Low",
     });
   }
+
+  if (scan.facts.pagesWithPricing === 0) {
+    add({
+      fix: "Expose pricing logic, plans, or commercial packaging in public copy",
+      whyItMatters: "AI agents often stall when they cannot infer whether there is a self-serve, sales-led, or enterprise buying path.",
+      impact: "High",
+      effort: "Medium",
+    });
+  } else {
+    add({
+      fix: "Clarify the enterprise evaluation path alongside plans and product proof",
+      whyItMatters: "Machines should be able to tell when to route a buyer into plans, self-serve setup, or a higher-touch enterprise motion.",
+      impact: "High",
+      effort: "Low",
+    });
+  }
+
   if (scan.facts.pagesWithSchema === 0) {
-    fixes.push({
-      fix: "Add lightweight schema to the core company, product, and FAQ surfaces.",
+    add({
+      fix: "Add lightweight schema to the core company, product, and FAQ surfaces",
       whyItMatters: "Structured reinforcement can reduce ambiguity around the organization, product, and offer model.",
       impact: "Medium",
       effort: "Low",
     });
+  } else {
+    add({
+      fix: "Reinforce product, organization, FAQ, and enterprise page schema",
+      whyItMatters: "Existing structured data is a good baseline, but broader reinforcement makes the category, offering, and page intent easier to confirm.",
+      impact: "Medium",
+      effort: "Low",
+    });
   }
+
+  if (/sidekick|ai assistant|ai/.test(joined)) {
+    add({
+      fix: "Make AI and assistant positioning more citeable with one short explainer and nearby proof",
+      whyItMatters: "AI features are easy for machines to overgeneralize unless the role, audience, and supporting proof are tightly framed.",
+      impact: "Medium",
+      effort: "Low",
+    });
+  }
+
+  if (scan.facts.pagesWithActions <= 1) {
+    add({
+      fix: "Create a cleaner buyer action path across homepage, product, and pricing surfaces",
+      whyItMatters: "Understanding alone is not enough if a machine still cannot determine the correct next action for a buyer.",
+      impact: "High",
+      effort: "Low",
+    });
+  } else {
+    add({
+      fix: "Connect homepage, product, pricing, enterprise, and docs paths with consistent action language",
+      whyItMatters: "A repeated action path keeps machine-mediated routing coherent across different entry points.",
+      impact: "Medium",
+      effort: "Low",
+    });
+  }
+
   if (scan.facts.pagesWithThinContent > 0) {
-    fixes.push({
-      fix: "Increase explanatory text on thin pages so key buyer logic is extractable without visual context.",
+    add({
+      fix: "Increase explanatory text on thin pages so key buyer logic is extractable without visual context",
       whyItMatters: "Machines cannot reliably infer the missing logic that human readers may pick up from layout or design alone.",
       impact: "Medium",
       effort: "Medium",
     });
   }
 
-  while (fixes.length < 5) {
-    fixes.push({
-      fix: "Tighten core page copy so the value proposition is explicit in one short scan.",
-      whyItMatters: "Clearer rendered copy generally improves both human comprehension and machine-side interpretation.",
-      impact: "Medium",
-      effort: "Low",
-    });
-  }
+  for (const fallback of distinctTopFixFallbacks()) add(fallback);
 
-  return fixes.slice(0, 5);
+  return candidates.slice(0, 5);
 }
 
 export function buildLLMPerceptionArtifact(
   scan: SiteScanResult,
   websiteContextArtifact = buildWebsiteContextArtifact(scan),
 ): LLMPerceptionArtifact {
-  const summarySource = firstNonEmpty([
-    pickPage(scan, "homepage")?.metaDescription,
-    pickPage(scan, "homepage")?.h1,
-    pickPage(scan, "product")?.metaDescription,
-  ]);
+  const company = safeCompanyName(scan);
+  const category = websiteContextArtifact.companyCategory.replace(/\.$/, "");
+  const audience = websiteContextArtifact.likelyAudience.replace(/\.$/, "");
+  const offering = websiteContextArtifact.mainOffering.replace(/\.$/, "");
 
   return {
     likelySummary: ensureNarrativeLength(
-      truncate(summarySource, 260),
+      `${company} appears to be a ${category.toLowerCase()} for ${audience.toLowerCase()}, with public signals pointing to ${offering.toLowerCase()}`,
       24,
-      `${safeCompanyName(scan)} appears to have a real public web presence, but the company and offering still risk being summarized too generically by LLMs.`,
+      `${company} appears to have a real public web presence, but the company and offering still risk being summarized too generically by LLMs.`,
       "Public site evidence is sparse, so this likely machine summary remains directional and incomplete.",
     ),
     positioningInterpretation:
       scan.facts.pagesWithUseCases > 0
-        ? sentence(`Public signals suggest the company will likely be interpreted as ${truncate(websiteContextArtifact.companyCategory, 150)}`)
+        ? sentence(`Public signals suggest the company will likely be interpreted as ${truncate(category, 150)}`)
         : "The likely positioning interpretation is directionally understandable, but category language is still loose enough to invite flattening or over-generalization.",
     possibleMisreadings: takeNonEmpty(
       [
         scan.facts.pagesWithUseCases === 0
           ? "The company may be described too broadly because audience and workflow language are still implied instead of stated plainly."
-          : "The company may still be flattened into a broader category if differentiation is not repeated across core pages.",
+          : "A model may still flatten the company into a broader category if the strongest category and audience cues are not repeated across homepage, product, and enterprise pages.",
         scan.facts.pagesWithPricing === 0
           ? "An LLM may miss the commercial motion because pricing and packaging remain unclear on public pages."
-          : "An LLM may understate the buying motion if pricing context is separated from product proof.",
+          : "A model may understand the product but still blur the difference between self-serve, growth, and enterprise paths.",
         scan.facts.pagesWithProof === 0
           ? "Claims may be repeated without enough proof context, which lowers confidence in a machine-generated summary."
-          : "Proof signals exist, but they may not be packaged tightly enough to anchor a reliable machine summary.",
+          : "Strong proof exists, but machines may not cite it cleanly if outcomes, trust cues, and commercial claims stay too far apart.",
       ],
       3,
     ),
@@ -451,11 +718,11 @@ function buildHomepageSummaryBlock(
 ) {
   const company = safeCompanyName(scan);
   const audience = truncate(normalizeAudienceSummary(websiteContextArtifact.likelyAudience), 120);
-  const offering = truncate(websiteContextArtifact.mainOffering.replace(/\.$/, ""), 150);
-  const proof = truncate(first(citationArtifact.strongClaims) || "Add one verified proof statement near the primary claim", 140);
+  const offering = truncate(websiteContextArtifact.mainOffering.replace(/\.$/, ""), 170);
+  const proof = truncate(cleanEvidenceText(first(citationArtifact.strongClaims) || "", 120) || "visible proof such as measured outcomes, named customer credibility, or trust markers", 120);
 
   return sentence(
-    `${company} should describe itself in one plain-language block that states the category, the primary audience${audience ? ` (${audience})` : ""}, and the main offering. Recommended core message: ${offering}. Support the primary claim with visible proof such as ${proof}. End the section with a clear next step, for example reviewing plans, requesting a demo, or starting an enterprise evaluation`,
+    `${company} is a ${websiteContextArtifact.companyCategory.replace(/\.$/, "").toLowerCase()} for ${audience.toLowerCase()}. It should say, in one machine-readable block, that it helps buyers with ${offering.toLowerCase()}, then support the primary claim with ${proof} and a clear next step for plans, demo, or enterprise evaluation`,
   );
 }
 
@@ -468,7 +735,7 @@ function buildFaqBlock(scan: SiteScanResult, websiteContextArtifact: WebsiteCont
   return [
     {
       question: `What does ${company} do?`,
-      answer: sentence(`${company} is presented as ${category.toLowerCase()}, with public pages that point to ${offering.toLowerCase()}`),
+      answer: sentence(`${company} is presented as a ${category.toLowerCase()} with public signals that point to ${offering.toLowerCase()}`),
     },
     {
       question: `Who is ${company} for?`,
@@ -478,7 +745,7 @@ function buildFaqBlock(scan: SiteScanResult, websiteContextArtifact: WebsiteCont
       question: `What problem does ${company} help solve?`,
       answer: sentence(
         scan.facts.pagesWithUseCases > 0
-          ? "The public copy should tie the product to one or two clear workflows so answer engines can map the company to a buyer problem quickly"
+          ? "The public copy should connect the offer to one or two concrete workflows so answer engines can map the company to the right buyer need quickly"
           : "The site should add a short workflow-oriented explanation that states the buyer problem, the product role, and the expected outcome",
       ),
     },
@@ -486,7 +753,7 @@ function buildFaqBlock(scan: SiteScanResult, websiteContextArtifact: WebsiteCont
       question: `What proof should a buyer or machine see?`,
       answer: sentence(
         scan.facts.pagesWithProof > 0
-          ? "Keep customer outcomes, trust markers, or measured results close to the main value claims so they are easy to cite directionally"
+          ? "Keep customer outcomes, trust markers, enterprise proof, or measured results close to the main value claims so they are easy to cite directionally"
           : "Add verified proof such as named customers, measured outcomes, security posture, or implementation evidence near the main claims",
       ),
     },
@@ -503,14 +770,16 @@ function buildFaqBlock(scan: SiteScanResult, websiteContextArtifact: WebsiteCont
 
 function buildCitationReadyProofBlock(scan: SiteScanResult, citationArtifact: CitationArtifact) {
   const currentStrong = citationArtifact.strongClaims
+    .map((claim) => cleanEvidenceText(claim, 180))
+    .filter(Boolean)
     .slice(0, 2)
-    .map((claim) => truncate(sentence(`Keep and tighten this claim with a visible source, metric, or named proof: ${claim}`), 260));
+    .map((claim) => truncate(sentence(`Turn this into a citation-ready proof line with a source, scope, or metric: ${claim}`), 260));
   const gapDriven = citationArtifact.proofGaps
     .slice(0, 2)
-    .map((gap) => truncate(sentence(`Add a citeable version in this format: ${gap}`), 260));
+    .map((gap) => truncate(sentence(`Add a proof line in this format: ${gap}`), 260));
   const commercial = scan.facts.pagesWithPricing === 0
     ? [truncate("Add a public commercial qualifier such as plan ranges, implementation scope, or enterprise evaluation criteria so machine-mediated buyers can understand the buying motion.", 260)]
-    : [truncate("Link proof statements to the relevant pricing or evaluation path so the buyer journey is easier for agents to interpret.", 260)];
+    : [truncate("Place the strongest proof line beside the relevant pricing or enterprise-evaluation path so agents can connect trust to action.", 260)];
 
   return [...currentStrong, ...gapDriven, ...commercial].slice(0, 5);
 }
@@ -579,6 +848,12 @@ export function buildFixPrioritizationArtifact(
   scan: SiteScanResult,
   topFixes = buildTopFixes(scan),
 ): FixPrioritizationArtifact {
+  const strongBaseline =
+    scan.facts.pagesWithPricing > 0 &&
+    scan.facts.pagesWithProof > 0 &&
+    scan.facts.pagesWithUseCases > 0 &&
+    scan.facts.pagesWithActions > 1;
+
   return {
     topActions: topFixes.map((fix) => ({
       action: fix.fix,
@@ -587,12 +862,18 @@ export function buildFixPrioritizationArtifact(
       whyItMatters: fix.whyItMatters,
     })),
     fixPackSummary: [
-      "Paste-ready homepage summary block for clearer machine-readable positioning.",
-      "Five concise answer-engine FAQ items to anchor category, audience, proof, and next steps.",
-      "Citation-ready proof statements and a practical schema plan for the highest-signal pages.",
+      strongBaseline
+        ? "Baseline machine readability is already strong, so the first-week work is refinement, not emergency repair."
+        : "Start with the highest-leverage clarity and buyer-path repairs first.",
+      "Paste-ready homepage summary and FAQ copy to reinforce category, audience, and next-step routing.",
+      "Citation-ready proof packaging and a practical schema plan for the highest-signal pages.",
       "Action-path copy for pricing, demo, enterprise evaluation, and docs routing.",
     ],
-    firstWeekFocus: sentence(topFixes[0]?.fix || "Start with the highest-impact homepage clarity fix this week"),
+    firstWeekFocus: sentence(
+      strongBaseline
+        ? `Baseline is strong. This week, ${topFixes[0]?.fix || "tighten the highest-leverage machine-facing refinement"}`
+        : topFixes[0]?.fix || "Start with the highest-impact homepage clarity fix this week",
+    ),
   };
 }
 
@@ -622,9 +903,9 @@ export function buildBeforeAfterPerception(
 }
 
 function compactCategoryLabel(value: string) {
-  const normalized = value.replace(/\.$/, "").trim();
-  if (!normalized) return "category-adjacent";
-  return truncate(normalized.replace(/^Public signals suggest\s+/i, ""), 72);
+  const normalized = cleanCategoryText(value).replace(/\.$/, "").trim();
+  if (!normalized) return "machine-readable market category";
+  return truncate(normalized, 72);
 }
 
 export function buildInferredCompetitiveContext(
@@ -641,45 +922,51 @@ export function buildInferredCompetitiveContext(
   const audience = normalizeAudienceSummary(websiteContextArtifact.likelyAudience) || "the implied buyer segment";
   const likelyPeerSet: InferredCompetitiveContext["likelyPeerSet"] = [
     {
-      name: `${categoryLabel} vendors with explicit category framing`,
+      name: /commerce|ecommerce/.test(categoryLabel.toLowerCase())
+        ? "Commerce platforms with stronger enterprise proof packaging"
+        : `${categoryLabel} vendors with stronger proof packaging`,
       confidence: categoryConfidence,
       whyInferred: sentence(
-        `Likely inferred from public site signals that point to ${categoryLabel.toLowerCase()} positioning and a need for clearer category language`,
+        "Likely inferred from public site signals showing a clear product story but room to make enterprise-grade proof easier for machines to quote and compare",
       ),
     },
     {
-      name: `${categoryLabel} vendors with stronger proof packaging`,
-      confidence: (scan.facts.pagesWithProof > 0 ? "Medium" : "High") as ConfidenceLevel,
-      whyInferred: sentence(
-        `Likely inferred from public site signals showing the product story is present, but proof density and citation support still shape how peers may be perceived`,
-      ),
-    },
-    {
-      name: `${categoryLabel} vendors with clearer buyer routing`,
+      name: /commerce|ecommerce/.test(categoryLabel.toLowerCase())
+        ? "Ecommerce infrastructure vendors with clearer buyer routing"
+        : `${categoryLabel} vendors with clearer buyer routing`,
       confidence: (scan.facts.pagesWithActions > 1 ? "Medium" : "High") as ConfidenceLevel,
       whyInferred: sentence(
-        `Likely inferred from public site signals around how directly the site guides ${audience.toLowerCase()} into pricing, demo, or evaluation next steps`,
+        `Likely inferred from public site signals around how directly the site guides ${audience.toLowerCase()} into pricing, demo, or enterprise evaluation next steps`,
       ),
     },
     {
-      name: `${categoryLabel} vendors with stronger answer-surface structure`,
+      name: /commerce|ecommerce/.test(categoryLabel.toLowerCase())
+        ? "Retail technology platforms with stronger structured data"
+        : `${categoryLabel} vendors with stronger structured data`,
       confidence: (scan.facts.pagesWithSchema > 0 ? "Medium" : "High") as ConfidenceLevel,
       whyInferred: sentence(
-        `Likely inferred from public site signals about structured data, repeated category wording, and how easily answer engines can reuse the site narrative`,
+        "Likely inferred from public site signals about structured data, repeated category wording, and how easily answer engines can reuse the site narrative",
+      ),
+    },
+    {
+      name: /commerce|ecommerce/.test(categoryLabel.toLowerCase())
+        ? "Marketplace and storefront platforms with clearer category framing"
+        : `${categoryLabel} vendors with clearer category framing`,
+      confidence: "Medium" as ConfidenceLevel,
+      whyInferred: sentence(
+        "Likely inferred from public site signals that suggest the category is real and legible, but still benefits from tighter noun-based framing across core pages",
       ),
     },
   ].slice(0, scan.facts.pagesWithSchema > 0 ? 4 : 3);
 
   return {
-    inferredCategory: sentence(
-      `Likely category inferred from public site signals: ${categoryLabel}`,
-    ),
+    inferredCategory: sentence(categoryLabel.replace(/\.$/, "")),
     categoryConfidence,
     likelyPeerSet,
     competitivePerceptionGap: sentence(
       scan.facts.pagesWithUseCases > 0
-        ? `The site appears likely to belong in this category, but its machine-facing differentiation is thinner than the strongest peer-shaped narratives AI systems usually compress into summaries`
-        : `The site appears likely to fit a real market category, but category language is still loose enough that AI systems may flatten it into a generic software or service label`,
+        ? "The site appears likely to belong in a clear category, but its machine-facing differentiation can still be packaged more tightly than the strongest peer narratives AI systems compress into summaries"
+        : "The site appears likely to fit a real market category, but category language is still loose enough that AI systems may flatten it into a generic software or service label",
     ),
     categoryVisibilityRisk: sentence(
       scan.facts.pagesWithProof > 0 && scan.facts.pagesWithActions > 1
@@ -687,7 +974,7 @@ export function buildInferredCompetitiveContext(
         : "Category visibility risk looks elevated because a machine may understand that the company exists without confidently understanding why it is distinct, citeable, or easy to route",
     ),
     differentiationNotes: [
-      sentence("Use category language consistently across homepage, product, and commercial pages so machine summaries do not drift"),
+      sentence("Use category language consistently across homepage, product, pricing, and enterprise pages so machine summaries do not drift"),
       sentence("Keep proof and audience context close to the main value proposition so differentiation is supported, not merely asserted"),
       sentence("Strengthen action-path clarity so machine-mediated buyers can distinguish this offer from adjacent options in the same category"),
     ].slice(0, 3),
@@ -812,7 +1099,7 @@ function fallbackReceipts(scan: SiteScanResult) {
       sourceUrl: page.url,
       signal: `${page.pageType} page was accessible in the bounded crawl.`,
       whyItMatters: "Accessible, descriptive pages give answer engines and agents more usable public context.",
-      snippet: truncate(page.snippet || page.metaDescription || page.h1 || page.title, 220),
+      snippet: cleanEvidenceText(page.snippet || page.metaDescription || page.h1 || page.title, 220) || truncate(page.metaDescription || page.h1 || page.title, 220),
     });
   }
 
@@ -869,7 +1156,11 @@ export function buildFallbackReport(scan: SiteScanResult): VisibilityReport {
       scan.pages.length === 0
         ? "Evidence is limited because the site could not be fetched cleanly from this environment, so this brief is directional at best."
         : sentence(
-            `Public signals suggest ${safeCompanyName(scan)} is ${visibilityScore >= 76 ? "fairly understandable" : visibilityScore >= 60 ? "partly understandable" : "still hard to interpret cleanly"} for AI search, LLM summaries, and agent visitors, but the site still needs stronger machine-facing support around proof, action paths, and structured clarity`,
+            visibilityScore >= 76
+              ? `Public signals suggest ${safeCompanyName(scan)} already has a strong machine-readable baseline, but category framing, proof packaging, and buyer routing can still be tightened for higher-confidence AI interpretation and citation`
+              : visibilityScore >= 60
+                ? `Public signals suggest ${safeCompanyName(scan)} is directionally understandable for AI search, LLM summaries, and agent visitors, but the site still needs stronger machine-facing support around proof, action paths, and structured clarity`
+                : `Public signals suggest ${safeCompanyName(scan)} is still hard for machines to interpret cleanly, especially around category clarity, proof, and next-step routing`,
           ),
     websiteContextArtifact,
     llmPerceptionArtifact,
@@ -913,14 +1204,7 @@ export function buildFallbackReport(scan: SiteScanResult): VisibilityReport {
     },
     topFixes,
     evidenceReceipts: receipts,
-    limitations: truncate(
-      sentence(
-        scan.limitations.length
-          ? scan.limitations.join(" ")
-          : "This is a directional public-page read, not a formal SEO audit or guaranteed LLM ranking result",
-      ),
-      400,
-    ),
+    limitations: truncate(buildUserFacingLimitations(), 400),
     competitorOrCategoryPositioning:
       inferredCompetitiveContext.competitivePerceptionGap,
     agentShopperBlockers: agentVisitorArtifact.journeyBlockers,
@@ -1014,13 +1298,21 @@ export function buildArtifactPreview(report: VisibilityReport, agentId: Workflow
 }
 
 export function buildWorkflowTrace(report: VisibilityReport, evidenceCount: number): WorkflowTraceItem[] {
+  const pageTypes = dedupe(
+    report.websiteContextArtifact.keyPagesFound
+      .map((item) => item.match(/\(([^)]+)\)$/)?.[1])
+      .filter(Boolean),
+  )
+    .slice(0, 4)
+    .join(", ");
+
   return [
     {
       id: "website-context",
       label: AGENT_LABELS["website-context"],
       status: evidenceCount ? "completed" : "blocked",
       summary: evidenceCount
-        ? `${report.websiteContextArtifact.companyCategory} ${report.websiteContextArtifact.mainOffering}`
+        ? sentence(`Captured ${evidenceCount} public pages and identified ${report.websiteContextArtifact.companyCategory.replace(/\.$/, "").toLowerCase()}, ${pageTypes || "core"}, proof, and action-path signals`)
         : "Could not extract enough public evidence from this environment.",
       evidenceCount,
       artifactPreview: evidenceCount ? buildArtifactPreview(report, "website-context") : undefined,
@@ -1029,7 +1321,7 @@ export function buildWorkflowTrace(report: VisibilityReport, evidenceCount: numb
       id: "llm-perception",
       label: AGENT_LABELS["llm-perception"],
       status: evidenceCount ? "completed" : "blocked",
-      summary: report.llmPerceptionArtifact.positioningInterpretation,
+      summary: "Modeled likely machine summary and category interpretation from public evidence.",
       evidenceCount,
       artifactPreview: evidenceCount ? buildArtifactPreview(report, "llm-perception") : undefined,
     },
@@ -1037,7 +1329,7 @@ export function buildWorkflowTrace(report: VisibilityReport, evidenceCount: numb
       id: "agent-visitor",
       label: AGENT_LABELS["agent-visitor"],
       status: evidenceCount ? "completed" : "blocked",
-      summary: report.agentVisitorArtifact.journeyBlockers[0] || report.agentVisitorArtifact.whatAgentsCanUnderstand[0],
+      summary: "Assessed buyer routing, evaluation clarity, and next-step action signals for agent visitors.",
       evidenceCount,
       artifactPreview: evidenceCount ? buildArtifactPreview(report, "agent-visitor") : undefined,
     },
@@ -1045,7 +1337,7 @@ export function buildWorkflowTrace(report: VisibilityReport, evidenceCount: numb
       id: "aio-answer-engine",
       label: AGENT_LABELS["aio-answer-engine"],
       status: evidenceCount ? "completed" : "blocked",
-      summary: report.aioArtifact.answerEngineObservations[0] || report.aioReadiness.answerEngineFit,
+      summary: "Reviewed answer-engine reuse, content structure, and machine-readable positioning cues.",
       evidenceCount,
       artifactPreview: evidenceCount ? buildArtifactPreview(report, "aio-answer-engine") : undefined,
     },
@@ -1053,7 +1345,7 @@ export function buildWorkflowTrace(report: VisibilityReport, evidenceCount: numb
       id: "citation-readiness",
       label: AGENT_LABELS["citation-readiness"],
       status: evidenceCount ? "completed" : "blocked",
-      summary: report.citationArtifact.proofGaps[0] || report.aioReadiness.citationReadiness,
+      summary: "Checked whether claims, proof, and trust cues are packaged cleanly enough for citation.",
       evidenceCount,
       artifactPreview: evidenceCount ? buildArtifactPreview(report, "citation-readiness") : undefined,
     },
@@ -1061,9 +1353,9 @@ export function buildWorkflowTrace(report: VisibilityReport, evidenceCount: numb
       id: "fix-prioritization",
       label: AGENT_LABELS["fix-prioritization"],
       status: evidenceCount ? "completed" : "blocked",
-      summary:
-        report.fixPrioritizationArtifact.topActions[0]?.action ||
-        "No fixes could be prioritized from the available evidence.",
+      summary: report.fixPrioritizationArtifact.topActions[0]
+        ? "Converted the findings into a distinct first-week action plan and Fix Pack."
+        : "No fixes could be prioritized from the available evidence.",
       evidenceCount,
       artifactPreview: evidenceCount ? buildArtifactPreview(report, "fix-prioritization") : undefined,
     },

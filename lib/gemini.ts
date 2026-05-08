@@ -16,7 +16,10 @@ import {
   buildLLMPerceptionArtifact,
   buildMachineFacingGtmRisks,
   buildTopFixes,
+  buildUserFacingLimitations,
   buildWebsiteContextArtifact,
+  cleanEvidenceText,
+  inferCleanCategory,
   safeCompanyName,
 } from "@/lib/report-helpers";
 import type { SiteScanResult, VisibilityReport } from "@/lib/types";
@@ -72,6 +75,31 @@ function riskNameValue(
     value === "Trust Gap"
     ? value
     : fallback;
+}
+
+function cleanSentenceText(value: unknown, fallback: string, maxChars = 520) {
+  if (typeof value !== "string") return fallback;
+  const cleaned = cleanEvidenceText(value, maxChars) || normalizeWhitespace(value);
+  return cleaned ? sentence(truncate(cleaned, maxChars)) : fallback;
+}
+
+
+
+function parseJsonResponse(text: string) {
+  const normalized = text.trim();
+  const fenced = normalized.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1]?.trim();
+  const candidate = fenced || normalized;
+  return JSON.parse(candidate) as unknown;
+}
+
+function normalizeActionKey(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function cleanPeerName(value: string, fallback: string) {
+  const cleaned = cleanEvidenceText(value, 120) || normalizeWhitespace(value);
+  if (!cleaned || /try |get started|free|all-star/i.test(cleaned)) return fallback;
+  return cleaned;
 }
 
 function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityReport {
@@ -150,9 +178,9 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
     scoreLabel: scoreLabel(visibilityScore),
     executiveVerdict: toSentence(source.executiveVerdict, fallback.executiveVerdict),
     websiteContextArtifact: {
-      companyCategory: toSentence(websiteContextArtifact.companyCategory, fallback.websiteContextArtifact.companyCategory),
-      likelyAudience: toSentence(websiteContextArtifact.likelyAudience, fallback.websiteContextArtifact.likelyAudience),
-      mainOffering: toSentence(websiteContextArtifact.mainOffering, fallback.websiteContextArtifact.mainOffering),
+      companyCategory: fallback.websiteContextArtifact.companyCategory,
+      likelyAudience: cleanSentenceText(websiteContextArtifact.likelyAudience, fallback.websiteContextArtifact.likelyAudience, 220),
+      mainOffering: cleanSentenceText(websiteContextArtifact.mainOffering, fallback.websiteContextArtifact.mainOffering, 260),
       keyPagesFound: ensureMinList(
         stringList(websiteContextArtifact.keyPagesFound, fallback.websiteContextArtifact.keyPagesFound, 6),
         fallback.websiteContextArtifact.keyPagesFound,
@@ -177,10 +205,11 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
       ),
     },
     llmPerceptionArtifact: {
-      likelySummary: toSentence(llmPerceptionArtifact.likelySummary, fallback.llmPerceptionArtifact.likelySummary),
-      positioningInterpretation: toSentence(
+      likelySummary: cleanSentenceText(llmPerceptionArtifact.likelySummary, fallback.llmPerceptionArtifact.likelySummary, 420),
+      positioningInterpretation: cleanSentenceText(
         llmPerceptionArtifact.positioningInterpretation,
         fallback.llmPerceptionArtifact.positioningInterpretation,
+        220,
       ),
       possibleMisreadings: stringList(
         llmPerceptionArtifact.possibleMisreadings,
@@ -235,11 +264,11 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
               return {
                 action:
                   typeof record.action === "string"
-                    ? sentence(normalizeWhitespace(record.action)).replace(/\.$/, "")
+                    ? (cleanEvidenceText(record.action, 220) || fallback.fixPrioritizationArtifact.topActions[index]?.action || fallback.topFixes[index]?.fix)
                     : fallback.fixPrioritizationArtifact.topActions[index]?.action || fallback.topFixes[index]?.fix,
                 whyItMatters:
                   typeof record.whyItMatters === "string"
-                    ? sentence(record.whyItMatters)
+                    ? cleanSentenceText(record.whyItMatters, fallback.fixPrioritizationArtifact.topActions[index]?.whyItMatters || fallback.topFixes[index]?.whyItMatters || "", 320)
                     : fallback.fixPrioritizationArtifact.topActions[index]?.whyItMatters || fallback.topFixes[index]?.whyItMatters,
                 impact:
                   record.impact === "High" || record.impact === "Medium" || record.impact === "Low"
@@ -269,7 +298,7 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
       ),
     },
     fixPack: {
-      homepageSummaryBlock: toSentence(fixPack.homepageSummaryBlock, fallback.fixPack.homepageSummaryBlock),
+      homepageSummaryBlock: cleanSentenceText(fixPack.homepageSummaryBlock, fallback.fixPack.homepageSummaryBlock, 520),
       faqBlock: Array.isArray(fixPack.faqBlock)
         ? fixPack.faqBlock
             .filter((item) => !!item && typeof item === "object")
@@ -344,10 +373,7 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
       ),
     },
     inferredCompetitiveContext: {
-      inferredCategory: toSentence(
-        inferredCompetitiveContext.inferredCategory,
-        fallback.inferredCompetitiveContext.inferredCategory,
-      ),
+      inferredCategory: fallback.inferredCompetitiveContext.inferredCategory,
       categoryConfidence: levelValue(
         inferredCompetitiveContext.categoryConfidence,
         fallback.inferredCompetitiveContext.categoryConfidence,
@@ -360,7 +386,7 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
               return {
                 name:
                   typeof record.name === "string"
-                    ? truncate(normalizeWhitespace(record.name), 120)
+                    ? cleanPeerName(record.name, fallback.inferredCompetitiveContext.likelyPeerSet[index]?.name || "Directional peer archetype")
                     : fallback.inferredCompetitiveContext.likelyPeerSet[index]?.name,
                 confidence: levelValue(
                   record.confidence,
@@ -368,20 +394,22 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
                 ),
                 whyInferred:
                   typeof record.whyInferred === "string"
-                    ? sentence(record.whyInferred)
+                    ? cleanSentenceText(record.whyInferred, fallback.inferredCompetitiveContext.likelyPeerSet[index]?.whyInferred || "Likely inferred from public site signals.", 240)
                     : fallback.inferredCompetitiveContext.likelyPeerSet[index]?.whyInferred,
               };
             })
             .filter((item) => item.name && item.whyInferred)
             .slice(0, 5)
         : fallback.inferredCompetitiveContext.likelyPeerSet,
-      competitivePerceptionGap: toSentence(
+      competitivePerceptionGap: cleanSentenceText(
         inferredCompetitiveContext.competitivePerceptionGap,
         fallback.inferredCompetitiveContext.competitivePerceptionGap,
+        260,
       ),
-      categoryVisibilityRisk: toSentence(
+      categoryVisibilityRisk: cleanSentenceText(
         inferredCompetitiveContext.categoryVisibilityRisk,
         fallback.inferredCompetitiveContext.categoryVisibilityRisk,
+        260,
       ),
       differentiationNotes: ensureMinList(
         stringList(
@@ -393,9 +421,10 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
         2,
         5,
       ),
-      validationNote: toSentence(
+      validationNote: cleanSentenceText(
         inferredCompetitiveContext.validationNote,
         fallback.inferredCompetitiveContext.validationNote,
+        260,
       ),
     },
     machineFacingGtmRisks: Array.isArray(source.machineFacingGtmRisks)
@@ -547,11 +576,11 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
           .map((item, index) => ({
             fix:
               typeof item.fix === "string"
-                ? sentence(normalizeWhitespace(item.fix)).replace(/\.$/, "")
+                ? (cleanEvidenceText(item.fix, 220) || fallback.topFixes[index]?.fix)
                 : fallback.topFixes[index]?.fix,
             whyItMatters:
               typeof item.whyItMatters === "string"
-                ? sentence(item.whyItMatters)
+                ? cleanSentenceText(item.whyItMatters, fallback.topFixes[index]?.whyItMatters || "", 320)
                 : fallback.topFixes[index]?.whyItMatters,
             impact:
               item.impact === "High" || item.impact === "Medium" || item.impact === "Low"
@@ -587,19 +616,35 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
                 : fallback.evidenceReceipts[index]?.whyItMatters,
             snippet:
               typeof item.snippet === "string"
-                ? truncate(normalizeWhitespace(item.snippet), 320)
+                ? cleanEvidenceText(item.snippet, 320) || fallback.evidenceReceipts[index]?.snippet
                 : fallback.evidenceReceipts[index]?.snippet,
           }))
           .filter((item) => item.sourceName && item.sourceUrl && item.signal && item.whyItMatters && item.snippet)
           .slice(0, 8)
       : fallback.evidenceReceipts,
-    limitations: toSentence(source.limitations, fallback.limitations),
+    limitations: buildUserFacingLimitations(),
     competitorOrCategoryPositioning:
       typeof source.competitorOrCategoryPositioning === "string"
         ? sentence(source.competitorOrCategoryPositioning)
         : fallback.competitorOrCategoryPositioning,
     agentShopperBlockers: stringList(source.agentShopperBlockers, fallback.agentShopperBlockers, 5),
   };
+
+  report.topFixes = [
+    ...report.topFixes,
+    ...fallback.topFixes,
+  ].filter((item, index, items) => {
+    const key = normalizeActionKey(item.fix);
+    return key && items.findIndex((candidate) => normalizeActionKey(candidate.fix) === key) === index;
+  }).slice(0, 5);
+
+  report.fixPrioritizationArtifact.topActions = [
+    ...report.fixPrioritizationArtifact.topActions,
+    ...fallback.fixPrioritizationArtifact.topActions,
+  ].filter((item, index, items) => {
+    const key = normalizeActionKey(item.action);
+    return key && items.findIndex((candidate) => normalizeActionKey(candidate.action) === key) === index;
+  }).slice(0, 5);
 
   while (report.fixPrioritizationArtifact.topActions.length < 5) {
     const nextIndex = report.fixPrioritizationArtifact.topActions.length;
@@ -609,16 +654,35 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
       impact: fallback.topFixes[nextIndex].impact,
       effort: fallback.topFixes[nextIndex].effort,
     };
-    report.fixPrioritizationArtifact.topActions.push(fallbackAction);
+    if (!report.fixPrioritizationArtifact.topActions.some((item) => normalizeActionKey(item.action) === normalizeActionKey(fallbackAction.action))) {
+      report.fixPrioritizationArtifact.topActions.push(fallbackAction);
+    } else {
+      break;
+    }
   }
 
   while (report.topFixes.length < 5) {
-    report.topFixes.push(fallback.topFixes[report.topFixes.length]);
+    const fallbackFix = fallback.topFixes[report.topFixes.length];
+    if (fallbackFix && !report.topFixes.some((item) => normalizeActionKey(item.fix) === normalizeActionKey(fallbackFix.fix))) {
+      report.topFixes.push(fallbackFix);
+    } else {
+      break;
+    }
   }
 
   while (report.fixPack.faqBlock.length < 5) {
     report.fixPack.faqBlock.push(fallback.fixPack.faqBlock[report.fixPack.faqBlock.length]);
   }
+
+  report.fixPack.faqBlock = report.fixPack.faqBlock.map((item, index) => {
+    if (index === 1 && !/entrepreneur|smb|brand|team|enterprise|buyer|operator/i.test(item.answer)) {
+      return fallback.fixPack.faqBlock[index];
+    }
+    if (cleanEvidenceText(item.answer, 260) === "") {
+      return fallback.fixPack.faqBlock[index];
+    }
+    return item;
+  });
 
   while (report.fixPack.agentActionPathCopy.length < 3) {
     report.fixPack.agentActionPathCopy.push(
@@ -642,10 +706,17 @@ function sanitizeReport(scan: SiteScanResult, candidate: unknown): VisibilityRep
     );
   }
 
-  report.evidenceReceipts = report.evidenceReceipts.filter((receipt) => allowedUrls.has(receipt.sourceUrl));
+  report.evidenceReceipts = report.evidenceReceipts
+    .filter((receipt) => allowedUrls.has(receipt.sourceUrl))
+    .filter((receipt, index, items) => {
+      const key = `${receipt.sourceUrl}::${normalizeActionKey(receipt.signal)}::${normalizeActionKey(receipt.snippet)}`;
+      return receipt.snippet && items.findIndex((candidate) => `${candidate.sourceUrl}::${normalizeActionKey(candidate.signal)}::${normalizeActionKey(candidate.snippet)}` === key) === index;
+    });
 
   while (report.evidenceReceipts.length < 4) {
-    report.evidenceReceipts.push(fallback.evidenceReceipts[report.evidenceReceipts.length]);
+    const fallbackReceipt = fallback.evidenceReceipts[report.evidenceReceipts.length];
+    if (fallbackReceipt) report.evidenceReceipts.push(fallbackReceipt);
+    else break;
   }
 
   if (!report.websiteContextArtifact.missingBasics.length) {
@@ -671,35 +742,49 @@ export async function generateVisibilityReport(scan: SiteScanResult) {
     return fallback;
   }
 
-  try {
-    const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey });
+
+  const runGemini = async (useSchema: boolean) => {
     const response = await ai.models.generateContent({
       model: MODEL,
       contents: buildVisibilityPrompt(scan),
       config: {
         responseMimeType: "application/json",
-        responseJsonSchema: geminiResponseJsonSchema,
+        ...(useSchema ? { responseJsonSchema: geminiResponseJsonSchema } : {}),
         temperature: 0.35,
         topP: 0.9,
       },
     });
 
     const text = response.text;
-    if (!text) return fallback;
-    const parsed = JSON.parse(text) as unknown;
-    return sanitizeReport(scan, parsed);
+    if (!text) return null;
+    return sanitizeReport(scan, parseJsonResponse(text));
+  };
+
+  try {
+    const primary = await runGemini(true);
+    if (primary) return primary;
+    return fallback;
   } catch (error) {
-    const reason = error instanceof Error ? error.message : "Gemini synthesis failed";
+    const invalidArgument = error instanceof Error && /INVALID_ARGUMENT/i.test(error.message);
+
+    if (invalidArgument) {
+      try {
+        const retry = await runGemini(false);
+        if (retry) return retry;
+      } catch {
+        // Fall through to conservative local synthesis.
+      }
+    }
+
     const artifactFallback = buildFallbackReport(scan);
     artifactFallback.executiveVerdict = sentence(
-      `${artifactFallback.executiveVerdict} Public signals for ${safeCompanyName(scan)} were still usable, but this run fell back to local synthesis`,
+      `${artifactFallback.executiveVerdict} Public signals for ${safeCompanyName(scan)} were still usable, so the report fell back to conservative local synthesis`,
     );
-    artifactFallback.limitations = truncate(
-      sentence(`${artifactFallback.limitations} Gemini fallback note: ${truncate(reason, 160)}`),
-      400,
-    );
+    artifactFallback.limitations = truncate(buildUserFacingLimitations({ geminiLimited: true }), 400);
 
     artifactFallback.websiteContextArtifact = buildWebsiteContextArtifact(scan);
+    artifactFallback.websiteContextArtifact.companyCategory = inferCleanCategory(scan);
     artifactFallback.llmPerceptionArtifact = buildLLMPerceptionArtifact(scan, artifactFallback.websiteContextArtifact);
     artifactFallback.agentVisitorArtifact = buildAgentVisitorArtifact(scan);
     artifactFallback.aioArtifact = buildAioArtifact(scan);

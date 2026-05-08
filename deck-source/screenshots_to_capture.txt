@@ -1,0 +1,43 @@
+Screenshots to capture and insert manually
+
+1. Hero / main app screen
+   - Capture the opening screen with the title, URL intake, and workflow panel visible.
+   - Best placement: Slide 1 hero placeholder.
+
+2. Workflow trace
+   - Capture the six-stage workflow trace during or after a run.
+   - Best placement: optional support for Slide 4 or Slide 9 checklist reference.
+
+3. Executive Verdict + Boardroom Snapshot
+   - Capture the top of the AI Visibility Readiness Brief showing Executive Verdict and Boardroom Snapshot together.
+   - Best placement: Slide 5 large top placeholder.
+
+4. Decision Memo + Scorecards
+   - Capture the Decision Memo and the scorecards section.
+   - Best placement: Slide 5 lower-left placeholder.
+
+5. Fix Pack
+   - Capture the Fix Pack section with top actions clearly visible.
+   - Best placement: Slide 5 lower-right placeholder.
+
+6. Shopify Executive Verdict
+   - Run the Shopify sample case and capture the top summary output.
+   - Best placement: Slide 6 upper-right left placeholder.
+
+7. Shopify Fix Pack
+   - Capture the Shopify Fix Pack with first-week move and top actions visible.
+   - Best placement: Slide 6 upper-right right placeholder.
+
+8. Shopify Evidence Receipts or Agent Artifacts
+   - Capture either the Evidence Receipts section or the Visible Agent Artifacts section from the Shopify run.
+   - Best placement: Slide 6 wide lower-right placeholder.
+
+9. Final hero or boardroom screenshot
+   - Choose the cleanest polished screenshot for the closing slide.
+   - Best placement: Slide 9 closing placeholder.
+
+Recommended capture approach
+- Use the Shopify sample case for all case-study screenshots.
+- Capture at full desktop width so the cards feel premium and readable.
+- Prefer screenshots with generous whitespace and no browser chrome if possible.
+- Replace placeholders after final copy review, then export the submission deck.

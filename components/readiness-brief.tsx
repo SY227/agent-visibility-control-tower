@@ -6,13 +6,9 @@ import { BoardroomSnapshot } from "@/components/boardroom-snapshot";
 import { DecisionMemo } from "@/components/decision-memo";
 import { EvidenceReceipts } from "@/components/evidence-receipts";
 import { FixPackSection } from "@/components/fix-pack-section";
-import { GeminiOrchestrationSummary } from "@/components/gemini-orchestration-summary";
 import { InferredCompetitiveContext } from "@/components/inferred-competitive-context";
-import { JudgeRubricSnapshot } from "@/components/judge-rubric-snapshot";
-import { JourneyDiagram } from "@/components/journey-diagram";
 import { MachineFacingGtmRisks } from "@/components/machine-facing-gtm-risks";
 import { VisibilityScoreCard } from "@/components/visibility-score-card";
-import { WhyGeminiStrip } from "@/components/why-gemini-strip";
 import { Badge, Button, Card, SectionHeading } from "@/components/ui";
 import type { VisibilityReport } from "@/lib/types";
 import { scoreTone } from "@/lib/utils";
@@ -102,63 +98,6 @@ export function ReadinessBrief({
       <BeforeAfterPerceptionSimulator perception={report.beforeAfterPerception} />
       <EvidenceReceipts receipts={report.evidenceReceipts} />
       <AgentArtifactCards report={report} />
-      <JourneyDiagram mermaid={report.journeyDiagram.mermaid} summary={report.journeyDiagram.summary} />
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <ListCard
-          title="What LLMs may say about this company"
-          lead={report.llmPerception.likelySummary}
-          items={[
-            `Positioning clarity: ${report.llmPerception.positioningClarity}`,
-            ...report.llmPerception.possibleMisreadings.map((item) => `Possible misreading: ${item}`),
-          ]}
-        />
-        <ListCard
-          title="Human persuasion vs agent-readable logic"
-          items={[
-            ...report.humanVsAgent.humanPersuasionStrengths.map((item) => `Human strength: ${item}`),
-            ...report.humanVsAgent.agentReadableLogicGaps.map((item) => `Agent gap: ${item}`),
-          ]}
-          tone="sage"
-        />
-        <ListCard title="Structured data / schema gaps" items={report.aioReadiness.structuredDataGaps} tone="amber" />
-        <ListCard title="Agent shopper / buyer journey blockers" items={report.agentShopperBlockers} tone="critical" />
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="p-5 sm:p-6">
-          <div className="space-y-4">
-            <div>
-              <div className="text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">Citation readiness</div>
-              <p className="mt-2 text-sm leading-7 text-[var(--slate)]">{report.aioReadiness.citationReadiness}</p>
-            </div>
-            <div>
-              <div className="text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">AIO / answer-engine fit</div>
-              <p className="mt-2 text-sm leading-7 text-[var(--slate)]">{report.aioReadiness.answerEngineFit}</p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-5 sm:p-6">
-          <div className="space-y-4">
-            <div className="text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">
-              Directional category visibility note
-            </div>
-            <p className="text-sm leading-7 text-[var(--slate)]">{report.inferredCompetitiveContext.validationNote}</p>
-          </div>
-        </Card>
-      </div>
-
-      <GeminiOrchestrationSummary report={report} />
-      <WhyGeminiStrip />
-      <JudgeRubricSnapshot />
-
-      <Card className="p-5 sm:p-6">
-        <div className="space-y-3">
-          <div className="text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">Limitations / confidence note</div>
-          <p className="text-sm leading-7 text-[var(--slate)]">{report.limitations}</p>
-        </div>
-      </Card>
     </section>
   );
 }

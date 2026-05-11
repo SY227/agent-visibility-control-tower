@@ -161,46 +161,12 @@ export function buildMarkdownBrief(report: VisibilityReport) {
       `- First this week: ${report.fixPrioritizationArtifact.firstWeekFocus}`,
       ...report.fixPrioritizationArtifact.fixPackSummary.map((item) => `- Fix Pack component: ${item}`),
     ]),
-    section("Human vs Agent / AIO / Citation Details", [
-      `### AIO / answer engine readiness`,
-      `- Answer-engine fit: ${report.aioReadiness.answerEngineFit}`,
-      `- Citation readiness: ${report.aioReadiness.citationReadiness}`,
-      ...report.aioReadiness.structuredDataGaps.map((item) => `- Structured data gap: ${item}`),
-      "",
-      `### Human persuasion vs agent-readable logic`,
-      ...report.humanVsAgent.humanPersuasionStrengths.map((item) => `- Human persuasion strength: ${item}`),
-      ...report.humanVsAgent.agentReadableLogicGaps.map((item) => `- Agent-readable logic gap: ${item}`),
-      "",
-      `### Agent shopper / buyer journey blockers`,
-      ...report.agentShopperBlockers.map((item) => `- ${item}`),
-    ]),
-    section("Journey Diagram", ["```mermaid", report.journeyDiagram.mermaid, "```", report.journeyDiagram.summary]),
     section(
       "Evidence Receipts",
       report.evidenceReceipts.length
         ? report.evidenceReceipts.map((item) => `- **${item.sourceName}** (${item.sourceUrl})\n  - Signal: ${item.signal}\n  - Why it matters: ${item.whyItMatters}\n  - Snippet: ${item.snippet}`)
         : ["No source receipts were available for this run because the bounded crawl could not capture enough public pages."],
     ),
-    section("Gemini Orchestration Summary", [
-      report.geminiOrchestrationSummary.overview,
-      ...report.geminiOrchestrationSummary.steps.map(
-        (step) => `- **${step.agentName}** -> ${step.job} Output artifact: ${step.outputArtifact}`,
-      ),
-    ]),
-    section("Why Gemini", [
-      `- Gemini Flash: used for fast, responsive agent workflows.`,
-      `- Structured outputs: Gemini output is constrained into typed artifacts and validated.`,
-      `- Bounded orchestration: six specialized Gemini-driven stages produce inspectable artifacts.`,
-      `- Enterprise reliability: evidence-constrained outputs are favored over open-ended chat or fake autonomous swarms.`,
-      `- Architecture note: Gemini Pro can support deeper final synthesis later without changing the core one-URL flow.`,
-    ]),
-    section("Why this fits the challenge", [
-      `- Application of Technology: Gemini powers the bounded six-stage agent workflow, structured JSON synthesis, visible intermediate artifacts, Machine-Facing GTM Risks, Fix Pack generation, and Before / After AI Perception Simulator.`,
-      `- Presentation: One URL input, visible workflow trace, boardroom-ready brief, executive snapshot, and handoff-ready workstreams.`,
-      `- Business Value: Enterprises risk being misunderstood, skipped, weakly cited, or misrouted by AI agents and answer engines before human buyers ever reach the website.`,
-      `- Originality: Most SEO tools optimize for search crawlers. This product audits and repairs how AI agents, LLMs, and answer engines understand, cite, route, or skip a company.`,
-    ]),
-    section("Limitations / confidence note", [report.limitations]),
   ]
     .filter(Boolean)
     .join("\n");

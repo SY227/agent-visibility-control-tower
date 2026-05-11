@@ -51,65 +51,18 @@ The app reads a bounded set of public pages, then returns:
 - a **Fix Pack** with handoff-ready workstreams
 - a **Before / After AI Perception Simulator**
 - **Evidence Receipts**
-- a **Gemini Orchestration Summary**
 - visible agent artifacts from each stage in the workflow
 
-## Bounded Gemini workflow
-
-This product does not pretend to be a fully autonomous swarm.
-
-It uses a bounded Gemini workflow with six specialized stages:
-
-1. **Website Context Agent** -> site facts captured
-2. **LLM Perception Agent** -> likely machine summary
-3. **Agent Visitor Agent** -> agent shopper journey blockers
-4. **AIO / Answer Engine Agent** -> answer-engine readiness findings
-5. **Citation Readiness Agent** -> evidence and proof gaps
-6. **Fix Prioritization Agent** -> Fix Pack + top 5 actions
-
-Each stage has a defined job.
-Each stage produces a visible artifact.
-The final output composes those artifacts into an executive brief.
-
-## Why Gemini
-
-Gemini is central because the product needs bounded orchestration, structured synthesis, and fast enterprise-readable outputs.
-
-- **Gemini Flash** supports fast, responsive workflow execution.
-- **Structured outputs** keep the brief constrained to typed artifacts and validated JSON.
-- **Bounded orchestration** makes each stage inspectable instead of opaque.
-- **Enterprise reliability** is prioritized over open-ended chat or fake autonomous behavior.
-
-The architecture can support **Gemini Pro** for deeper final synthesis later without changing the current one-URL flow.
 
 ## Why this is executive-grade
 
 - one URL input
-- visible bounded Gemini workflow
 - evidence receipts
 - machine-facing GTM risk layer
 - inferred competitive context with confidence language
 - Fix Pack with handoff-ready workstreams
 - before/after AI perception simulator
 - clear limitations and no ranking guarantees
-
-## Why this fits the challenge
-
-### Application of Technology
-
-Gemini powers the bounded six-stage agent workflow, structured JSON synthesis, visible intermediate artifacts, Machine-Facing GTM Risks, Fix Pack generation, and Before / After AI Perception Simulator.
-
-### Presentation
-
-One URL input, visible workflow trace, boardroom-ready brief, executive snapshot, and handoff-ready workstreams make the product legible in under a minute.
-
-### Business Value
-
-Enterprises risk being misunderstood, skipped, weakly cited, or misrouted by AI agents and answer engines before human buyers ever reach the website.
-
-### Originality
-
-Most SEO tools optimize for search crawlers. This product audits and repairs how AI agents, LLMs, and answer engines understand, cite, route, or skip a company.
 
 ## What the brief includes
 
@@ -123,13 +76,7 @@ Most SEO tools optimize for search crawlers. This product audits and repairs how
 - Fix Pack
 - Before / After AI Perception Simulator
 - visible agent artifacts
-- human vs agent, AIO, and citation details
-- journey diagram
 - evidence receipts
-- Gemini Orchestration Summary
-- Why Gemini
-- Why this fits the challenge
-- limitations / confidence note
 
 ## Local setup
 
@@ -178,11 +125,3 @@ npm run start
 - no secrets in client code
 - no edits to `.env.local`
 
-## Limitations
-
-- This is a directional public-page read, not a formal SEO audit.
-- It does not claim certainty about closed-model rankings, answer-surface treatment, or citation behavior.
-- Competitive context is inferred from public site signals and is not a verified market map.
-- The Before / After AI Perception Simulator is a projected interpretation model, not a guarantee.
-- It only uses accessible public pages gathered in a bounded crawl.
-- Some sites may block or limit fetch access, which lowers confidence.

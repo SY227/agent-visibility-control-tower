@@ -80,6 +80,28 @@ export function AgentVisibilityApp() {
     );
   }
 
+  function handleStreamMessage(
+    parsed:
+      | { type: "progress"; event: ProgressEvent }
+      | { type: "result"; payload: AnalyzeResultPayload }
+      | { type: "error"; error: string },
+  ) {
+    if (parsed.type === "progress") {
+      updateTrace(parsed.event);
+      return;
+    }
+
+    if (parsed.type === "result") {
+      setPayload(parsed.payload);
+      setWorkflowTrace(parsed.payload.workflowTrace);
+      return;
+    }
+
+    if (parsed.type === "error") {
+      throw new Error(parsed.error);
+    }
+  }
+
   async function runScan(nextUrl?: string) {
     const candidateUrl = (nextUrl ?? url).trim();
     if (!candidateUrl) return;
@@ -122,20 +144,19 @@ export function AgentVisibilityApp() {
           >(part);
 
           if (!parsed) continue;
-
-          if (parsed.type === "progress") {
-            updateTrace(parsed.event);
-          }
-
-          if (parsed.type === "result") {
-            setPayload(parsed.payload);
-            setWorkflowTrace(parsed.payload.workflowTrace);
-          }
-
-          if (parsed.type === "error") {
-            throw new Error(parsed.error);
-          }
+          handleStreamMessage(parsed);
         }
+      }
+
+      const finalPart = buffer.trim();
+      if (finalPart) {
+        const parsed = tryParseJson<
+          | { type: "progress"; event: ProgressEvent }
+          | { type: "result"; payload: AnalyzeResultPayload }
+          | { type: "error"; error: string }
+        >(finalPart);
+
+        if (parsed) handleStreamMessage(parsed);
       }
     } catch (scanError) {
       const message = scanError instanceof Error ? scanError.message : "The scan failed.";

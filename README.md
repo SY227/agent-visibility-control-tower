@@ -9,6 +9,13 @@ Built for the **Transforming Enterprise Through AI hackathon**, **Track 2: AI Ag
 - Live demo: https://agent-visibility-control-tower-live.vercel.app/
 - Source code: https://github.com/SY227/agent-visibility-control-tower
 
+## Submission assets
+
+- Pitch deck: https://drive.google.com/file/d/1B0QCFywsoiDxFpTEAgMSdzQbUyO3yrdS/view?usp=sharing
+- Demo video: https://drive.google.com/file/d/1mPhrsGzXENZs-A1i3N5dHRyP7QpWASsd/view?usp=sharing
+
+The pitch deck and demo video are also included in the official hackathon submission package.
+
 ## Core product
 
 **One URL in -> boardroom-ready AI Visibility Brief + visible agent artifacts + Fix Pack + Before / After AI Perception Simulator out.**

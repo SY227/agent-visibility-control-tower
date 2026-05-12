@@ -1,8 +1,13 @@
 # Agent Visibility Control Tower
 
-Agent Visibility Control Tower is a Gemini-powered executive workbench for the agent-mediated web. It helps enterprises inspect and repair the machine-facing GTM layer, what AI agents, LLMs, and answer engines understand, cite, route, or skip before a human buyer ever clicks.
+Agent Visibility Control Tower is a Gemini-powered executive workbench for the agent-mediated web. It helps enterprises inspect and repair the machine-facing GTM layer: what AI agents, LLMs, and answer engines understand, cite, route, or skip before a human buyer ever clicks.
 
 Built for the **Transforming Enterprise Through AI hackathon**, **Track 2: AI Agents with Google AI Studio**.
+
+## Live links
+
+- Live demo: https://agent-visibility-control-tower-live.vercel.app/
+- Source code: https://github.com/SY227/agent-visibility-control-tower
 
 ## Core product
 
@@ -47,19 +52,27 @@ The app reads a bounded set of public pages, then returns:
 - an **AI Visibility Readiness Brief**
 - a **Boardroom Snapshot** and **Decision Memo**
 - **Machine-Facing GTM Risks**
-- **Inferred Competitive Context**
+- **Directional Competitive Context**
 - a **Fix Pack** with handoff-ready workstreams
 - a **Before / After AI Perception Simulator**
 - **Evidence Receipts**
 - visible agent artifacts from each stage in the workflow
 
+## How it works
+
+1. **Website Context Agent** captures public site facts and page signals.
+2. **LLM Perception Agent** models likely machine interpretation.
+3. **Agent Visitor Agent** checks buyer-path and next-action clarity.
+4. **AIO / Answer Engine Agent** evaluates answer-surface readiness.
+5. **Citation Readiness Agent** reviews proof and trust packaging.
+6. **Fix Prioritization Agent** turns findings into ranked actions and a Fix Pack.
 
 ## Why this is executive-grade
 
 - one URL input
 - evidence receipts
 - machine-facing GTM risk layer
-- inferred competitive context with confidence language
+- directional competitive context with confidence language, not verified competitor claims
 - Fix Pack with handoff-ready workstreams
 - before/after AI perception simulator
 - clear limitations and no ranking guarantees
@@ -72,7 +85,7 @@ The app reads a bounded set of public pages, then returns:
 - Decision Memo
 - top machine-facing gap
 - Machine-Facing GTM Risks
-- Inferred Competitive Context
+- Directional Competitive Context
 - Fix Pack
 - Before / After AI Perception Simulator
 - visible agent artifacts
@@ -104,6 +117,10 @@ GEMINI_MODEL=gemini-flash-latest
 
 Do not commit `.env.local` or any secrets.
 
+## Deployment
+
+This app is deployed on Vercel. Set `GEMINI_API_KEY` and optionally `GEMINI_MODEL` in the Vercel project environment variables before deploying.
+
 ## Scripts
 
 ```bash
@@ -124,4 +141,3 @@ npm run start
 - no chain-of-thought exposure
 - no secrets in client code
 - no edits to `.env.local`
-

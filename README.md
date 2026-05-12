@@ -1,6 +1,8 @@
 # Agent Visibility Control Tower
 
-Agent Visibility Control Tower is a Gemini-powered executive workbench for the agent-mediated web. It helps enterprises inspect and repair the machine-facing GTM layer: what AI agents, LLMs, and answer engines understand, cite, route, or skip before a human buyer ever clicks.
+Agent Visibility Control Tower is a Gemini-powered executive workbench that helps companies see and improve how AI agents, LLMs, and answer engines understand their website before a human buyer ever clicks.
+
+It helps enterprises inspect how AI agents, LLMs, and answer engines understand, describe, cite, route, or skip a company — then turns those findings into an executive-ready Fix Pack.
 
 Built for the **Transforming Enterprise Through AI hackathon**, **Track 2: AI Agents with Google AI Studio**.
 
@@ -18,37 +20,46 @@ The pitch deck and demo video are also included in the official hackathon submis
 
 ## Core product
 
-**One URL in -> boardroom-ready AI Visibility Brief + visible agent artifacts + Fix Pack + Before / After AI Perception Simulator out.**
+**One URL in → AI Visibility Brief + visible agent artifacts + Fix Pack + Before / After AI Perception Simulator out.**
 
-The product preserves a single-URL intake and a bounded public-web scan. It does not require login, persistence, a second URL, or external system setup.
+The app keeps the workflow simple: one company URL, no login, no documents, and no setup tax.
+
+It runs a bounded public-page scan, then uses a six-stage Gemini workflow to inspect how the company may be understood by AI agents, LLMs, and answer engines.
 
 ## What problem this solves
 
-On the agent-mediated web, the next visitor may be an AI system long before it is a human buyer.
+The next visitor to a company website may not be human.
 
-That machine visitor may:
+AI agents, LLMs, and answer engines may read the site first. They may summarize the company, decide whether its claims are trustworthy, and route a buyer toward or away from it.
 
-- misclassify the company
-- skip key proof
-- miss the right buyer path
-- fail to cite the business confidently
-- flatten differentiation into a generic category label
+That creates a new machine-facing GTM risk.
 
-Agent Visibility Control Tower is built to inspect that machine-facing layer, then turn the findings into repair outputs a real enterprise team can use.
+A company may be:
+
+- described too broadly
+- weakly cited
+- routed to the wrong buyer path
+- skipped by an AI agent
+- flattened into a generic category
+- misunderstood before a human buyer ever clicks
+
+Agent Visibility Control Tower helps teams inspect that machine-facing layer and repair it with clear, practical outputs.
 
 ## Not a generic SEO audit
 
-This is not a generic SEO or crawler audit.
+This is not a generic SEO audit, crawler audit, or open-ended chatbot.
 
-It is machine-facing GTM infrastructure for the moment before a click, when AI systems are already shaping perception, routing, and commercial visibility.
+It is machine-facing GTM infrastructure for the AI-mediated web.
+
+The goal is not only to help humans read a website. The goal is to help AI agents, LLMs, and answer engines understand what the company does, trust its proof, cite the right signals, and guide buyers to the right next step.
 
 ## Executive use case
 
-- **For GTM and growth teams:** identify machine-facing visibility gaps.
-- **For digital teams:** repair AIO, agent-readability, and citation readiness.
-- **For content teams:** generate answer-engine-ready copy and FAQ blocks.
-- **For engineering teams:** identify schema and structured-data workstreams.
-- **For executives:** understand enterprise risk, business consequence, and first-week action.
+- **For GTM and growth teams:** see where AI agents may misunderstand or misroute the company.
+- **For digital teams:** improve answer-engine readiness, page clarity, and proof packaging.
+- **For content teams:** generate AI-readable copy, FAQ blocks, and citation-ready proof language.
+- **For engineering teams:** identify schema and machine-readable structure workstreams.
+- **For executives:** see the risk, business impact, owner, and first-week move.
 
 ## Product flow
 
@@ -57,46 +68,69 @@ Paste one company website URL.
 The app reads a bounded set of public pages, then returns:
 
 - an **AI Visibility Readiness Brief**
-- a **Boardroom Snapshot** and **Decision Memo**
+- an **Executive Verdict**
+- a **Boardroom Snapshot**
+- a **Decision Memo**
 - **Machine-Facing GTM Risks**
 - **Directional Competitive Context**
-- a **Fix Pack** with handoff-ready workstreams
+- a prioritized **Fix Pack**
 - a **Before / After AI Perception Simulator**
 - **Evidence Receipts**
-- visible agent artifacts from each stage in the workflow
+- visible agent artifacts from each stage of the workflow
 
 ## How it works
 
-1. **Website Context Agent** captures public site facts and page signals.
-2. **LLM Perception Agent** models likely machine interpretation.
-3. **Agent Visitor Agent** checks buyer-path and next-action clarity.
-4. **AIO / Answer Engine Agent** evaluates answer-surface readiness.
-5. **Citation Readiness Agent** reviews proof and trust packaging.
-6. **Fix Prioritization Agent** turns findings into ranked actions and a Fix Pack.
+The app uses a six-stage Gemini workflow:
 
-## Why this is executive-grade
+1. **Website Context Agent** captures public site facts, page signals, and missing basics.
+2. **LLM Perception Agent** models how LLMs may summarize and describe the company.
+3. **Agent Visitor Agent** checks whether an AI agent can follow the buyer path.
+4. **AIO / Answer Engine Agent** evaluates answer-engine readiness and reusable page structure.
+5. **Citation Readiness Agent** reviews whether claims, proof, and trust signals are easy to cite.
+6. **Fix Prioritization Agent** turns the findings into ranked actions and a Fix Pack.
+
+## Why this is executive-ready
 
 - one URL input
+- bounded public-page scan
+- visible Gemini workflow trace
 - evidence receipts
 - machine-facing GTM risk layer
-- directional competitive context with confidence language, not verified competitor claims
+- directional competitive context with confidence language
 - Fix Pack with handoff-ready workstreams
-- before/after AI perception simulator
+- Before / After AI Perception Simulator
 - clear limitations and no ranking guarantees
 
 ## What the brief includes
 
 - Executive Verdict
 - Boardroom Snapshot
-- score cards
 - Decision Memo
+- AI Visibility Score
+- Citation Readiness Score
+- Agent Actionability Score
 - top machine-facing gap
 - Machine-Facing GTM Risks
 - Directional Competitive Context
 - Fix Pack
 - Before / After AI Perception Simulator
+- Evidence Receipts
 - visible agent artifacts
-- evidence receipts
+
+## Example demo path
+
+For the clearest demo experience, open the live app and click the **Shopify** sample case.
+
+The Shopify demo shows:
+
+- one URL input
+- a visible six-stage Gemini workflow
+- AI Visibility Score
+- Executive Verdict
+- Boardroom Snapshot
+- Fix Pack
+- Evidence Receipts
+- visible agent artifacts
 
 ## Local setup
 
@@ -126,7 +160,9 @@ Do not commit `.env.local` or any secrets.
 
 ## Deployment
 
-This app is deployed on Vercel. Set `GEMINI_API_KEY` and optionally `GEMINI_MODEL` in the Vercel project environment variables before deploying.
+This app is deployed on Vercel.
+
+Set `GEMINI_API_KEY` and optionally `GEMINI_MODEL` in the Vercel project environment variables before deploying.
 
 ## Scripts
 
@@ -148,3 +184,7 @@ npm run start
 - no chain-of-thought exposure
 - no secrets in client code
 - no edits to `.env.local`
+
+## License
+
+MIT License
